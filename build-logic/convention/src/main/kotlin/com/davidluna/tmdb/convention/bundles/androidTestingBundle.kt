@@ -7,6 +7,7 @@ import com.davidluna.tmdb.convention.libs.androidRunner
 import com.davidluna.tmdb.convention.libs.androidTestCore
 import com.davidluna.tmdb.convention.libs.androidTestRules
 import com.davidluna.tmdb.convention.libs.composeBom
+import com.davidluna.tmdb.convention.libs.coroutinesTest
 import com.davidluna.tmdb.convention.libs.espressoIntents
 import com.davidluna.tmdb.convention.libs.hiltCompiler
 import com.davidluna.tmdb.convention.libs.hiltTest
@@ -22,6 +23,7 @@ import org.gradle.kotlin.dsl.dependencies
 internal val Project.androidTestingBundle: Unit
     get() {
         dependencies {
+            androidHiltTestingBundle
             androidTestImplementation(platform(libs.composeBom))
             androidTestImplementation(libs.uiTestJunit4)
             androidTestImplementation(libs.navigationTesting)
@@ -31,8 +33,14 @@ internal val Project.androidTestingBundle: Unit
             androidTestImplementation(libs.androidTestCore)
             androidTestImplementation(libs.espressoIntents)
             androidTestImplementation(libs.mockWebServer)
-            androidTestImplementation(libs.hiltTest)
-            kspAndroidTest(libs.hiltCompiler)
+            androidTestImplementation(libs.coroutinesTest)
             androidTestImplementation(libs.playServicesLocation)
         }
+    }
+
+internal val Project.androidHiltTestingBundle: Unit
+    get() = dependencies {
+        androidTestImplementation(libs.coroutinesTest)
+        androidTestImplementation(libs.hiltTest)
+        kspAndroidTest(libs.hiltCompiler)
     }

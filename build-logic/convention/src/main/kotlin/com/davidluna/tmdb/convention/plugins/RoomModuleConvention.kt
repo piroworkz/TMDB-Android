@@ -1,6 +1,7 @@
 package com.davidluna.tmdb.convention.plugins
 
 import androidx.room.gradle.RoomExtension
+import com.davidluna.tmdb.convention.bundles.androidHiltTestingBundle
 import com.davidluna.tmdb.convention.bundles.unitTestingBundle
 import com.davidluna.tmdb.convention.extensions.android_library.androidLibrary
 import com.davidluna.tmdb.convention.extensions.common.roomPluginManger
@@ -47,6 +48,7 @@ class RoomModuleConvention : Plugin<Project> {
             implementation(libs.hiltAndroid)
             ksp(libs.hiltCompiler)
             unitTestingBundle
+            androidHiltTestingBundle
         }
     }
 

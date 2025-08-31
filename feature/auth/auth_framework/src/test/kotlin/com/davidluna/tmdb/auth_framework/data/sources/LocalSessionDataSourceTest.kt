@@ -33,7 +33,7 @@ class LocalSessionDataSourceTest {
 
         every { sessionDao.getSession() } returns flowOf(fakeRoomSession)
 
-        sut.flow.test {
+        sut().test {
             assertEquals(fakeDomainSession, awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
@@ -45,7 +45,7 @@ class LocalSessionDataSourceTest {
 
         every { sessionDao.getSession() } returns flowOf(null)
 
-        sut.flow.test {
+        sut().test {
             assertEquals(null, awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
@@ -60,7 +60,7 @@ class LocalSessionDataSourceTest {
 
         every { sessionDao.getSession() } returns sessionFlow
 
-        sut.flow.test {
+        sut().test {
             val first = awaitItem()
             assertEquals(firstSessionExpected, first)
 
