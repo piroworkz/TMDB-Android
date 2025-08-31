@@ -2,7 +2,6 @@ import com.davidluna.tmdb.convention.constants.Constants
 
 plugins {
     alias(libs.plugins.roomModuleConventionPlugin)
-    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
