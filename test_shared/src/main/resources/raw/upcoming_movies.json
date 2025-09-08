@@ -1,0 +1,410 @@
+{
+  "dates": {
+    "maximum": "2025-10-01",
+    "minimum": "2025-09-10"
+  },
+  "page": 1,
+  "results": [
+    {
+      "adult": false,
+      "backdrop_path": "/fq8gLtrz1ByW3KQ2IM3RMZEIjsQ.jpg",
+      "genre_ids": [
+        27
+      ],
+      "id": 1038392,
+      "original_language": "en",
+      "original_title": "The Conjuring: Last Rites",
+      "overview": "Paranormal investigators Ed and Lorraine Warren take on one last terrifying case involving mysterious entities they must confront.",
+      "popularity": 556.5356,
+      "poster_path": "/8XfIKOPmuCZLh5ooK13SPKeybWF.jpg",
+      "release_date": "2025-09-03",
+      "title": "The Conjuring: Last Rites",
+      "video": false,
+      "vote_average": 7.053,
+      "vote_count": 132
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/1RgPyOhN4DRs225BGTlHJqCudII.jpg",
+      "genre_ids": [
+        16,
+        28,
+        14,
+        53
+      ],
+      "id": 1311031,
+      "original_language": "ja",
+      "original_title": "劇場版「鬼滅の刃」無限城編 第一章 猗窩座再来",
+      "overview": "The Demon Slayer Corps are drawn into the Infinity Castle, where Tanjiro, Nezuko, and the Hashira face terrifying Upper Rank demons in a desperate fight as the final battle against Muzan Kibutsuji begins.",
+      "popularity": 280.5123,
+      "poster_path": "/aFRDH3P7TX61FVGpaLhKr6QiOC1.jpg",
+      "release_date": "2025-07-18",
+      "title": "Demon Slayer: Kimetsu no Yaiba Infinity Castle",
+      "video": false,
+      "vote_average": 7.337,
+      "vote_count": 104
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/fBlzTwgtbDYkDKlhnPu69jHfVGy.jpg",
+      "genre_ids": [
+        27,
+        10749
+      ],
+      "id": 1242011,
+      "original_language": "en",
+      "original_title": "Together",
+      "overview": "With a move to the countryside already testing the limits of a couple's relationship, a supernatural encounter begins an extreme transformation of their love, their lives, and their flesh.",
+      "popularity": 217.9008,
+      "poster_path": "/6MJxjNxjgAtuBEOVYtuF4yUYXZC.jpg",
+      "release_date": "2025-07-23",
+      "title": "Together",
+      "video": false,
+      "vote_average": 7.143,
+      "vote_count": 374
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/xSD0q1FiuZkvHuy7uscOLbmd1hR.jpg",
+      "genre_ids": [
+        12,
+        28,
+        14
+      ],
+      "id": 13494,
+      "original_language": "en",
+      "original_title": "Red Sonja",
+      "overview": "A young girl rises from the ashes of tragedy to become the most feared warrior woman of all time: the She-Devil with a Sword.",
+      "popularity": 203.9503,
+      "poster_path": "/l10eghFN1nQmWwMSt91MlLvZZFA.jpg",
+      "release_date": "2025-07-31",
+      "title": "Red Sonja",
+      "video": false,
+      "vote_average": 5.8,
+      "vote_count": 67
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/jvpkBenB6hv19WWYVlaiow8zklq.jpg",
+      "genre_ids": [
+        16,
+        10751,
+        35,
+        80,
+        12
+      ],
+      "id": 1175942,
+      "original_language": "en",
+      "original_title": "The Bad Guys 2",
+      "overview": "The now-reformed Bad Guys are trying (very, very hard) to be good, but instead find themselves hijacked into a high-stakes, globe-trotting heist, masterminded by a new team of criminals they never saw coming: The Bad Girls.",
+      "popularity": 171.7265,
+      "poster_path": "/26oSPnq0ct59l07QOXZKyzsiRtN.jpg",
+      "release_date": "2025-07-24",
+      "title": "The Bad Guys 2",
+      "video": false,
+      "vote_average": 7.8,
+      "vote_count": 322
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/zxi6WQPVc0uQAG5TtLsKvxYHApC.jpg",
+      "genre_ids": [
+        16,
+        14,
+        12,
+        28
+      ],
+      "id": 980477,
+      "original_language": "zh",
+      "original_title": "哪吒之魔童闹海",
+      "overview": "After a catastrophic event leaves their bodies destroyed, Ne Zha and Ao Bing are granted a fragile second chance at life. As tensions rise between the dragon clans and celestial forces, the two must undergo a series of perilous trials that will test their bond, challenge their identities, and decide the fate of both mortals and immortals.",
+      "popularity": 95.335,
+      "poster_path": "/cb5NyNrqiCNNoDkA8FfxHAtypdG.jpg",
+      "release_date": "2025-01-29",
+      "title": "Ne Zha 2",
+      "video": false,
+      "vote_average": 8.04,
+      "vote_count": 349
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/4BtL2vvEufDXDP4u6xQjjQ1Y2aT.jpg",
+      "genre_ids": [
+        28,
+        80,
+        53
+      ],
+      "id": 1419406,
+      "original_language": "zh",
+      "original_title": "捕风追影",
+      "overview": "Macau Police brings the tracking expert police officer out of retirement to help catch a dangerous group of professional thieves.",
+      "popularity": 69.0406,
+      "poster_path": "/e0RU6KpdnrqFxDKlI3NOqN8nHL6.jpg",
+      "release_date": "2025-08-16",
+      "title": "The Shadow's Edge",
+      "video": false,
+      "vote_average": 7.5,
+      "vote_count": 20
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/9whEVuKte4Qi0LI4TzPf7glinJW.jpg",
+      "genre_ids": [
+        16,
+        10751,
+        14
+      ],
+      "id": 936108,
+      "original_language": "en",
+      "original_title": "Smurfs",
+      "overview": "When Papa Smurf is mysteriously taken by evil wizards, Razamel and Gargamel, Smurfette leads the Smurfs on a mission into the real world to save him. With the help of new friends, the Smurfs must discover what defines their destiny to save the universe.",
+      "popularity": 55.3545,
+      "poster_path": "/8o6lkhL32xQJeB52IIG1us5BVey.jpg",
+      "release_date": "2025-07-05",
+      "title": "Smurfs",
+      "video": false,
+      "vote_average": 6.072,
+      "vote_count": 167
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/eezI7a6PBPInXZVlFxBVaIc0iMc.jpg",
+      "genre_ids": [
+        28,
+        53
+      ],
+      "id": 758923,
+      "original_language": "hi",
+      "original_title": "बाघी ४",
+      "overview": "After waking up from a coma, a grieving man sets out to uncover the truth about his missing girlfriend.",
+      "popularity": 43.6803,
+      "poster_path": "/u2YEFW5o2Y7RAw2K4hSA4TEXF3Q.jpg",
+      "release_date": "2025-09-05",
+      "title": "Baaghi 4",
+      "video": false,
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/3htgvJ6d0GV633oHYueeISk8J7w.jpg",
+      "genre_ids": [
+        12,
+        14,
+        35,
+        10751
+      ],
+      "id": 1319969,
+      "original_language": "en",
+      "original_title": "Sketch",
+      "overview": "When a young girl’s sketchbook falls into a strange pond, her drawings come to life—chaotic, real, and on the loose. As the town descends into chaos, her family must reunite and stop the monsters they never meant to unleash.",
+      "popularity": 36.6368,
+      "poster_path": "/sxiDj3dTgZuCPkx30Jvyq8K9QUV.jpg",
+      "release_date": "2025-08-06",
+      "title": "Sketch",
+      "video": false,
+      "vote_average": 7.3,
+      "vote_count": 40
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/eQV9rSQ6S1ja4lGTwHTnQuVhoG.jpg",
+      "genre_ids": [
+        27,
+        35,
+        14,
+        18
+      ],
+      "id": 1284120,
+      "original_language": "no",
+      "original_title": "Den stygge stesøsteren",
+      "overview": "In a fairy-tale kingdom where beauty is a brutal business, Elvira battles to compete with her incredibly beautiful stepsister, and she will go to any length to catch the prince’s eye.",
+      "popularity": 34.4734,
+      "poster_path": "/crX9rSg9EohybhkEe8iTQUCe55y.jpg",
+      "release_date": "2025-03-07",
+      "title": "The Ugly Stepsister",
+      "video": false,
+      "vote_average": 7.207,
+      "vote_count": 353
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/cWJonyOJESS10tF6DyH9kMBsLh.jpg",
+      "genre_ids": [
+        27,
+        14,
+        10749
+      ],
+      "id": 1246049,
+      "original_language": "fr",
+      "original_title": "Dracula",
+      "overview": "The story of 15th century Prince Vladimir who curses God following the death of his beloved wife and is turned into a vampire. Later, in 19th century London, he discovers his wife’s doppelgänger and dooms himself by pursuing her.",
+      "popularity": 34.0904,
+      "poster_path": "/juUIOcOQ0ip9qw3ecH9IBEQklEp.jpg",
+      "release_date": "2025-07-30",
+      "title": "Dracula: A Love Tale",
+      "video": false,
+      "vote_average": 6.5,
+      "vote_count": 57
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/eNSUknQqzTXWE5EeT8ZnVccEPR0.jpg",
+      "genre_ids": [
+        27,
+        53
+      ],
+      "id": 1285965,
+      "original_language": "en",
+      "original_title": "Dangerous Animals",
+      "overview": "A savvy and free-spirited surfer is abducted by a shark-obsessed serial killer. Held captive on his boat, she must figure out how to escape before he carries out a ritualistic feeding to the sharks below.",
+      "popularity": 34.0505,
+      "poster_path": "/oQJ1PKLIE2gF5cr3xwjLCvv4jcU.jpg",
+      "release_date": "2025-06-05",
+      "title": "Dangerous Animals",
+      "video": false,
+      "vote_average": 6.469,
+      "vote_count": 240
+    },
+    {
+      "adult": false,
+      "backdrop_path": null,
+      "genre_ids": [
+        18
+      ],
+      "id": 1091043,
+      "original_language": "ta",
+      "original_title": "தண்டகாரண்யம்",
+      "overview": "A young man’s struggles to secure a government job.",
+      "popularity": 32.3171,
+      "poster_path": "/enkPbejfPmM8o2bgbhnLSX4fCAV.jpg",
+      "release_date": "2025-09-19",
+      "title": "Thandakaaranyam",
+      "video": false,
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/vcFs7lPVMOvYX7KMkDw66iUpoYp.jpg",
+      "genre_ids": [
+        14,
+        18,
+        27
+      ],
+      "id": 1020822,
+      "original_language": "fr",
+      "original_title": "Animale",
+      "overview": "Camargue, France - Nejma trains hard to win the local bullfighting competition. When she is mauled after a celebration, she starts to notice disturbing changes. News of a rogue bull on the loose terrifies the community, killing young men.",
+      "popularity": 30.9083,
+      "poster_path": "/htOG0XTgTLTSIraMvc468XZsUKP.jpg",
+      "release_date": "2024-09-20",
+      "title": "Animale",
+      "video": false,
+      "vote_average": 6.8,
+      "vote_count": 19
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/3Rfvhy1Nl6sSGJwyjb0QiZzZYlB.jpg",
+      "genre_ids": [
+        16,
+        12,
+        10751,
+        35
+      ],
+      "id": 862,
+      "original_language": "en",
+      "original_title": "Toy Story",
+      "overview": "Led by Woody, Andy's toys live happily in his room until Andy's birthday brings Buzz Lightyear onto the scene. Afraid of losing his place in Andy's heart, Woody plots against Buzz. But when circumstances separate Buzz and Woody from their owner, the duo eventually learns to put aside their differences.",
+      "popularity": 29.4946,
+      "poster_path": "/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg",
+      "release_date": "1995-11-22",
+      "title": "Toy Story",
+      "video": false,
+      "vote_average": 7.97,
+      "vote_count": 19103
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/9ZhhlJbtLmzjvdbxbNzHZEBFdIZ.jpg",
+      "genre_ids": [
+        80,
+        53,
+        35
+      ],
+      "id": 1245993,
+      "original_language": "en",
+      "original_title": "Caught Stealing",
+      "overview": "Burned-out ex-baseball player Hank Thompson unexpectedly finds himself embroiled in a dangerous struggle for survival amidst the criminal underbelly of 1990s New York City, forced to navigate a treacherous underworld he never imagined.",
+      "popularity": 28.6889,
+      "poster_path": "/cvda8s5J8YaHjTyEyXQpvD6f3iV.jpg",
+      "release_date": "2025-08-26",
+      "title": "Caught Stealing",
+      "video": false,
+      "vote_average": 6.967,
+      "vote_count": 150
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/htuuuEwAvDVECMpb0ltLLyZyDDt.jpg",
+      "genre_ids": [
+        18,
+        80
+      ],
+      "id": 238,
+      "original_language": "en",
+      "original_title": "The Godfather",
+      "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
+      "popularity": 28.4601,
+      "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+      "release_date": "1972-03-14",
+      "title": "The Godfather",
+      "video": false,
+      "vote_average": 8.686,
+      "vote_count": 21803
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/1KwliRKTw61fRGmbG4Sf8eWOHP.jpg",
+      "genre_ids": [
+        28,
+        35,
+        80
+      ],
+      "id": 1181540,
+      "original_language": "en",
+      "original_title": "Guns Up",
+      "overview": "When a job goes horribly wrong, an ex-cop and family man who moonlights as a mob henchman has one night to get his family out of the city.",
+      "popularity": 27.3777,
+      "poster_path": "/3RokBWEkQqJRZEVP3DPwGm5MYh6.jpg",
+      "release_date": "2025-05-15",
+      "title": "Guns Up",
+      "video": false,
+      "vote_average": 6.9,
+      "vote_count": 88
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/xgU3KkqiME9pGe5gGCNpUYkoSWg.jpg",
+      "genre_ids": [
+        27,
+        53,
+        12
+      ],
+      "id": 578,
+      "original_language": "en",
+      "original_title": "Jaws",
+      "overview": "When the seaside community of Amity finds itself under attack by a dangerous great white shark, the town's chief of police, a young marine biologist, and a grizzled hunter embark on a desperate quest to destroy the beast before it strikes again.",
+      "popularity": 25.6116,
+      "poster_path": "/lxM6kqilAdpdhqUl2biYp5frUxE.jpg",
+      "release_date": "1975-06-20",
+      "title": "Jaws",
+      "video": false,
+      "vote_average": 7.7,
+      "vote_count": 10987
+    }
+  ],
+  "total_pages": 1,
+  "total_results": 20
+}

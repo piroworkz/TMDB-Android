@@ -1,0 +1,420 @@
+{
+  "page": 1,
+  "results": [
+    {
+      "adult": false,
+      "backdrop_path": "/blSthAPRbEOJBowdxppeQqNPRh9.jpg",
+      "genre_ids": [
+        16,
+        35,
+        10759
+      ],
+      "id": 207332,
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "SAKAMOTO DAYS",
+      "overview": "Once the greatest hitman of all, Taro Sakamoto retired in the name of love. But when his past catches up, he must fight to protect his beloved family.",
+      "popularity": 54.9716,
+      "poster_path": "/wRpCqsJFyKNuh5FMegNPrhzp2NF.jpg",
+      "first_air_date": "2025-01-11",
+      "name": "SAKAMOTO DAYS",
+      "vote_average": 8.105,
+      "vote_count": 223
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/qLMfcvdCcCGD2BNLH8b6ZCBuO7D.jpg",
+      "genre_ids": [
+        10763,
+        35
+      ],
+      "id": 2224,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Daily Show",
+      "overview": "The World's Fakest News Team tackle the biggest stories in news, politics and pop culture.",
+      "popularity": 47.4762,
+      "poster_path": "/ixcfyK7it6FjRM36Te4OdblAq4X.jpg",
+      "first_air_date": "1996-07-22",
+      "name": "The Daily Show",
+      "vote_average": 6.381,
+      "vote_count": 594
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/kIgzX0QdvK3vtaoHBpj9fUy7DP9.jpg",
+      "genre_ids": [
+        10764
+      ],
+      "id": 121876,
+      "origin_country": [
+        "CN"
+      ],
+      "original_language": "zh",
+      "original_name": "花儿与少年",
+      "overview": "",
+      "popularity": 43.8362,
+      "poster_path": "/s4WOcsEQ1pLjdKWEy7dcFDlWfI4.jpg",
+      "first_air_date": "2014-04-25",
+      "name": "Divas Hit the Road",
+      "vote_average": 6.9,
+      "vote_count": 12
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/s1dTt4M31q2HwD5Fkl1tf5tQzJg.jpg",
+      "genre_ids": [
+        10766
+      ],
+      "id": 206559,
+      "origin_country": [
+        "ZA"
+      ],
+      "original_language": "af",
+      "original_name": "Binnelanders",
+      "overview": "A South African Afrikaans soap opera. It is set in and around the fictional private hospital, Binneland Kliniek, in Pretoria, and the storyline follows the trials, trauma and tribulations of the staff and patients of the hospital.",
+      "popularity": 36.7574,
+      "poster_path": "/3bzECfllho8PphdYujLUIuhncJD.jpg",
+      "first_air_date": "2005-10-13",
+      "name": "Binnelanders",
+      "vote_average": 5.624,
+      "vote_count": 97
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/kGxPVyra9Lvf5tPmTXnMEBpwOip.jpg",
+      "genre_ids": [
+        18,
+        10766
+      ],
+      "id": 45789,
+      "origin_country": [
+        "DE"
+      ],
+      "original_language": "de",
+      "original_name": "Sturm der Liebe",
+      "overview": "These are the stories of relationships taking place in the fictional five-star hotel Fürstenhof, located in Feldkirchen-Westerham near Rosenheim with the plot revolving around members of the family room area, the hotel owners, and employees.",
+      "popularity": 28.6569,
+      "poster_path": "/jfFNydakwvbeACEwSd2Gh8UWtba.jpg",
+      "first_air_date": "2005-09-26",
+      "name": "Sturm der Liebe",
+      "vote_average": 6,
+      "vote_count": 38
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/n69QxkZ0RRc6PMNnxD9U0MZnLzl.jpg",
+      "genre_ids": [
+        10764
+      ],
+      "id": 4656,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Raw",
+      "overview": "A regularly scheduled, live, year-round program featuring some of the biggest WWE Superstars.",
+      "popularity": 25.805,
+      "poster_path": "/pv5WNnLUo7mpT8k901Lo8UovrqI.jpg",
+      "first_air_date": "1993-01-11",
+      "name": "Raw",
+      "vote_average": 6.757,
+      "vote_count": 338
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/8W8yAG9WYkMxI9O2iiAp0SoVKI3.jpg",
+      "genre_ids": [
+        18
+      ],
+      "id": 298444,
+      "origin_country": [
+        "HK"
+      ],
+      "original_language": "cn",
+      "original_name": "俠醫",
+      "overview": "A devoted traditional medicine doctor modernizes his father’s medicated oil and challenges the city’s reliance on painkillers. Using ancient medical wisdom and daring acupuncture methods, he treats patients abandoned by Western medicine, risking controversy to bring hope to the poor and hopeless.",
+      "popularity": 23.2148,
+      "poster_path": "/vobnrlo9wakXP0JC2gpV6xIzb5l.jpg",
+      "first_air_date": "2025-09-01",
+      "name": "Heroes in White",
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/hlVfglhjnlCP5tp8hFvTQKQVaMp.jpg",
+      "genre_ids": [
+        10766
+      ],
+      "id": 11890,
+      "origin_country": [
+        "NL"
+      ],
+      "original_language": "nl",
+      "original_name": "Goede Tijden, Slechte Tijden",
+      "overview": "Goede tijden, slechte tijden, also known as GTST, is the longest-running Dutch soap opera,  revolving around the lives of the families Alberts, Sanders, De Jong, Van Houten and Bouwhuis. It all takes place in the fictional town of Meerdijk.",
+      "popularity": 22.9684,
+      "poster_path": "/p1oXgtJ0q0wAcEp3tHA5DpiynxL.jpg",
+      "first_air_date": "1990-10-01",
+      "name": "Goede Tijden, Slechte Tijden",
+      "vote_average": 5.3,
+      "vote_count": 19
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/5APjn4LnV5wWk5DXq7ZewT6zzP1.jpg",
+      "genre_ids": [
+        10766
+      ],
+      "id": 291,
+      "origin_country": [
+        "GB"
+      ],
+      "original_language": "en",
+      "original_name": "Coronation Street",
+      "overview": "The residents of Coronation Street are ordinary, working-class people, and the show follows them through regular social and family interactions at home, in the workplace, and in their local pub, the Rovers Return Inn. Britain's longest-running soap.",
+      "popularity": 20.2119,
+      "poster_path": "/5x1HXqYqPyYw7oc7Isu1lvVmwRP.jpg",
+      "first_air_date": "1960-12-09",
+      "name": "Coronation Street",
+      "vote_average": 5.416,
+      "vote_count": 113
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/hINekSpbcBxjnjGqmIm6I4bz2ab.jpg",
+      "genre_ids": [
+        10767,
+        35
+      ],
+      "id": 22980,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Watch What Happens Live with Andy Cohen",
+      "overview": "Bravo network executive Andy Cohen discusses pop culture topics with celebrities and reality show personalities.",
+      "popularity": 20.0262,
+      "poster_path": "/onSD9UXfJwrMXWhq7UY7hGF2S1h.jpg",
+      "first_air_date": "2009-07-16",
+      "name": "Watch What Happens Live with Andy Cohen",
+      "vote_average": 5.083,
+      "vote_count": 79
+    },
+    {
+      "adult": false,
+      "backdrop_path": null,
+      "genre_ids": [
+        10763
+      ],
+      "id": 64190,
+      "origin_country": [
+        "DE"
+      ],
+      "original_language": "de",
+      "original_name": "Volle Kanne",
+      "overview": "",
+      "popularity": 19.2351,
+      "poster_path": null,
+      "first_air_date": "1999-08-30",
+      "name": "Volle Kanne",
+      "vote_average": 4.4,
+      "vote_count": 5
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/ottT2Yt0OfHiHp3PHJTLNVV8JPE.jpg",
+      "genre_ids": [
+        18,
+        10766
+      ],
+      "id": 13945,
+      "origin_country": [
+        "DE"
+      ],
+      "original_language": "de",
+      "original_name": "Gute Zeiten, schlechte Zeiten",
+      "overview": "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
+      "popularity": 19.1734,
+      "poster_path": "/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg",
+      "first_air_date": "1992-05-11",
+      "name": "Gute Zeiten, schlechte Zeiten",
+      "vote_average": 5.8,
+      "vote_count": 41
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/pLn4lsSBtGUY1whHyCoEJhgziaP.jpg",
+      "genre_ids": [
+        10764,
+        10751
+      ],
+      "id": 2912,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Jeopardy!",
+      "overview": "America's favorite quiz show where contestants are presented with general knowledge clues in the form of answers, and must phrase their responses in question form.",
+      "popularity": 18.1224,
+      "poster_path": "/11rWvQOEZBouD7wet0sWHwu7NDs.jpg",
+      "first_air_date": "1984-09-10",
+      "name": "Jeopardy!",
+      "vote_average": 6.9,
+      "vote_count": 146
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/gMMnf8VRg3Z98WaFmOLr9Jk8pIs.jpg",
+      "genre_ids": [
+        35,
+        10767
+      ],
+      "id": 63770,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Late Show with Stephen Colbert",
+      "overview": "Stephen Colbert brings his signature satire and comedy to The Late Show with Stephen Colbert, the #1 show in late night, where he talks with an eclectic mix of guests about what is new and relevant in the worlds of politics, entertainment, business, music, technology, and more. Featuring bandleader Jon Batiste with his band Stay Human, the Emmy Award-nominated show is broadcast from the historic Ed Sullivan Theater.",
+      "popularity": 17.8516,
+      "poster_path": "/9jkThAGYj2yp8jsS6Nriy5mzKFT.jpg",
+      "first_air_date": "2015-09-08",
+      "name": "The Late Show with Stephen Colbert",
+      "vote_average": 6.24,
+      "vote_count": 323
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/3KXfYrUN4TYL3L0t4v8AaPBOZap.jpg",
+      "genre_ids": [
+        18,
+        10768
+      ],
+      "id": 273271,
+      "origin_country": [
+        "CN"
+      ],
+      "original_language": "zh",
+      "original_name": "归队",
+      "overview": "The journey of an ordinary soldier in the Northeast Anti-Japanese United Army during the 14-year Second Sino-Japanese War, highlighting the region's grueling and heroic fight against Japanese imperialist forces.",
+      "popularity": 16.2242,
+      "poster_path": "/nsPfI1Ad9xpNqYtpYASCajL9voz.jpg",
+      "first_air_date": "2025-08-25",
+      "name": "The Long Way Back",
+      "vote_average": 10,
+      "vote_count": 2
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/3hOxwqn1P2AY0d20VVtxN2f3Lfh.jpg",
+      "genre_ids": [
+        35,
+        10767
+      ],
+      "id": 6809,
+      "origin_country": [
+        "ES"
+      ],
+      "original_language": "es",
+      "original_name": "El hormiguero",
+      "overview": "El Hormiguero is a Spanish television program with a live audience focusing on comedy, science, and politics running since September 2006. It is hosted and produced by screenwriter Pablo Motos. The show aired on Spain's Cuatro channel from launch until June 2011 and is now broadcast on Antena 3. Recurring guests on the show include Luis Piedrahita, Raquel Martos, Marron & \"The Man in Black\", and puppet ants Trancas and Barrancas. It has proved a ratings success, and has expanded from a weekly 120-minute show to a daily 40-minute show in its third season, which began on September 17, 2007. The show won the Entertainment prize at the 2009 Rose d'Or ceremony.",
+      "popularity": 15.7837,
+      "poster_path": "/tT4hXTYXtZVadi6AZ0rhdVgNo2T.jpg",
+      "first_air_date": "2006-09-24",
+      "name": "El hormiguero",
+      "vote_average": 4.908,
+      "vote_count": 38
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/upD2G9Z7W07w47c7B8ZqLqbTDc5.jpg",
+      "genre_ids": [
+        10767
+      ],
+      "id": 1900,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "LIVE with Kelly and Mark",
+      "overview": "A morning talk show with A-list celebrity guests, top-notch performances and one-of-a-kind segments that are unrivaled on daytime television, plus spontaneous, hilarious and unpredictable talk.",
+      "popularity": 15.7251,
+      "poster_path": "/hBkyypWN3EcOzkozatiCm5VeaG.jpg",
+      "first_air_date": "1988-09-05",
+      "name": "LIVE with Kelly and Mark",
+      "vote_average": 5.5,
+      "vote_count": 47
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/ynd225o8GuCahYGjHtFdEt8Xizm.jpg",
+      "genre_ids": [
+        10766
+      ],
+      "id": 235484,
+      "origin_country": [
+        "ZA"
+      ],
+      "original_language": "af",
+      "original_name": "Suidooster",
+      "overview": "Suidooster is a South African television soap opera produced by Suidooster Films which revolves around a matriarch, her family, friends and the people of Suidooster, a small shopping and business centre in the fictional Cape Town suburb of Ruiterbosch.",
+      "popularity": 15.6462,
+      "poster_path": "/naCgSiacvV685kait6fBvhVhdce.jpg",
+      "first_air_date": "2015-11-16",
+      "name": "Suidooster",
+      "vote_average": 7.217,
+      "vote_count": 23
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/cchlQWYrnMPyl1EbjZWCzeAz8l5.jpg",
+      "genre_ids": [
+        18,
+        35
+      ],
+      "id": 36361,
+      "origin_country": [
+        "CZ"
+      ],
+      "original_language": "cs",
+      "original_name": "Ulice",
+      "overview": "Ulice is a Czech soap opera produced and broadcast by Nova. In the Czech language Ulice means street.\n\nThe show describes the lives of the Farský, Jordán, Boháč, Nikl, and Liška families and many other people that live in Prague. Their daily battle against real problems of living in a modern world like divorce, love, betrayal and illness or disease. Ulice often shows crime.",
+      "popularity": 15.4137,
+      "poster_path": "/gFEHva8Csx18hMGJJZ6gi4sFSKR.jpg",
+      "first_air_date": "2005-09-05",
+      "name": "Ulice",
+      "vote_average": 4.606,
+      "vote_count": 33
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/mbSSCIbNpeyNJqKAKkWgdvYsQ8F.jpg",
+      "genre_ids": [
+        18,
+        9648,
+        10766
+      ],
+      "id": 212907,
+      "origin_country": [
+        "ES"
+      ],
+      "original_language": "es",
+      "original_name": "La promesa",
+      "overview": "In 1913 Spain, a woman gets a job at the palace of La Promesa as a reward for saving the marquesses' son - but nobody knows that she has her own plans, which involve avenging her mother's death and finding her missing brother.",
+      "popularity": 14.4585,
+      "poster_path": "/y656ZhHU2Hh3bmC5vBtMa2vKpUM.jpg",
+      "first_air_date": "2023-01-12",
+      "name": "La promesa",
+      "vote_average": 7.738,
+      "vote_count": 61
+    }
+  ],
+  "total_pages": 1,
+  "total_results": 20
+}
