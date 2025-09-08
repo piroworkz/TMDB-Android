@@ -1,0 +1,407 @@
+{
+  "page": 1,
+  "results": [
+    {
+      "adult": false,
+      "backdrop_path": "/iZLqwEwUViJdSkGVjePGhxYzbDb.jpg",
+      "genre_ids": [
+        878,
+        53
+      ],
+      "id": 755898,
+      "original_language": "en",
+      "original_title": "War of the Worlds",
+      "overview": "Will Radford is a top analyst for Homeland Security who tracks potential threats through a mass surveillance program, until one day an attack by an unknown entity leads him to question whether the government is hiding something from him... and from the rest of the world.",
+      "popularity": 683.8424,
+      "poster_path": "/yvirUYrva23IudARHn3mMGVxWqM.jpg",
+      "release_date": "2025-07-29",
+      "title": "War of the Worlds",
+      "video": false,
+      "vote_average": 4.319,
+      "vote_count": 493
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/mEW9XMgYDO6U0MJcIRqRuSwjzN5.jpg",
+      "genre_ids": [
+        28,
+        53
+      ],
+      "id": 1007734,
+      "original_language": "en",
+      "original_title": "Nobody 2",
+      "overview": "Former assassin Hutch Mansell takes his family on a nostalgic vacation to a small-town theme park, only to be pulled back into violence when they clash with a corrupt operator, a crooked sheriff, and a ruthless crime boss.",
+      "popularity": 566.8777,
+      "poster_path": "/svXVRoRSu6zzFtCzkRsjZS7Lqpd.jpg",
+      "release_date": "2025-08-13",
+      "title": "Nobody 2",
+      "video": false,
+      "vote_average": 7.257,
+      "vote_count": 327
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/fq8gLtrz1ByW3KQ2IM3RMZEIjsQ.jpg",
+      "genre_ids": [
+        27
+      ],
+      "id": 1038392,
+      "original_language": "en",
+      "original_title": "The Conjuring: Last Rites",
+      "overview": "Paranormal investigators Ed and Lorraine Warren take on one last terrifying case involving mysterious entities they must confront.",
+      "popularity": 556.5356,
+      "poster_path": "/8XfIKOPmuCZLh5ooK13SPKeybWF.jpg",
+      "release_date": "2025-09-03",
+      "title": "The Conjuring: Last Rites",
+      "video": false,
+      "vote_average": 7.053,
+      "vote_count": 132
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/1wi1hcbl6KYqARjdQ4qrBWZdiau.jpg",
+      "genre_ids": [
+        28,
+        35,
+        80
+      ],
+      "id": 1035259,
+      "original_language": "en",
+      "original_title": "The Naked Gun",
+      "overview": "Only one man has the particular set of skills... to lead Police Squad and save the world: Lt. Frank Drebin Jr.",
+      "popularity": 535.735,
+      "poster_path": "/aq0JMbmSfPwG8JvAzExJPrBHqmG.jpg",
+      "release_date": "2025-07-30",
+      "title": "The Naked Gun",
+      "video": false,
+      "vote_average": 6.788,
+      "vote_count": 497
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/6nCy4OrV7gxhDc3lBSUxkNALPej.jpg",
+      "genre_ids": [
+        28,
+        36,
+        18,
+        12,
+        10752
+      ],
+      "id": 1051486,
+      "original_language": "en",
+      "original_title": "Stockholm Bloodbath",
+      "overview": "In 1520, the notorious and power-hungry Danish King Christian II is determined to seize the Swedish crown from Sten Sture, no matter what it takes. Meanwhile, sisters Freja and Anne make a solemn promise to seek revenge on the men who brutally murdered their family. Everything comes to a head in the heart of Stockholm, where the sisters are drawn into a ruthless political struggle between Sweden and Denmark that culminates in a mass execution, presided over by the mad King \"Christian the Tyrant,\" known as the Stockholm Bloodbath.",
+      "popularity": 350.6912,
+      "poster_path": "/tzXOB8nxO70SfSbOhrYcY94x6MI.jpg",
+      "release_date": "2024-01-19",
+      "title": "Stockholm Bloodbath",
+      "video": false,
+      "vote_average": 6.2,
+      "vote_count": 27
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/ZtcGMc204JsNqfjS9lU6udRgpo.jpg",
+      "genre_ids": [
+        28,
+        18
+      ],
+      "id": 911430,
+      "original_language": "en",
+      "original_title": "F1",
+      "overview": "Racing legend Sonny Hayes is coaxed out of retirement to lead a struggling Formula 1 team—and mentor a young hotshot driver—while chasing one more chance at glory.",
+      "popularity": 306.1446,
+      "poster_path": "/9PXZIUsSDh4alB80jheWX4fhZmy.jpg",
+      "release_date": "2025-06-25",
+      "title": "F1",
+      "video": false,
+      "vote_average": 7.8,
+      "vote_count": 1919
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/eU7IfdWq8KQy0oNd4kKXS0QUR08.jpg",
+      "genre_ids": [
+        878,
+        12,
+        28
+      ],
+      "id": 1061474,
+      "original_language": "en",
+      "original_title": "Superman",
+      "overview": "Superman, a journalist in Metropolis, embarks on a journey to reconcile his Kryptonian heritage with his human upbringing as Clark Kent.",
+      "popularity": 301.0289,
+      "poster_path": "/ombsmhYUqR4qqOLOxAyr5V8hbyv.jpg",
+      "release_date": "2025-07-09",
+      "title": "Superman",
+      "video": false,
+      "vote_average": 7.519,
+      "vote_count": 2984
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/1RgPyOhN4DRs225BGTlHJqCudII.jpg",
+      "genre_ids": [
+        16,
+        28,
+        14,
+        53
+      ],
+      "id": 1311031,
+      "original_language": "ja",
+      "original_title": "劇場版「鬼滅の刃」無限城編 第一章 猗窩座再来",
+      "overview": "The Demon Slayer Corps are drawn into the Infinity Castle, where Tanjiro, Nezuko, and the Hashira face terrifying Upper Rank demons in a desperate fight as the final battle against Muzan Kibutsuji begins.",
+      "popularity": 280.5123,
+      "poster_path": "/aFRDH3P7TX61FVGpaLhKr6QiOC1.jpg",
+      "release_date": "2025-07-18",
+      "title": "Demon Slayer: Kimetsu no Yaiba Infinity Castle",
+      "video": false,
+      "vote_average": 7.3,
+      "vote_count": 104
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/zNriRTr0kWwyaXPzdg1EIxf0BWk.jpg",
+      "genre_ids": [
+        878,
+        12,
+        28
+      ],
+      "id": 1234821,
+      "original_language": "en",
+      "original_title": "Jurassic World Rebirth",
+      "overview": "Five years after the events of Jurassic World Dominion, covert operations expert Zora Bennett is contracted to lead a skilled team on a top-secret mission to secure genetic material from the world's three most massive dinosaurs. When Zora's operation intersects with a civilian family whose boating expedition was capsized, they all find themselves stranded on an island where they come face-to-face with a sinister, shocking discovery that's been hidden from the world for decades.",
+      "popularity": 254.0299,
+      "poster_path": "/1RICxzeoNCAO5NpcRMIgg1XT6fm.jpg",
+      "release_date": "2025-07-01",
+      "title": "Jurassic World Rebirth",
+      "video": false,
+      "vote_average": 6.4,
+      "vote_count": 2005
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/538U9snNc2fpnOmYXAPUh3zn31H.jpg",
+      "genre_ids": [
+        28,
+        12,
+        53
+      ],
+      "id": 575265,
+      "original_language": "en",
+      "original_title": "Mission: Impossible - The Final Reckoning",
+      "overview": "Ethan Hunt and team continue their search for the terrifying AI known as the Entity — which has infiltrated intelligence networks all over the globe — with the world's governments and a mysterious ghost from Hunt's past on their trail. Joined by new allies and armed with the means to shut the Entity down for good, Hunt is in a race against time to prevent the world as we know it from changing forever.",
+      "popularity": 249.0589,
+      "poster_path": "/z53D72EAOxGRqdr7KXXWp9dJiDe.jpg",
+      "release_date": "2025-05-17",
+      "title": "Mission: Impossible - The Final Reckoning",
+      "video": false,
+      "vote_average": 7.278,
+      "vote_count": 1630
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/fBlzTwgtbDYkDKlhnPu69jHfVGy.jpg",
+      "genre_ids": [
+        27,
+        10749
+      ],
+      "id": 1242011,
+      "original_language": "en",
+      "original_title": "Together",
+      "overview": "With a move to the countryside already testing the limits of a couple's relationship, a supernatural encounter begins an extreme transformation of their love, their lives, and their flesh.",
+      "popularity": 217.9008,
+      "poster_path": "/6MJxjNxjgAtuBEOVYtuF4yUYXZC.jpg",
+      "release_date": "2025-07-23",
+      "title": "Together",
+      "video": false,
+      "vote_average": 7.143,
+      "vote_count": 374
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/pHvHLrbvMogNMH1l7Uon3VzE3px.jpg",
+      "genre_ids": [
+        80,
+        28
+      ],
+      "id": 660033,
+      "original_language": "pl",
+      "original_title": "Jak zostałem gangsterem. Historia prawdziwa",
+      "overview": "The action of the film begins in the 1970s – even then, the young protagonist knows that adrenaline tastes better than powdered milk. Over time, he also discovers a desire for money, power, and being above the law. A transformation begins, and his gangster talent blossoms. Together with a friend, they build their own army.",
+      "popularity": 205.2181,
+      "poster_path": "/oEvk45mBpE6s6wmIjvCTbdaMMpB.jpg",
+      "release_date": "2019-12-25",
+      "title": "How I Became a Gangster",
+      "video": false,
+      "vote_average": 7.032,
+      "vote_count": 110
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/ot2LoRyfp73Mswc9Y5KrDJYcyU1.jpg",
+      "genre_ids": [
+        28,
+        53,
+        18
+      ],
+      "id": 1119878,
+      "original_language": "en",
+      "original_title": "Ice Road: Vengeance",
+      "overview": "Big rig ice road driver Mike McCann travels to Nepal to scatter his late brother’s ashes on Mt. Everest. While on a packed tour bus traversing the deadly 12,000 ft. terrain of the infamous Road to the Sky, McCann and his mountain guide encounter a group of mercenaries and must fight to save themselves, the busload of innocent travelers, and the local villagers’ homeland.",
+      "popularity": 204.6711,
+      "poster_path": "/cQN9rZj06rXMVkk76UF1DfBAico.jpg",
+      "release_date": "2025-06-27",
+      "title": "Ice Road: Vengeance",
+      "video": false,
+      "vote_average": 6.629,
+      "vote_count": 287
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/xSD0q1FiuZkvHuy7uscOLbmd1hR.jpg",
+      "genre_ids": [
+        12,
+        28,
+        14
+      ],
+      "id": 13494,
+      "original_language": "en",
+      "original_title": "Red Sonja",
+      "overview": "A young girl rises from the ashes of tragedy to become the most feared warrior woman of all time: the She-Devil with a Sword.",
+      "popularity": 203.9503,
+      "poster_path": "/l10eghFN1nQmWwMSt91MlLvZZFA.jpg",
+      "release_date": "2025-07-31",
+      "title": "Red Sonja",
+      "video": false,
+      "vote_average": 5.8,
+      "vote_count": 67
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/z8tNyAAnGk2d1XmO1L4i34UmP19.jpg",
+      "genre_ids": [
+        28,
+        53
+      ],
+      "id": 1367575,
+      "original_language": "en",
+      "original_title": "A Line of Fire",
+      "overview": "After working as a secret agent in the FBI for ten years, Jack 'Cash' Conry left it all behind after his wife passed in order to dedicate himself to his two daughters. Despite a fulfilling life at home, Cash misses the chance to make an impact and has been considering a return to the force. The decision is made for him when his old partner’s niece Jamie calls him for help, launching Cash right back into a world of danger, corruption and intrigue.",
+      "popularity": 192.8865,
+      "poster_path": "/jSG2mg1998DUAam6X9EA6SeJmqD.jpg",
+      "release_date": "2025-04-05",
+      "title": "A Line of Fire",
+      "video": false,
+      "vote_average": 6.25,
+      "vote_count": 26
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/dg1VXTXSChZG3O5c1Op5kozbi2q.jpg",
+      "genre_ids": [
+        53,
+        80,
+        18
+      ],
+      "id": 1242434,
+      "original_language": "en",
+      "original_title": "Highest 2 Lowest",
+      "overview": "When a titan music mogul, widely known as having the \"best ears in the business\", is targeted with a ransom plot, he is jammed up in a life-or-death moral dilemma.",
+      "popularity": 190.1245,
+      "poster_path": "/kOzwIr0R7WhaFgoYUZFLPZA2RBZ.jpg",
+      "release_date": "2025-08-14",
+      "title": "Highest 2 Lowest",
+      "video": false,
+      "vote_average": 6.2,
+      "vote_count": 111
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/yth78N88nwokepnOe5atwPGfTL1.jpg",
+      "genre_ids": [
+        28,
+        80,
+        53
+      ],
+      "id": 1382406,
+      "original_language": "zh",
+      "original_title": "惊天大营救",
+      "overview": "A veteran Muay Thai expert goes on a take-no-prisoners mission of revenge after his wife and daughter are brutally murdered by mysterious forces.",
+      "popularity": 186.4544,
+      "poster_path": "/nML8rOI4GOiiEsXgknuhZeUF8M7.jpg",
+      "release_date": "2024-12-05",
+      "title": "Striking Rescue",
+      "video": false,
+      "vote_average": 7.639,
+      "vote_count": 104
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/8J6UlIFcU7eZfq9iCLbgc8Auklg.jpg",
+      "genre_ids": [
+        14,
+        10751,
+        28,
+        12
+      ],
+      "id": 1087192,
+      "original_language": "en",
+      "original_title": "How to Train Your Dragon",
+      "overview": "On the rugged isle of Berk, where Vikings and dragons have been bitter enemies for generations, Hiccup stands apart, defying centuries of tradition when he befriends Toothless, a feared Night Fury dragon. Their unlikely bond reveals the true nature of dragons, challenging the very foundations of Viking society.",
+      "popularity": 180.7898,
+      "poster_path": "/q5pXRYTycaeW6dEgsCrd4mYPmxM.jpg",
+      "release_date": "2025-06-06",
+      "title": "How to Train Your Dragon",
+      "video": false,
+      "vote_average": 8.031,
+      "vote_count": 1839
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/8jeDyvFQKgss36FbGAmGQVzPXlH.jpg",
+      "genre_ids": [
+        53,
+        28,
+        35
+      ],
+      "id": 1151334,
+      "original_language": "en",
+      "original_title": "Eenie Meanie",
+      "overview": "A former teenage getaway driver gets dragged back into her unsavory past when a former employer offers her a chance to save the life of her chronically unreliable ex-boyfriend.",
+      "popularity": 179.4876,
+      "poster_path": "/12Va3oO3oYUdOd75zM57Nx1976a.jpg",
+      "release_date": "2025-08-21",
+      "title": "Eenie Meanie",
+      "video": false,
+      "vote_average": 6.439,
+      "vote_count": 165
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/w3Bi0wygeFQctn6AqFTwhGNXRwL.jpg",
+      "genre_ids": [
+        16,
+        28,
+        12,
+        35,
+        10751,
+        14,
+        10402
+      ],
+      "id": 803796,
+      "original_language": "en",
+      "original_title": "KPop Demon Hunters",
+      "overview": "When K-pop superstars Rumi, Mira and Zoey aren't selling out stadiums, they're using their secret powers to protect their fans from supernatural threats.",
+      "popularity": 178.3853,
+      "poster_path": "/22AouvwlhlXbe3nrFcjzL24bvWH.jpg",
+      "release_date": "2025-06-20",
+      "title": "KPop Demon Hunters",
+      "video": false,
+      "vote_average": 8.355,
+      "vote_count": 1302
+    }
+  ],
+  "total_pages": 1,
+  "total_results": 20
+}

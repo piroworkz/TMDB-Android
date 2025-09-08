@@ -1,0 +1,439 @@
+{
+  "page": 1,
+  "results": [
+    {
+      "adult": false,
+      "backdrop_path": "/25g7mthXoJFcNZhAKz0evk17Bsx.jpg",
+      "genre_ids": [
+        10765,
+        18
+      ],
+      "id": 157239,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Alien: Earth",
+      "overview": "When the mysterious deep space research vessel USCSS Maginot crash-lands on Earth, Wendy and a ragtag group of tactical soldiers make a fateful discovery that puts them face-to-face with the planet's greatest threat.",
+      "popularity": 237.1727,
+      "poster_path": "/yueXS3q8BtoWekcHOATFHicLl3e.jpg",
+      "first_air_date": "2025-08-12",
+      "name": "Alien: Earth",
+      "vote_average": 7.756,
+      "vote_count": 344
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/jCcSS9iDpKgll8Kpp7qVhSn0l1f.jpg",
+      "genre_ids": [
+        18
+      ],
+      "id": 194766,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Summer I Turned Pretty",
+      "overview": "Every summer, Belly and her family head to the Fishers’ beach house in Cousins. Every summer is the same ... until Belly turns sixteen. Relationships will be tested, painful truths will be revealed, and Belly will be forever changed. It’s a summer of first love, first heartbreak and growing up — it's the summer she turns pretty.",
+      "popularity": 185.5723,
+      "poster_path": "/xBIz53wYWsKfFpN0TaizVAjKJ0z.jpg",
+      "first_air_date": "2022-06-16",
+      "name": "The Summer I Turned Pretty",
+      "vote_average": 8.159,
+      "vote_count": 926
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/yQw23xxmVBFVHPCF6V68TAIIfno.jpg",
+      "genre_ids": [
+        10759,
+        18
+      ],
+      "id": 219760,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Terminal List: Dark Wolf",
+      "overview": "Before The Terminal List, Navy SEAL Ben Edwards finds himself entangled in the black operations side of the CIA. The deeper Ben goes into the 'gray', the harder it will become to not give himself over to his darker impulses. Every man has two wolves inside him – light and dark – fighting for control. Which wolf will Ben Edwards feed?",
+      "popularity": 134.8871,
+      "poster_path": "/9mYeRoWguq5etbwJRdF8BXFKiF.jpg",
+      "first_air_date": "2025-08-27",
+      "name": "The Terminal List: Dark Wolf",
+      "vote_average": 7.5,
+      "vote_count": 46
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/pj1wFbZF3gpEg7F0EreXTvZNZTG.jpg",
+      "genre_ids": [
+        10759,
+        10765,
+        18
+      ],
+      "id": 110492,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Peacemaker",
+      "overview": "The continuing story of Peacemaker, a vainglorious superhero/supervillain who believes in peace at any cost — no matter how many people he has to kill. After a miraculous recovery from his duel with Bloodsport, Peacemaker soon discovers that his freedom comes at a price.",
+      "popularity": 112.8821,
+      "poster_path": "/yb4F1Oocq8GfQt6iIuAgYEBokhG.jpg",
+      "first_air_date": "2022-01-13",
+      "name": "Peacemaker",
+      "vote_average": 8.238,
+      "vote_count": 2946
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/9DrORnlwnjt5SeJKcuE5sqOoIdV.jpg",
+      "genre_ids": [
+        16,
+        10759,
+        10765
+      ],
+      "id": 207468,
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "怪獣８号",
+      "overview": "In a world plagued by creatures known as Kaiju, Kafka Hibino aspired to enlist in The Defense Force. He makes a promise to enlist with his childhood friend, Mina Ashiro. Soon, life takes them in separate ways. While employed cleaning up after Kaiju battles, Kafka meets Reno Ichikawa. Reno's determination to join The Defense Force reawakens Kafka's promise to join Mina and protect humanity.",
+      "popularity": 95.5492,
+      "poster_path": "/bJxGs0w5RAhaX4fIUQu511rvm0S.jpg",
+      "first_air_date": "2024-04-13",
+      "name": "Kaiju No. 8",
+      "vote_average": 8.5,
+      "vote_count": 615
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/9QwPn3hV58ESYzT6YbWPzGJ9SjG.jpg",
+      "genre_ids": [
+        10765,
+        18
+      ],
+      "id": 280945,
+      "origin_country": [
+        "KR"
+      ],
+      "original_language": "ko",
+      "original_name": "폭군의 셰프",
+      "overview": "After time traveling to the Joseon era, a talented chef meets a tyrant king. Her modern dishes captivate his palate, but royal challenges await her.",
+      "popularity": 85.0922,
+      "poster_path": "/exUXEOierAwZ597010TLQka9TFy.jpg",
+      "first_air_date": "2025-08-23",
+      "name": "Bon Appétit, Your Majesty",
+      "vote_average": 8.969,
+      "vote_count": 32
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/uNTrRKIOyKYISthoeizghtXPEOK.jpg",
+      "genre_ids": [
+        16,
+        10759,
+        35,
+        10765
+      ],
+      "id": 240411,
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "ダンダダン",
+      "overview": "In a bet to prove whether ghosts or aliens exist, two high schoolers face terrifying paranormal threats, gain superpowers and maybe even fall in love?!",
+      "popularity": 84.4687,
+      "poster_path": "/6qfZAOEUFIrbUH3JvePclx1nXzz.jpg",
+      "first_air_date": "2024-10-04",
+      "name": "Dan Da Dan",
+      "vote_average": 8.632,
+      "vote_count": 646
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/7UWoOvJZRqGxURZZQY8MtKGgZ9L.jpg",
+      "genre_ids": [
+        18
+      ],
+      "id": 196890,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Chief of War",
+      "overview": "With Hawaii's four kingdoms divided by war, the ferocious warrior Kaʻiana embarks on an epic mission to unite his people—as an existential threat approaches their shores.",
+      "popularity": 81.8034,
+      "poster_path": "/8Mckh3qJRTzXTQNZtpb133RHmO4.jpg",
+      "first_air_date": "2025-07-31",
+      "name": "Chief of War",
+      "vote_average": 7.063,
+      "vote_count": 111
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/sKlF9YrVu84DYMDAUZEZDCvDxK2.jpg",
+      "genre_ids": [
+        16,
+        35,
+        18,
+        10765
+      ],
+      "id": 244808,
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "ぬきたし THE ANIMATION",
+      "overview": "On Seiran Island, secret society NLNS is united by Junnosuke Tachibana, who is determined to crush a law. They have found a benefactor, an unknown rich man, who offers them a secret base and cash. Their mission is to locate a mysterious girl and stop the law, keeping the SHO off their trail.",
+      "popularity": 80.8525,
+      "poster_path": "/zlybZJXfu4IpPnWXhnRtobl9BgZ.jpg",
+      "first_air_date": "2025-07-19",
+      "name": "Nukitashi the Animation",
+      "vote_average": 7.7,
+      "vote_count": 19
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/4d4xvVwpEhpy1brZIXPrNfN3DsQ.jpg",
+      "genre_ids": [
+        18,
+        9648
+      ],
+      "id": 298132,
+      "origin_country": [
+        "CN"
+      ],
+      "original_language": "zh",
+      "original_name": "月读神之心",
+      "overview": "A young man haunted by visions linked to the moon god Tsukuyomi confronts past traumas and the loss of a loved one. Amid deepening bonds, the story blends mystery, emotion, and complex relationships in short, intense episodes.",
+      "popularity": 68.4748,
+      "poster_path": "/cHFImyJW7YHTDMWT3IFyPIx957W.jpg",
+      "first_air_date": "2025-08-14",
+      "name": "The Heart of Tsukuyomi",
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/ub0xUWZUBoAwy1eBG1uwi9ikaVg.jpg",
+      "genre_ids": [
+        10759,
+        18,
+        80
+      ],
+      "id": 247732,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "NCIS: Tony & Ziva",
+      "overview": "When his security company is attacked, Tony and Ziva must go on the run across Europe, try to figure out who is after them and maybe even learn to trust each other again so that they can finally have their unconventional happily ever after.",
+      "popularity": 67.8433,
+      "poster_path": "/zNIANQsAs2kbxbzbTTe5dTBzhKe.jpg",
+      "first_air_date": "2025-09-04",
+      "name": "NCIS: Tony & Ziva",
+      "vote_average": 9.333,
+      "vote_count": 12
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/vmNj8bthBAofXgsaY6yP4bCvXko.jpg",
+      "genre_ids": [
+        10765,
+        18
+      ],
+      "id": 93740,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Foundation",
+      "overview": "Follow a band of exiles on their monumental journey to save humanity and rebuild civilization amid the fall of the Galactic Empire.",
+      "popularity": 67.3081,
+      "poster_path": "/tg9I5pOY4M9CKj8U0cxVBTsm5eh.jpg",
+      "first_air_date": "2021-09-23",
+      "name": "Foundation",
+      "vote_average": 7.7,
+      "vote_count": 1489
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/mrapJp0qb6Fvo3IW9IrjCK9IgSo.jpg",
+      "genre_ids": [
+        16,
+        10759,
+        18,
+        10765
+      ],
+      "id": 256721,
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "ガチアクタ",
+      "overview": "In a floating city where the rich discard their waste—and people—Rudo is framed for murder and thrown into the Pit, where a hellscape of mutated garbage beasts dwell. To survive, he must wield a new power and join the rogue Cleaners. Rudo doesn’t just aim to battle monsters, but the corrupt who cast him into Hell.",
+      "popularity": 63.606,
+      "poster_path": "/lXAyZHGAh0YrAi8x7ekCnoquace.jpg",
+      "first_air_date": "2025-07-06",
+      "name": "Gachiakuta",
+      "vote_average": 8.846,
+      "vote_count": 79
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/i9IEOD1Li1y89xRHKH9kiE8dt9z.jpg",
+      "genre_ids": [
+        10765,
+        18
+      ],
+      "id": 127235,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Invasion",
+      "overview": "Earth is visited by an alien species that threatens humanity's existence. Events unfold in real time through the eyes of five ordinary people across the globe as they struggle to make sense of the chaos unraveling around them.",
+      "popularity": 56.1723,
+      "poster_path": "/xP4SIyOn7vUh0OqT4a30MHhNFMO.jpg",
+      "first_air_date": "2021-10-21",
+      "name": "Invasion",
+      "vote_average": 7.2,
+      "vote_count": 1048
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/blSthAPRbEOJBowdxppeQqNPRh9.jpg",
+      "genre_ids": [
+        16,
+        35,
+        10759
+      ],
+      "id": 207332,
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "SAKAMOTO DAYS",
+      "overview": "Once the greatest hitman of all, Taro Sakamoto retired in the name of love. But when his past catches up, he must fight to protect his beloved family.",
+      "popularity": 54.9716,
+      "poster_path": "/wRpCqsJFyKNuh5FMegNPrhzp2NF.jpg",
+      "first_air_date": "2025-01-11",
+      "name": "SAKAMOTO DAYS",
+      "vote_average": 8.1,
+      "vote_count": 223
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/wiKWTM2DTrkEIxbTWCv4XRXckBf.jpg",
+      "genre_ids": [
+        10766,
+        35,
+        18
+      ],
+      "id": 230424,
+      "origin_country": [
+        "CO"
+      ],
+      "original_language": "es",
+      "original_name": "Betty la fea, la historia continúa",
+      "overview": "While an empowered and wiser Betty works hard on rebuilding her relationship with her teenage daughter Mila, her relationship with Armando begins to deteriorate, making her question if she made the right decision 20 years ago.",
+      "popularity": 51.2323,
+      "poster_path": "/huEeQQBmZsZ5qDXkWl0pS5vPWIU.jpg",
+      "first_air_date": "2024-07-19",
+      "name": "Betty la Fea, the Story Continues",
+      "vote_average": 7.505,
+      "vote_count": 206
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/dl3pdT1NZiqRM4aDBwsD2TtO8x9.jpg",
+      "genre_ids": [
+        16,
+        18,
+        35
+      ],
+      "id": 271607,
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "薫る花は凛と咲く",
+      "overview": "When the intimidating Rintaro meets the open-minded Kaoruko, the unlikely duo grows closer. The issue? Their neighboring high schools hate each other.",
+      "popularity": 50.214,
+      "poster_path": "/cRtyoypoIfrW8SWyVw0y554xWQ.jpg",
+      "first_air_date": "2025-07-06",
+      "name": "The Fragrant Flower Blooms with Dignity",
+      "vote_average": 8.8,
+      "vote_count": 52
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/qLMfcvdCcCGD2BNLH8b6ZCBuO7D.jpg",
+      "genre_ids": [
+        10763,
+        35
+      ],
+      "id": 2224,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Daily Show",
+      "overview": "The World's Fakest News Team tackle the biggest stories in news, politics and pop culture.",
+      "popularity": 47.4762,
+      "poster_path": "/ixcfyK7it6FjRM36Te4OdblAq4X.jpg",
+      "first_air_date": "1996-07-22",
+      "name": "The Daily Show",
+      "vote_average": 6.381,
+      "vote_count": 594
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/gWPK2RIVJ6i3myf7Xdw8DqlznT8.jpg",
+      "genre_ids": [
+        16,
+        35,
+        18
+      ],
+      "id": 123249,
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "その着せ替え人形は恋をする",
+      "overview": "High schooler Wakana Gojo wants to become a kashirashi—a master craftsman who makes traditional Japanese Hina dolls. Though he's gung-ho about the craft, he knows nothing about the latest trends, and has a hard time fitting in with his class. The popular kids—especially one girl, Marin Kitagawa—seem like they live in a completely different world. That all changes one day, when she shares an unexpected secret with him, and their completely different worlds collide.",
+      "popularity": 44.6299,
+      "poster_path": "/A6mxBwvvv63JXZm3xXKv4SugE0L.jpg",
+      "first_air_date": "2022-01-09",
+      "name": "My Dress-Up Darling",
+      "vote_average": 8.472,
+      "vote_count": 791
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/AdWWrcYKNXlpeWNJlmK4HCJ6Dj9.jpg",
+      "genre_ids": [
+        16,
+        9648,
+        10765
+      ],
+      "id": 232230,
+      "origin_country": [
+        "CN"
+      ],
+      "original_language": "zh",
+      "original_name": "诡秘之主",
+      "overview": "In a Victorian world of steam, dreadnoughts, and occult horrors, Zhou Mingrui awakens as Klein Moretti. He walks a razor’s edge between light and darkness, entangled with warring Churches. This is the legend of unlimited potential…and unspeakable danger.",
+      "popularity": 44.1164,
+      "poster_path": "/c8fHePq3yTn3WvZd4hupkHwsjm5.jpg",
+      "first_air_date": "2025-06-28",
+      "name": "Lord of Mysteries",
+      "vote_average": 8.965,
+      "vote_count": 57
+    }
+  ],
+  "total_pages": 1,
+  "total_results": 20
+}
