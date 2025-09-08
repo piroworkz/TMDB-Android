@@ -8,7 +8,6 @@ import com.davidluna.tmdb.convention.libs.androidTestCore
 import com.davidluna.tmdb.convention.libs.androidTestRules
 import com.davidluna.tmdb.convention.libs.composeBom
 import com.davidluna.tmdb.convention.libs.coroutinesTest
-import com.davidluna.tmdb.convention.libs.espressoIntents
 import com.davidluna.tmdb.convention.libs.hiltCompiler
 import com.davidluna.tmdb.convention.libs.hiltTest
 import com.davidluna.tmdb.convention.libs.libs
@@ -31,7 +30,6 @@ internal val Project.androidTestingBundle: Unit
             androidTestImplementation(libs.androidRunner)
             androidTestImplementation(libs.androidTestRules)
             androidTestImplementation(libs.androidTestCore)
-            androidTestImplementation(libs.espressoIntents)
             androidTestImplementation(libs.mockWebServer)
             androidTestImplementation(libs.coroutinesTest)
             androidTestImplementation(libs.playServicesLocation)
