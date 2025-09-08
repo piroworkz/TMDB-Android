@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.davidluna.tmdb.auth_domain.entities.LoginRequest
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.PASSWORD
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.USERNAME
+import com.davidluna.tmdb.auth_domain.usecases.CloseSessionUseCase
 import com.davidluna.tmdb.auth_domain.usecases.LoginAsGuest
 import com.davidluna.tmdb.auth_domain.usecases.LoginWithCredentials
 import com.davidluna.tmdb.auth_domain.usecases.ValidateInputUseCase
@@ -15,7 +16,6 @@ import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetPassword
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetUsername
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.toAppError
-import com.davidluna.tmdb.auth_domain.usecases.CloseSessionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -104,6 +104,12 @@ class LoginViewModel @Inject constructor(
     private fun validateLoginForm(): Boolean {
         val usernameError = validateInput(_state.value.username, USERNAME)
         val passwordError = validateInput(_state.value.password, PASSWORD)
+        _state.update {
+            it.copy(
+                usernameError = usernameError?.message,
+                passwordError = passwordError?.message
+            )
+        }
         return usernameError == null && passwordError == null
     }
 
