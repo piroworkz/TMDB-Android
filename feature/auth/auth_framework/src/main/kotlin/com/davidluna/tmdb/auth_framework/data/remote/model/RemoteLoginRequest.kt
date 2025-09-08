@@ -8,4 +8,3 @@ data class RemoteLoginRequest(
     @SerialName("request_token")
     val requestToken: String
 )
-
