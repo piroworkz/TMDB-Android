@@ -20,6 +20,7 @@ object Reader {
     const val AUTH_TOKEN_NEW = "auth_token_new.json"
     const val AUTH_SESSION_NEW = "auth_session_new.json"
     const val AUTH_GUEST_SESSION = "auth_guest_session.json"
+    const val VALIDATE_WITH_LOGIN = "validate_with_login.json"
     const val REMOTE_ERROR = "remote_error_message.json"
 
     val json: Json = Json {

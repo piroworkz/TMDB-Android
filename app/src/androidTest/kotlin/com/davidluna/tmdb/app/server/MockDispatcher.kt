@@ -16,6 +16,7 @@ import com.davidluna.tmdb.test_shared.reader.Reader.TV_SHOW_IMAGES
 import com.davidluna.tmdb.test_shared.reader.Reader.TV_SHOW_LIST
 import com.davidluna.tmdb.test_shared.reader.Reader.TV_SHOW_VIDEOS
 import com.davidluna.tmdb.test_shared.reader.Reader.USER_ACCOUNT
+import com.davidluna.tmdb.test_shared.reader.Reader.VALIDATE_WITH_LOGIN
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
@@ -31,16 +32,17 @@ class MockDispatcher : Dispatcher() {
             request.path?.contains("authentication/token/new") == true -> AUTH_TOKEN_NEW
             request.path?.contains("authentication/session/new") == true -> AUTH_SESSION_NEW
             request.path?.contains("authentication/guest_session/new") == true -> AUTH_GUEST_SESSION
+            request.path?.contains("authentication/token/validate_with_login") == true -> VALIDATE_WITH_LOGIN
             request.path?.contains("account") == true -> USER_ACCOUNT
             request.path?.contains("movie/popular") == true
-                    or (request.path?.contains("movie/top_rated") == true)
-                    or (request.path?.contains("movie/upcoming") == true)
-                    or (request.path?.contains("movie/now_playing") == true) -> MOVIE_LIST
+                    || request.path?.contains("movie/top_rated") == true
+                    || request.path?.contains("movie/upcoming") == true
+                    || request.path?.contains("movie/now_playing") == true -> MOVIE_LIST
 
             request.path?.contains("tv/airing_today") == true
-                    or (request.path?.contains("tv/on_the_air") == true)
-                    or (request.path?.contains("tv/popular") == true)
-                    or (request.path?.contains("tv/top_rated") == true) -> TV_SHOW_LIST
+                    || request.path?.contains("tv/on_the_air") == true
+                    || request.path?.contains("tv/popular") == true
+                    || request.path?.contains("tv/top_rated") == true -> TV_SHOW_LIST
 
             request.path?.contains("movie/$movieId/credits") == true -> MOVIE_CREDITS
             request.path?.contains("movie/$movieId/images") == true -> MOVIE_IMAGES
@@ -54,15 +56,17 @@ class MockDispatcher : Dispatcher() {
             request.path?.contains("tv/$tvShowId/recommendations") == true -> TV_SHOW_LIST
             request.path?.contains("tv/$tvShowId/similar") == true -> TV_SHOW_LIST
             request.path?.contains("tv/$tvShowId") == true -> TV_SHOW_DETAIL
-
             else -> REMOTE_ERROR
         }
+        println("<-- fileName $fileName path ${request.path}")
         return fromFile(fileName)
     }
 
     private fun fromFile(fileName: String): MockResponse {
         return try {
-            MockResponse().setBody(Reader.fromFile(fileName))
+            val body = Reader.fromFile(fileName)
+            println("<-- body for $fileName $body")
+            MockResponse().setBody(body)
         } catch (e: Exception) {
             MockResponse().setBody(Reader.fromFile(REMOTE_ERROR))
         }
