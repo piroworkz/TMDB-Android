@@ -2,7 +2,7 @@ package com.davidluna.tmdb.convention.extensions.application
 
 
 import com.android.build.api.dsl.ApplicationExtension
-import com.davidluna.tmdb.convention.constants.*
+import com.davidluna.tmdb.convention.constants.Constants
 import com.davidluna.tmdb.convention.constants.Constants.COMPILE_SDK
 import com.davidluna.tmdb.convention.constants.Constants.HILT_TEST_RUNNER
 import com.davidluna.tmdb.convention.constants.Constants.MIN_SDK
@@ -24,6 +24,10 @@ internal fun ApplicationExtension.setDefaultConfig(project: Project) {
         versionCode = VERSION_CODE
         versionName = VERSION_NAME
         testInstrumentationRunner = HILT_TEST_RUNNER
+        testInstrumentationRunnerArguments += mapOf(
+            "clearPackageData" to "true"
+        )
+        testOptions { animationsDisabled = true }
         vectorDrawables {
             useSupportLibrary = true
         }
