@@ -10,10 +10,8 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.davidluna.tmdb.app.rules.MockWebServerRule
@@ -72,7 +70,6 @@ class TmdbAppEndToEndTest {
 
             waitUntilAtLeastOneExists(hasText(firstMovie.title.orEmpty()))
 
-            onRoot(useUnmergedTree = true).printToLog("<-- CarouselImageView")
             onNode(hasAnyChild(hasContentDescription("CarouselImageView") and hasText(firstMovie.title.orEmpty())))
                 .performClick()
 
