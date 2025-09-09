@@ -4,7 +4,6 @@ package com.davidluna.tmdb.convention.extensions.application
 import com.android.build.api.dsl.ApplicationExtension
 import com.davidluna.tmdb.convention.constants.Constants
 import com.davidluna.tmdb.convention.constants.Constants.COMPILE_SDK
-import com.davidluna.tmdb.convention.constants.Constants.HILT_TEST_RUNNER
 import com.davidluna.tmdb.convention.constants.Constants.MIN_SDK
 import com.davidluna.tmdb.convention.constants.Constants.NAMESPACE
 import com.davidluna.tmdb.convention.constants.Constants.TARGET_SDK
@@ -23,7 +22,7 @@ internal fun ApplicationExtension.setDefaultConfig(project: Project) {
         targetSdk = TARGET_SDK
         versionCode = VERSION_CODE
         versionName = VERSION_NAME
-        testInstrumentationRunner = HILT_TEST_RUNNER
+        testInstrumentationRunner = "com.davidluna.tmdb.app.HiltTestRunner"
         testInstrumentationRunnerArguments += mapOf(
             "clearPackageData" to "true"
         )

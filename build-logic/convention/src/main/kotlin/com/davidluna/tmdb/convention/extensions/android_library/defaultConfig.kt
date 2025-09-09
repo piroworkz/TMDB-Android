@@ -7,7 +7,7 @@ internal fun LibraryExtension.defaultConfig() {
     compileSdk = Constants.COMPILE_SDK
     defaultConfig {
         minSdk = Constants.MIN_SDK
-        testInstrumentationRunner = Constants.HILT_TEST_RUNNER
+        testInstrumentationRunner = Constants.TEST_INSTRUMENTATION_RUNNER
         consumerProguardFiles("proguard-rules.pro")
     }
 }
