@@ -36,7 +36,6 @@ fun FilmMaskImageView(
         modifier = Modifier
             .padding(8.dp)
             .clip(RoundedCornerShape(18.dp))
-            .shimmer(model == null)
             .aspectRatio(aspectRatio)
     ) {
         AsyncImage(
@@ -46,7 +45,8 @@ fun FilmMaskImageView(
                 .build(),
             contentDescription = "FilmMaskImageView",
             modifier = Modifier
-                .aspectRatio(aspectRatio),
+                .aspectRatio(aspectRatio)
+                .shimmer(model == null),
             alignment = Alignment.Center,
             placeholder = painterResource(R.drawable.logo_v1),
             contentScale = ContentScale.Crop,

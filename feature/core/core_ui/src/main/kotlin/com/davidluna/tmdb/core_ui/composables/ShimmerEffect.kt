@@ -6,57 +6,77 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.tooling.preview.Preview
+import com.davidluna.tmdb.core_ui.theme.TmdbTheme
 
-fun Modifier.shimmer(enabled: Boolean, duration: Int = 2000): Modifier = composed {
-    var intSize by remember { mutableStateOf(IntSize.Zero) }
-    val transition = rememberInfiniteTransition(label = "Animation Shimmer")
-    val startOffset by transition.animateFloat(
-        initialValue = -2 * intSize.width.toFloat(),
-        targetValue = 2 * intSize.width.toFloat(),
+fun Modifier.shimmer(
+    enabled: Boolean,
+    durationMillis: Int = 1000,
+): Modifier = if (!enabled) this else composed {
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val progress by transition.animateFloat(
+        initialValue = -1f,
+        targetValue = 1f,
         animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = duration,
-                easing = LinearEasing
-            ),
+            animation = tween(durationMillis = durationMillis, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
-        ), label = "Animation Shimmer"
+        ),
+        label = "shimmerProgress"
     )
 
-    if (enabled) {
-        background(appGradientBrush(startOffset = startOffset, intSize = intSize))
-            .onGloballyPositioned { coordinates ->
-                intSize = coordinates.size
+    val colors = listOf(
+        Color.Unspecified,
+        Color.Gray.copy(alpha = .5F),
+        Color.Unspecified,
+    )
+    drawWithCache {
+        val bandWidth = size.width
+        val brush = Brush.linearGradient(
+            colors = colors,
+            start = Offset(0F, 0F),
+            end = Offset(bandWidth, 0F),
+            tileMode = TileMode.Clamp
+        )
+        onDrawWithContent {
+            drawContent()
+            val translateX = progress * bandWidth
+            drawRect(Color.LightGray.copy(alpha = .3F))
+            withTransform({
+                translate(left = translateX, top = 0f)
+            }) {
+                drawRect(brush = brush)
             }
-    } else {
-        background(colorScheme.background)
+        }
     }
-
 }
 
-
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
 @Composable
-private fun appGradientBrush(startOffset: Float, intSize: IntSize): Brush =
-    Brush.linearGradient(
-        colors = listOf(
-            colorScheme.primary,
-            colorScheme.secondary,
-            colorScheme.tertiary
-        ).reversed(),
-        start = Offset(startOffset, 0f),
-        end = Offset(startOffset + intSize.width.toFloat(), intSize.height.toFloat()),
-        tileMode = TileMode.Clamp
-    )
+private fun ShimmerPreview() {
+    TmdbTheme {
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(CircleShape)
+                .shimmer(enabled = true)
+        )
+    }
+}
