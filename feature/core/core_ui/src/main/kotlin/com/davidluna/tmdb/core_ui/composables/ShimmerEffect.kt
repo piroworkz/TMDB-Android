@@ -7,7 +7,12 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.davidluna.tmdb.core_ui.theme.TmdbTheme
 
 fun Modifier.shimmer(
@@ -40,20 +46,19 @@ fun Modifier.shimmer(
 
     val colors = listOf(
         Color.Unspecified,
-        Color.Gray.copy(alpha = .5F),
+        Color.LightGray,
         Color.Unspecified,
     )
     drawWithCache {
-        val bandWidth = size.width
         val brush = Brush.linearGradient(
             colors = colors,
             start = Offset(0F, 0F),
-            end = Offset(bandWidth, 0F),
+            end = Offset(size.width, 0F),
             tileMode = TileMode.Clamp
         )
         onDrawWithContent {
             drawContent()
-            val translateX = progress * bandWidth
+            val translateX = (progress * size.width) / 2
             drawRect(Color.LightGray.copy(alpha = .3F))
             withTransform({
                 translate(left = translateX, top = 0f)
@@ -71,12 +76,30 @@ fun Modifier.shimmer(
 @Composable
 private fun ShimmerPreview() {
     TmdbTheme {
-
-        Box(
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .clip(CircleShape)
-                .shimmer(enabled = true)
-        )
+                .padding(24.dp)
+        ){
+            Box(
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(CircleShape)
+                    .shimmer(enabled = true)
+            )
+
+            Column {
+                repeat(3) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp)
+                            .height(16.dp)
+                            .clip(CircleShape)
+                            .shimmer(enabled = true)
+                    )
+                }
+            }
+
+        }
     }
 }
