@@ -13,16 +13,14 @@ fun Project.setSigningConfig(
     applicationExtension.signingConfigs {
         create("release") {
             keyAlias =
-                System.getenv(KEY_ALIAS) ?: project.findProperty(KEY_ALIAS) as String
+                System.getenv(KEY_ALIAS) ?: project.findProperty(KEY_ALIAS) as? String
             keyPassword =
-                System.getenv(KEY_PASSWORD) ?: project.findProperty(KEY_PASSWORD) as String
-            storeFile =
-                file(
-                    System.getenv(STORE_FILE) ?: project.findProperty(STORE_FILE) as String
-                )
-            storePassword =
-                System.getenv(STORE_PASSWORD)
-                    ?: project.findProperty(STORE_PASSWORD) as String
+                System.getenv(KEY_PASSWORD) ?: project.findProperty(KEY_PASSWORD) as? String
+            (System.getenv(STORE_FILE) ?: project.findProperty(STORE_FILE) as? String)?.let {
+                file(it)
+                storePassword = System.getenv(STORE_PASSWORD) ?: project.findProperty(STORE_PASSWORD) as? String
+            }
+
         }
     }
 }
