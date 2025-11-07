@@ -4,7 +4,7 @@ import org.gradle.api.JavaVersion
 
 object Constants {
     const val NAMESPACE = "com.davidluna.tmdb"
-    const val COMPILE_SDK = 35
+    const val COMPILE_SDK = 36
     const val MIN_SDK = 28
     const val TARGET_SDK = 35
     const val VERSION_CODE = 1
