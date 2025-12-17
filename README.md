@@ -1,151 +1,251 @@
+# TMDB-Android
 
-# TMDB2024
+A modern, modular Android application built with Kotlin and Jetpack Compose, following Clean Architecture and SOLID principles. This project demonstrates a professional, scalable approach to building maintainable and testable Android applications.
 
-A Modern, Scalable Android Application
+## 🎯 Project Overview
 
-TMDB 2024 is a cutting-edge Android application built with Kotlin and Jetpack Compose, adhering to Clean Architecture and SOLID principles. This project showcases a robust approach to building maintainable, scalable, and testable Android applications using best-in-class practices.
+**TMDB-Android** is a feature-rich Android application that showcases best practices in modern Android development:
+- **Modular Architecture**: Each feature is split into `domain`, `framework`, and `ui` layers
+- **Jetpack Compose**: Modern declarative UI framework
+- **Kotlin Coroutines**: Asynchronous operations and reactive data flows
+- **Dependency Injection with Hilt**: Centralized dependency management
+- **Clean Architecture**: Separation of concerns with clear layer boundaries
+- **Comprehensive Testing**: Unit tests, integration tests, and instrumented UI tests
 
-
-Why Kotlin and Clean Architecture?
-
-
-## Kotlin
-
-A modern, concise language that compiles to Java bytecode. It offers features like null safety, higher-order functions, coroutines, and extension functions, leading to cleaner and more expressive code.
-## Clean Architecture:
-
-An architectural approach that separates concerns into distinct layers, promoting independence, testability, and maintainability. SOLID principles guide this separation of responsibilities.
-        
-### S.O.L.I.D.
-
-- **Single Responsibility Principle:** A class should have one, and only one, reason to change.
-- **Open-Closed Principle:** Entities should be open for extension, but closed for modification.
-- **Liskov Substitution Principle:** Objects in a superclass should be replaceable with objects of its - subclasses without altering the correctness of the program.   
-- **Interface Segregation Principle:** Clients should not be forced to depend on interfaces that they - do not use.
-- **Dependency Inversion Principle:** Depend on abstractions, not concretions.
-
-
-## Key Features
-
--    Modern UI with Jetpack Compose: Delivers a sleek and responsive user interface using Jetpack -Compose.
--    Efficient Data Serialization with Protobuf: Leverages Google Protocol Buffers for fast and -efficient data serialization and deserialization.
--    Secure Network Communication: Ensures secure data transfer with Retrofit and OkHttp.
--    Advanced State Management and Asynchronous Handling: Employs Kotlin Coroutines for seamless -asynchronous operations and data flow.
--    Clean Architecture Adherence: Strictly follows Clean Architecture principles for better code -organization and testability.
--    Comprehensive Testing: Includes a robust suite of unit and integration tests to guarantee code quality. (Instrumented testing coming soon)
-
-
-## Benefits of This Approach
-
-Cleaner, more maintainable code: Facilitates long-term code understanding and modification.
-Enhanced testability: Enables writing more isolated and reliable unit tests.
-Reduced coupling: Minimizes dependencies between different code parts.
-Improved scalability: Allows for adding new features without significantly impacting existing cod.
-Greater code reusability: Promotes the creation of reusable components.
-## Getting Started
-
-- **Add your TMDB API key to `local.properties`** (project root) as:
+## 📦 Project Structure
 
 ```
-TMDB_API_KEY=your_api_key_here
+TMDB-Android/
+├── app/                          # Android application module
+├── feature/                       # Feature modules
+│   ├── auth/                     # Authentication feature
+│   │   ├── auth_domain/          # Business logic & entities
+│   │   ├── auth_framework/       # Data sources & repositories
+│   │   └── auth_ui/              # Compose UI & ViewModels
+│   ├── media/                    # Media (movies/shows) feature
+│   │   ├── media_domain/
+│   │   ├── media_framework/
+│   │   └── media_ui/
+│   └── core/                     # Shared core functionality
+│       ├── core_domain/          # Shared domain models
+│       ├── core_framework/       # Shared infrastructure
+│       └── core_ui/              # Shared UI components
+├── build-logic/                  # Custom Gradle convention plugins
+├── test_shared/                  # Shared testing utilities
+└── gradle/libs.versions.toml     # Centralized dependency management
 ```
 
-Do not commit `local.properties` to version control.
+## 🏗️ Architecture
+
+The project follows a **modular, layered Clean Architecture**:
+
+- **Domain Layer**: Pure Kotlin/business logic, use cases, and entities (no Android dependencies)
+- **Framework Layer**: Data sources, repositories, network calls, database, and DI configuration
+- **UI Layer**: Jetpack Compose components, ViewModels, and navigation
+
+### S.O.L.I.D. Principles
+
+- **Single Responsibility**: Each class has one reason to change
+- **Open-Closed**: Open for extension, closed for modification
+- **Liskov Substitution**: Subtypes must be substitutable for their base types
+- **Interface Segregation**: Depend on specific interfaces, not general ones
+- **Dependency Inversion**: Depend on abstractions, not concrete implementations
+
+## ✨ Key Features
+
+- **Modern UI with Jetpack Compose**: Declarative UI framework with material design 3
+- **Efficient Networking**: Retrofit + OkHttp with kotlinx-serialization
+- **Local Persistence**: Room database for caching
+- **Reactive Data Flow**: Kotlin Flow and Coroutines
+- **Image Loading**: Coil for efficient image caching and loading
+- **Modular Design**: Features can be developed independently
+- **Comprehensive Testing**: Unit tests, integration tests, and instrumented UI tests
+- **Dependency Injection**: Hilt for automatic DI container management
+- **Firebase Integration**: Analytics, Crashlytics, Cloud Messaging, and Performance Monitoring
+
+## 🎁 Benefits of This Approach
+
+- **Cleaner Code**: Modular structure makes code easier to understand and maintain
+- **Enhanced Testability**: Isolated layers enable comprehensive unit and integration testing
+- **Reduced Coupling**: Dependencies flow in one direction; features are loosely coupled
+- **Improved Scalability**: New features can be added without affecting existing modules
+- **Better Code Reusability**: Shared components via `core_*` modules
+- **Team Collaboration**: Teams can work on different features independently
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Android Studio Otter | 2025.2.1 or later
-- JDK 1.8 (or the JDK configured for your environment/Gradle plugin)
+- **Android Studio**: 2025.2.2 (Otter Feature Drop) or later
+- **JDK**: 17 (configured for this project)
+- **Gradle**: Configured in `gradle-wrapper` (no manual installation needed)
 
 ### Setup
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/ArchitectCoders2024.git
-   cd ArchitectCoders2024
+   git clone https://github.com/yourusername/TMDB-Android.git
+   cd TMDB-Android
    ```
 
-2. Add your TMDB API key to `local.properties` as shown above.
+2. **Add your TMDB API key** to `local.properties` (project root):
+   ```properties
+   TMDB_API_KEY=your_api_key_here
+   ```
+   ⚠️ **Important**: Do not commit `local.properties` to version control.
 
-3. Open the project in Android Studio and let Gradle sync. The project uses a centralized versions catalog at `gradle/libs.versions.toml` to manage dependency versions.
+3. **Open the project** in Android Studio and let Gradle sync automatically. The project uses a centralized versions catalog at `gradle/libs.versions.toml` to manage all dependency versions.
 
-### Configuration — Signing keystore & Base URL
+### Configuration
 
-For release builds you'll usually need a signing keystore and a base API URL. Keep these values out of source control by placing them in `local.properties` (project root). Example entries:
+For release builds and API configuration, keep sensitive values out of source control by placing them in `local.properties` (project root):
 
-```
-# TMDB API key
-MY_API_KEY=your_api_key_here
+```properties
+# TMDB API configuration
+TMDB_API_KEY=your_api_key_here
 
-# Base URL for API requests (defaults to TMDB v3)
-BASE_URL=https://api.themoviedb.org/
-
-# Signing / release keystore (absolute or relative path)
+# Signing / Release Keystore (optional)
 STORE_FILE=/absolute/or/relative/path/to/keystore.jks
 STORE_PASSWORD=your_store_password
 KEY_ALIAS=your_key_alias
 KEY_PASSWORD=your_key_password
 ```
 
-### AndroidX
-- `androidx.navigation:navigation-compose` - Navigation for Jetpack Compose.
-- `androidx.fragment:fragment-ktx` - Kotlin extensions for Fragment APIs.
-- `androidx.biometric:biometric` - Biometric authentication support.
+## 📚 Tech Stack & Dependencies
 
-### Kotlin
-- `org.jetbrains.kotlin:kotlin-stdlib` - Kotlin standard library.
-- `org.jetbrains.kotlinx:kotlinx-coroutines-core` - Concurrency using coroutines.
-- `org.jetbrains.kotlinx:kotlinx-serialization-json` - Kotlinx Serialization for JSON.
+### Core Dependencies (Key Libraries)
 
-### Jetpack Compose
-- Compose BOM (managed in the versions catalog)
-- `androidx.activity:activity-compose` - Compose integration with Activities.
-- `androidx.compose.ui:ui` - Core Compose UI.
-- `androidx.compose.material3:material3` - Material Design 3 components.
-- `androidx.compose.animation:animation` - Compose animation APIs.
-- `io.coil-kt:coil-compose` - Image loading in Compose.
+**Android & Jetpack**
+- `androidx.activity:activity-compose` (1.12.1) - Activity integration with Compose
+- `androidx.compose.*` (2025.12.00) - Jetpack Compose BOM
+- `androidx.compose.material3:material3` - Material Design 3 components
+- `androidx.navigation:navigation-compose` (2.9.6) - Navigation for Compose
+- `androidx.room:room-*` (2.8.4) - Local database with Room ORM
+- `androidx.datastore:datastore-preferences-core` (1.2.0) - Data storage
+- `androidx.paging:paging-compose` (3.3.6) - Pagination support
+- `androidx.core:core-splashscreen` (1.2.0) - Splash screen support
+- `androidx.hilt:hilt-navigation-compose` (1.3.0) - Hilt + Compose integration
 
-### Networking
-- `com.squareup.retrofit2:retrofit` - REST client.
-- `com.squareup.okhttp3:okhttp` - HTTP client.
-- `com.squareup.okhttp3:logging-interceptor` - Logging interceptor for OkHttp.
-- `com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter` - Kotlinx-serialization converter for Retrofit.
+**Kotlin & Coroutines**
+- `org.jetbrains.kotlin:kotlin-stdlib` (2.2.21) - Kotlin standard library
+- `org.jetbrains.kotlinx:kotlinx-coroutines-*` (1.10.2) - Coroutines for async operations
+- `org.jetbrains.kotlinx:kotlinx-serialization-json` (1.9.0) - JSON serialization
+- `org.jetbrains.kotlinx:kotlinx-datetime` (0.7.1) - Date/time handling
 
-### Protobuf
-- `com.google.protobuf:protobuf-javalite` and `protobuf-kotlin-lite` - Protobuf (lite) implementations used for efficient serialization.
+**Networking & API**
+- `com.squareup.retrofit2:retrofit` (3.0.0) - REST client
+- `com.squareup.okhttp3:okhttp` (5.3.2) - HTTP client
+- `com.squareup.okhttp3:logging-interceptor` (5.3.2) - HTTP logging
+- `com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter` (1.0.0) - Serialization converter
 
-### Arrow
-- `io.arrow-kt:arrow-core` - Functional programming utilities for Kotlin.
+**Image Loading**
+- `io.coil-kt:coil-compose` (2.7.0) - Image loading library for Compose
 
-### Paging
-- `androidx.paging:paging-compose` and `androidx.paging:paging-runtime` - Paging library with Compose integration.
+**Dependency Injection**
+- `com.google.dagger:hilt-android` (2.57.2) - Hilt dependency injection framework
+- `com.google.dagger:hilt-compiler` (2.57.2) - Hilt compiler
+- `javax.inject:javax.inject` (1) - Injection annotations
 
-### Hilt / DI
-- `com.google.dagger:hilt-android` - Dependency Injection framework.
-- `androidx.hilt:hilt-navigation-compose` - Hilt integration for Compose navigation.
+**Firebase**
+- `com.google.firebase:firebase-bom` (34.7.0) - Firebase platform
+- `com.google.firebase:firebase-analytics` - Analytics tracking
+- `com.google.firebase:firebase-crashlytics` - Crash reporting
+- `com.google.firebase:firebase-messaging` - Cloud messaging
+- `com.google.firebase:firebase-perf` - Performance monitoring
 
-### Google Services & Material
-- `com.google.android.gms:play-services-location` - Location APIs.
-- `com.google.android.material:material` - Material components.
+**Other Libraries**
+- `io.arrow-kt:arrow-core` (2.2.0) - Functional programming utilities
+- `com.google.android.gms:play-services-location` (21.3.0) - Location services
 
-### Piroworkz (project utilities)
-- `com.piroworkz:compose-android-permissions` - Permission utilities for Compose.
-- `com.piroworkz:versions-catalog` - Version-catalog helper used by the build logic.
+### Testing Dependencies
 
-### Testing
-- Unit testing: `junit:junit`, `io.mockk:mockk`, `app.cash.turbine:turbine`, `com.google.truth:truth`.
-- Instrumentation/Compose testing: `androidx.compose.ui:ui-test-junit4`, `com.squareup.okhttp3:mockwebserver`, `androidx.test.espresso:espresso-intents`.
+**Unit Testing**
+- `junit:junit` (4.13.2) - JUnit test framework
+- `io.mockk:mockk` (1.14.7) - Mocking library
+- `app.cash.turbine:turbine` (1.2.1) - Flow testing utilities
+- `org.jetbrains.kotlinx:kotlinx-coroutines-test` (1.10.2) - Coroutines testing
 
-For a complete, authoritative list of libraries and their exact versions, see `gradle/libs.versions.toml`.
+**Instrumented Testing**
+- `androidx.compose.ui:ui-test-junit4` - Compose testing
+- `androidx.compose.ui:ui-test-manifest` - Compose test manifest
+- `androidx.test:runner` (1.7.0) - Android test runner
+- `androidx.test.espresso:espresso-core` (3.7.0) - Espresso testing
+- `androidx.test.espresso:espresso-intents` (3.7.0) - Intent testing
+- `com.squareup.okhttp3:mockwebserver` (5.3.2) - Mock HTTP server
+- `com.google.dagger:hilt-android-testing` (2.57.2) - Hilt testing support
+- `androidx.navigation:navigation-testing` (2.9.6) - Navigation testing
 
+### Build Plugins
 
-## Contribution
+- `com.android.application` (8.13.2) - Android app plugin
+- `org.jetbrains.kotlin.android` (2.2.21) - Kotlin Android plugin
+- `org.jetbrains.kotlin.jvm` (2.2.21) - Kotlin JVM plugin
+- `com.google.gms.google-services` (4.4.4) - Google Services plugin
+- Custom convention plugins via `build-logic/convention`
 
-- Follow the project's coding conventions and architecture.
-- Add tests for new features.
-- Open issues or PRs on GitHub.
+For the complete, authoritative list of versions and dependencies, see **`gradle/libs.versions.toml`**.
+## 🔨 Build & Testing
 
-## Credits
+### Build Commands
 
-- Project scaffold and utilities by Piroworkz
-- See repository for full acknowledgements and license.
+Build the app in debug mode:
+```bash
+./gradlew assembleDebug
+```
+
+Build the app in release mode:
+```bash
+./gradlew assembleRelease
+```
+
+Run all unit tests:
+```bash
+./gradlew test
+```
+
+Run instrumented UI tests:
+```bash
+./gradlew connectedUiTests
+```
+
+Aggregate UI test reports:
+```bash
+./gradlew aggregateUiAndroidTestReports
+```
+
+### Code Quality
+
+The project uses:
+- **Kotlin Compiler**: Enforces modern Kotlin syntax and patterns
+- **Convention Plugins**: Enforce consistent dependency and configuration across modules
+- **IDE Inspections**: Android Studio integrated code analysis
+
+### Directory Structure for Build Logic
+
+Custom Gradle convention plugins are located in `build-logic/convention/`:
+- `tmdb.ui.module.plugin` - Applies UI module configuration (Compose, Material3, testing)
+- `tmdb.framework.module.plugin` - Applies framework module configuration (networking, persistence, DI)
+- `tmdb.kotlin.module.plugin` - Applies common Kotlin JVM settings
+
+## 🤝 Contribution
+
+- Follow the project's coding conventions and architecture
+- Create features following the modular pattern (domain/framework/ui split)
+- Add unit and instrumented tests for new features
+- Keep dependencies versions synchronized in `gradle/libs.versions.toml`
+- Open issues or pull requests on GitHub
+
+## 📄 License
+
+[Add your license information here]
+
+## 👥 Credits
+
+- **Architecture Pattern**: Clean Architecture + MVVM with Hilt DI
+- **UI Framework**: Jetpack Compose + Material Design 3
+- **Build System**: Gradle with custom convention plugins
+- See repository for full acknowledgements
+
+---
+
+**Last Updated**: December 17, 2025
