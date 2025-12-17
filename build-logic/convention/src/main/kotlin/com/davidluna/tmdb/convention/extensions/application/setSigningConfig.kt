@@ -17,10 +17,9 @@ fun Project.setSigningConfig(
             keyPassword =
                 System.getenv(KEY_PASSWORD) ?: project.findProperty(KEY_PASSWORD) as? String
             (System.getenv(STORE_FILE) ?: project.findProperty(STORE_FILE) as? String)?.let {
-                file(it)
+                storeFile = file(it)
                 storePassword = System.getenv(STORE_PASSWORD) ?: project.findProperty(STORE_PASSWORD) as? String
             }
-
         }
     }
 }

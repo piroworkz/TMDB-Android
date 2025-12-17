@@ -32,7 +32,7 @@ An architectural approach that separates concerns into distinct layers, promotin
 -    Secure Network Communication: Ensures secure data transfer with Retrofit and OkHttp.
 -    Advanced State Management and Asynchronous Handling: Employs Kotlin Coroutines for seamless -asynchronous operations and data flow.
 -    Clean Architecture Adherence: Strictly follows Clean Architecture principles for better code -organization and testability.
--    Comprehensive Testing: Includes a robust suite of unit and integration tests to guarantee code quality.(Instrumented testing comming soon)
+-    Comprehensive Testing: Includes a robust suite of unit and integration tests to guarantee code quality. (Instrumented testing coming soon)
 
 
 ## Benefits of This Approach
@@ -43,80 +43,109 @@ Reduced coupling: Minimizes dependencies between different code parts.
 Improved scalability: Allows for adding new features without significantly impacting existing cod.
 Greater code reusability: Promotes the creation of reusable components.
 ## Getting Started
-- ** Add your own TMDB api_key variable to your local.properties
+
+- **Add your TMDB API key to `local.properties`** (project root) as:
+
+```
+TMDB_API_KEY=your_api_key_here
+```
+
+Do not commit `local.properties` to version control.
+
 ### Prerequisites
 
-- Android Studio Chipmunk | 2021.2.1 Patch 2 or higher
-- JDK 1.8
+- Android Studio Otter | 2025.2.1 or later
+- JDK 1.8 (or the JDK configured for your environment/Gradle plugin)
 
 ### Setup
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/ArchitectCoders2024.git
+   cd ArchitectCoders2024
    ```
 
-## Dependencies Used
+2. Add your TMDB API key to `local.properties` as shown above.
+
+3. Open the project in Android Studio and let Gradle sync. The project uses a centralized versions catalog at `gradle/libs.versions.toml` to manage dependency versions.
+
+### Configuration — Signing keystore & Base URL
+
+For release builds you'll usually need a signing keystore and a base API URL. Keep these values out of source control by placing them in `local.properties` (project root). Example entries:
+
+```
+# TMDB API key
+MY_API_KEY=your_api_key_here
+
+# Base URL for API requests (defaults to TMDB v3)
+BASE_URL=https://api.themoviedb.org/
+
+# Signing / release keystore (absolute or relative path)
+STORE_FILE=/absolute/or/relative/path/to/keystore.jks
+STORE_PASSWORD=your_store_password
+KEY_ALIAS=your_key_alias
+KEY_PASSWORD=your_key_password
+```
 
 ### AndroidX
-- `androidx.appcompat:appcompat` - Backwards compatibility for Android.
-- `androidx.core:core-ktx` - Kotlin extensions for Android core libraries.
-- `androidx.datastore:datastore-core` - Preferences storage using DataStore.
-- `androidx.lifecycle:lifecycle-runtime-ktx` - Lifecycle management in Kotlin.
-- `androidx.navigation:navigation-common-ktx` - Jetpack Navigation in Kotlin.
-- `androidx.fragment:fragment-ktx` - Kotlin extensions for Fragment.
+- `androidx.navigation:navigation-compose` - Navigation for Jetpack Compose.
+- `androidx.fragment:fragment-ktx` - Kotlin extensions for Fragment APIs.
 - `androidx.biometric:biometric` - Biometric authentication support.
 
 ### Kotlin
-- `org.jetbrains.kotlinx:kotlinx-coroutines-core` - Support for asynchronous programming using coroutines.
-- `org.jetbrains.kotlinx:kotlinx-serialization-json` - JSON serialization and deserialization library.
+- `org.jetbrains.kotlin:kotlin-stdlib` - Kotlin standard library.
+- `org.jetbrains.kotlinx:kotlinx-coroutines-core` - Concurrency using coroutines.
+- `org.jetbrains.kotlinx:kotlinx-serialization-json` - Kotlinx Serialization for JSON.
 
 ### Jetpack Compose
-- `androidx.compose.ui:ui` - UI framework based on Composable functions.
+- Compose BOM (managed in the versions catalog)
+- `androidx.activity:activity-compose` - Compose integration with Activities.
+- `androidx.compose.ui:ui` - Core Compose UI.
 - `androidx.compose.material3:material3` - Material Design 3 components.
-- `androidx.activity:activity-compose` - Integration between Jetpack Compose and Android's Activity.
-- `androidx.navigation:navigation-compose` - Navigation library for Jetpack Compose applications.
-- `io.coil-kt:coil-compose` - Asynchronous image loading in Compose.
+- `androidx.compose.animation:animation` - Compose animation APIs.
+- `io.coil-kt:coil-compose` - Image loading in Compose.
 
-### Retrofit & OkHttp
-- `com.squareup.retrofit2:retrofit` - HTTP client for interacting with REST APIs.
-- `com.squareup.okhttp3:okhttp` - HTTP client for efficient network operations.
+### Networking
+- `com.squareup.retrofit2:retrofit` - REST client.
+- `com.squareup.okhttp3:okhttp` - HTTP client.
 - `com.squareup.okhttp3:logging-interceptor` - Logging interceptor for OkHttp.
+- `com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter` - Kotlinx-serialization converter for Retrofit.
 
 ### Protobuf
-- `com.google.protobuf:protobuf-javalite` - Protobuf implementation for Java Lite.
-- `com.google.protobuf:protobuf-kotlin-lite` - Protobuf implementation for Kotlin Lite.
+- `com.google.protobuf:protobuf-javalite` and `protobuf-kotlin-lite` - Protobuf (lite) implementations used for efficient serialization.
 
 ### Arrow
-- `io.arrow-kt:arrow-core` - Functional programming library for Kotlin.
+- `io.arrow-kt:arrow-core` - Functional programming utilities for Kotlin.
 
 ### Paging
-- `androidx.paging:paging-compose` - Pagination support for Jetpack Compose.
-- `androidx.paging:paging-runtime` - Pagination support for Android runtime.
+- `androidx.paging:paging-compose` and `androidx.paging:paging-runtime` - Paging library with Compose integration.
 
-### Google Services
-- `com.google.android.gms:play-services-location` - Google Play Services Location APIs.
-- `com.google.android.material:material` - Material Design components from Google.
+### Hilt / DI
+- `com.google.dagger:hilt-android` - Dependency Injection framework.
+- `androidx.hilt:hilt-navigation-compose` - Hilt integration for Compose navigation.
 
-### Hilt
-- `com.google.dagger:hilt-android` - Dependency injection framework for Android.
-- `androidx.hilt:hilt-navigation-compose` - Hilt integration for Jetpack Compose navigation.
+### Google Services & Material
+- `com.google.android.gms:play-services-location` - Location APIs.
+- `com.google.android.material:material` - Material components.
 
-### Piroworkz
-- `com.piroworkz:compose-android-permissions` - Permission handling in Jetpack Compose.
-- `com.piroworkz:versions-catalog` - A version catalog utility build-logic module.
+### Piroworkz (project utilities)
+- `com.piroworkz:compose-android-permissions` - Permission utilities for Compose.
+- `com.piroworkz:versions-catalog` - Version-catalog helper used by the build logic.
 
-### Unit Testing
-- `junit:junit` - JUnit framework for unit testing.
-- `org.mockito.kotlin:mockito-kotlin` - Mockito library for Kotlin.
-- `app.cash.turbine:turbine` - Flow testing utilities.
-- `com.google.truth:truth` - Assertion library for testing.
+### Testing
+- Unit testing: `junit:junit`, `io.mockk:mockk`, `app.cash.turbine:turbine`, `com.google.truth:truth`.
+- Instrumentation/Compose testing: `androidx.compose.ui:ui-test-junit4`, `com.squareup.okhttp3:mockwebserver`, `androidx.test.espresso:espresso-intents`.
 
-### Instrumentation Testing (Compose)
-- `androidx.compose.ui:ui-test-junit4` - JUnit4 testing support for Jetpack Compose.
-- `com.squareup.okhttp3:mockwebserver` - Mock server for OkHttp.
-- `androidx.test.espresso:espresso-intents` - Intent interception for Espresso testing.
+For a complete, authoritative list of libraries and their exact versions, see `gradle/libs.versions.toml`.
 
 
-   [![Watch Video](https://img.youtube.com/vi/8OOVcnH2qE8/0.jpg)](https://www.youtube.com/watch?v=8OOVcnH2qE8)
+## Contribution
 
+- Follow the project's coding conventions and architecture.
+- Add tests for new features.
+- Open issues or PRs on GitHub.
+
+## Credits
+
+- Project scaffold and utilities by Piroworkz
+- See repository for full acknowledgements and license.
