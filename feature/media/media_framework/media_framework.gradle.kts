@@ -8,9 +8,7 @@ android {
     namespace = Constants.NAMESPACE.plus(".media_framework")
 
     @Suppress("UnstableApiUsage")
-    testFixtures {
-        enable = true
-    }
+    testFixtures { enable = true }
 }
 
 dependencies {

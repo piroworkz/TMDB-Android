@@ -12,7 +12,7 @@ import com.davidluna.tmdb.media_framework.data.remote.model.toEndpointPath
 import com.davidluna.tmdb.media_domain.entities.Media
 import com.davidluna.tmdb.media_framework.data.fakes.fakeCatalog
 import com.davidluna.tmdb.media_framework.data.fakes.fakeRoomMediaList
-import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDaoSpy
+import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDao
 import com.davidluna.tmdb.media_framework.data.local.database.entities.media.RoomMedia
 import com.davidluna.tmdb.media_framework.data.paging.MediaCatalogRemoteMediator
 import com.davidluna.tmdb.media_framework.di.MediaCatalogMediatorFactory
@@ -40,7 +40,7 @@ class MediaCatalogRepositoryTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var mediaDao: MediaDaoSpy
+    private lateinit var mediaDao: MediaDao
 
     @MockK
     private lateinit var mediatorFactory: MediaCatalogMediatorFactory

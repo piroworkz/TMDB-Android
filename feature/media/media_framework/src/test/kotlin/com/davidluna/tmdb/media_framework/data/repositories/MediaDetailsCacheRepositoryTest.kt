@@ -3,6 +3,7 @@ package com.davidluna.tmdb.media_framework.data.repositories
 import arrow.core.left
 import arrow.core.right
 import com.davidluna.tmdb.core_domain.entities.toAppError
+import com.davidluna.tmdb.core_domain.usecases.GetCountryCodeUseCase
 import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
 import com.davidluna.tmdb.media_framework.data.fakes.fakeCatalog
 import com.davidluna.tmdb.media_framework.data.fakes.fakeMediaDetails
@@ -11,9 +12,9 @@ import com.davidluna.tmdb.media_framework.data.fakes.fakeRemoteError
 import com.davidluna.tmdb.media_framework.data.fakes.fakeRemoteImageResponse
 import com.davidluna.tmdb.media_framework.data.fakes.fakeRemoteMediaDetail
 import com.davidluna.tmdb.media_framework.data.fakes.fakeRoomMediaDetailsRelations
-import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDetailsDaoSpy
+import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDetailsDao
 import com.davidluna.tmdb.media_framework.data.paging.IsCacheExpired
-import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaServiceSpy
+import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaService
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.called
 import io.mockk.coEvery
@@ -34,13 +35,16 @@ class MediaDetailsCacheRepositoryTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var local: MediaDetailsDaoSpy
+    private lateinit var local: MediaDetailsDao
 
     @MockK
-    private lateinit var remote: RemoteMediaServiceSpy
+    private lateinit var remote: RemoteMediaService
 
     @MockK
     private lateinit var isCacheExpired: IsCacheExpired
+
+    @MockK
+    private lateinit var getCountryCodeUseCase: GetCountryCodeUseCase
 
     private val mediaId = fakeMediaDetails.id
 
@@ -170,6 +174,7 @@ class MediaDetailsCacheRepositoryTest {
     private fun buildSUT() = MediaDetailsCacheRepository(
         local = local,
         remote = remote,
-        isCacheExpired = isCacheExpired
+        isCacheExpired = isCacheExpired,
+        getCountryCodeUseCase = getCountryCodeUseCase
     )
 }

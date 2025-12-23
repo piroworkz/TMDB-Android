@@ -5,14 +5,14 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import arrow.core.right
-import com.davidluna.tmdb.media_framework.data.remote.model.toEndpointPath
 import com.davidluna.tmdb.media_framework.data.fakes.fakeCatalog
 import com.davidluna.tmdb.media_framework.data.fakes.fakeRemoteKey
 import com.davidluna.tmdb.media_framework.data.fakes.fakeRemoteResults
-import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDaoSpy
-import com.davidluna.tmdb.media_framework.data.local.database.dao.RemoteKeysDaoSpy
+import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDao
+import com.davidluna.tmdb.media_framework.data.local.database.dao.RemoteKeysDao
 import com.davidluna.tmdb.media_framework.data.local.database.entities.media.RoomMedia
-import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaServiceSpy
+import com.davidluna.tmdb.media_framework.data.remote.model.toEndpointPath
+import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaService
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.called
 import io.mockk.coEvery
@@ -34,13 +34,13 @@ class EndpointRemoteMediatorTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var mediaDao: MediaDaoSpy
+    private lateinit var mediaDao: MediaDao
 
     @MockK
-    private lateinit var mediaService: RemoteMediaServiceSpy
+    private lateinit var mediaService: RemoteMediaService
 
     @MockK
-    private lateinit var remoteKeysDao: RemoteKeysDaoSpy
+    private lateinit var remoteKeysDao: RemoteKeysDao
 
     @MockK
     private lateinit var isCacheExpired: IsCacheExpired
