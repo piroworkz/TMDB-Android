@@ -90,19 +90,19 @@ External libraries (Retrofit, Room, etc.)
 ### Current Features
 
 1. **auth** - Authentication and login flow
-   - `auth_domain/` - Login use cases and authentication models
-   - `auth_framework/` - Authentication repository and API integration
-   - `auth_ui/` - Login screen and authentication UI
+    - `auth_domain/` - Login use cases and authentication models
+    - `auth_framework/` - Authentication repository and API integration
+    - `auth_ui/` - Login screen and authentication UI
 
 2. **media** - Movies/Shows browsing and details
-   - `media_domain/` - Media models and use cases
-   - `media_framework/` - Media repository and TMDB API integration
-   - `media_ui/` - Media listing, search, and detail screens
+    - `media_domain/` - Media models and use cases
+    - `media_framework/` - Media repository and TMDB API integration
+    - `media_ui/` - Media listing, search, and detail screens
 
 3. **core** - Shared functionality across all features
-   - `core_domain/` - Shared domain models (Result types, common entities)
-   - `core_framework/` - Shared infrastructure (network config, database)
-   - `core_ui/` - Shared Compose components, themes, utilities
+    - `core_domain/` - Shared domain models (Result types, common entities)
+    - `core_framework/` - Shared infrastructure (network config, database)
+    - `core_ui/` - Shared Compose components, themes, utilities
 
 ### Design Patterns Used
 
@@ -132,17 +132,17 @@ External libraries (Retrofit, Room, etc.)
 #### Android Studio Settings
 
 1. **Code Style**
-   - Settings → Editor → Code Style → Kotlin
-   - Enable "Optimize imports on the fly"
-   - Enable "Add unambiguous imports on the fly"
+    - Settings → Editor → Code Style → Kotlin
+    - Enable "Optimize imports on the fly"
+    - Enable "Add unambiguous imports on the fly"
 
 2. **Kotlin Compiler**
-   - Settings → Languages & Frameworks → Kotlin Compiler
-   - Ensure "Report warnings as errors" is checked for CI consistency
+    - Settings → Languages & Frameworks → Kotlin Compiler
+    - Ensure "Report warnings as errors" is checked for CI consistency
 
 3. **Run Configurations**
-   - Pre-configured in `.run/` folder (if present)
-   - Add your emulator or device for testing
+    - Pre-configured in `.run/` folder (if present)
+    - Add your emulator or device for testing
 
 #### Recommended Plugins
 
@@ -168,9 +168,9 @@ export PATH="$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH"
 ### Module Naming Convention
 
 - Feature modules: `feature/{feature_name}/{feature_name}_{layer}`
-  - Example: `feature/auth/auth_ui`, `feature/media/media_framework`
+    - Example: `feature/auth/auth_ui`, `feature/media/media_framework`
 - Package names: `com.davidluna.tmdb.{feature}.{layer}`
-  - Example: `com.davidluna.tmdb.auth.ui`, `com.davidluna.tmdb.media.framework`
+    - Example: `com.davidluna.tmdb.auth.ui`, `com.davidluna.tmdb.media.framework`
 
 ### Dependency Management
 
@@ -276,6 +276,16 @@ dependencies {
 - `app/app.gradle.kts` - App module configuration
 - `feature/*/build.gradle.kts` - Feature module configurations
 
+### Kotlin testFixtures support (Kotlin sourcesets)
+
+- Kotlin `testFixtures` source sets only compile when `android.experimental.enableTestFixturesKotlinSupport=true` is set.
+- Keep this property enabled in `gradle.properties` (preferred for team-wide default) or `local.properties` if you cannot commit it.
+- Current state: it is already present in `local.properties`. If you move it to `gradle.properties`, delete the local copy to avoid confusion.
+
+```properties
+android.experimental.enableTestFixturesKotlinSupport=true
+```
+
 ---
 
 ## Coding Conventions
@@ -284,11 +294,11 @@ dependencies {
 
 **Naming**:
 - Classes, interfaces: `PascalCase`
-  - Example: `LoginViewModel`, `MediaRepository`
+    - Example: `LoginViewModel`, `MediaRepository`
 - Functions, variables: `camelCase`
-  - Example: `getUserData()`, `userName`
+    - Example: `getUserData()`, `userName`
 - Constants: `UPPER_SNAKE_CASE`
-  - Example: `const val API_TIMEOUT = 30000L`
+    - Example: `const val API_TIMEOUT = 30000L`
 
 **File Organization**:
 
@@ -808,7 +818,7 @@ For E2E tests, MockWebServer is used with a custom rule. See `app/src/androidTes
    ```
 
 2. **Create `build.gradle.kts` for each layer**:
-   
+
    **Domain** (`newfeature_domain/build.gradle.kts`):
    ```kotlin
    plugins {
@@ -821,7 +831,7 @@ For E2E tests, MockWebServer is used with a custom rule. See `app/src/androidTes
        implementation(libs.pagingJVM)
    }
    ```
-   
+
    **Framework** (`newfeature_framework/build.gradle.kts`):
    ```kotlin
    plugins {
@@ -833,7 +843,7 @@ For E2E tests, MockWebServer is used with a custom rule. See `app/src/androidTes
        implementation(projects.feature.core.coreFramework)
    }
    ```
-   
+
    **UI** (`newfeature_ui/build.gradle.kts`):
    ```kotlin
    plugins {
@@ -980,7 +990,7 @@ For E2E tests, MockWebServer is used with a custom rule. See `app/src/androidTes
                getMovieDetails(id)
                    .fold(
                        ifLeft = { error -> _state.update { it.copy(error = error) } },
-                       ifRight = { movie -> _state.update { it.copy(movie = movie) } }
+                       ifRight = { movie -> _state.update { it.copy(selectedMovie = movie) } }
                    )
            }
        }
@@ -1309,13 +1319,12 @@ interface MovieDao {
 - **Check existing issues** on GitHub before creating new ones
 - **Ask in team channels** for quick questions
 - **Create detailed bug reports** with:
-  - Android version
-  - Device/emulator info
-  - Steps to reproduce
-  - Expected vs. actual behavior
-  - Relevant logs
+    - Android version
+    - Device/emulator info
+    - Steps to reproduce
+    - Expected vs. actual behavior
+    - Relevant logs
 
 ---
 
 **Happy coding! 🎉**
-
