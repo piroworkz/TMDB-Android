@@ -13,8 +13,10 @@ class CloseSessionDataSource @Inject constructor(
     private val sessionDao: SessionDao,
 ) : CloseSessionUseCase {
     override suspend operator fun invoke(): Either<AppError, Boolean> = tryCatch {
-        val isSessionDeleted = sessionDao.deleteSession() > 0
-        val isAccountDeleted = accountDao.deleteAccount() > 0
+        val sessionCount = sessionDao.hasSession()
+        val hasAccount = accountDao.hasAccount()
+        val isSessionDeleted = if (sessionCount) sessionDao.deleteSession() > 0 else true
+        val isAccountDeleted = if (hasAccount) accountDao.deleteAccount() > 0 else true
         isSessionDeleted && isAccountDeleted
     }
 }

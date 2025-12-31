@@ -15,6 +15,9 @@ interface SessionDao {
     @Query("SELECT * FROM RoomSession LIMIT 1")
     fun getSession(): Flow<RoomSession?>
 
+    @Query("SELECT EXISTS (SELECT 1 FROM RoomSession LIMIT 1)")
+    suspend fun hasSession(): Boolean
+
     @Query("DELETE FROM RoomSession")
     suspend fun deleteSession(): Int
 }
