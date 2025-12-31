@@ -69,7 +69,7 @@ class CloseSessionDataSourceTest {
             assertTrue(error is AppError)
         }
 
-    private fun buildSUT() = CloseSessionDataSource(
+    private fun buildSUT() = SessionCloser(
         accountDao = accountDao,
         sessionDao = sessionDao
     )

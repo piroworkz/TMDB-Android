@@ -13,8 +13,8 @@ import com.davidluna.tmdb.auth_framework.data.local.database.dao.AccountDaoSpy
 import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDao
 import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDaoSpy
 import com.davidluna.tmdb.auth_framework.data.local.database.entities.RoomUserAccount
-import com.davidluna.tmdb.auth_framework.data.sources.CloseSessionDataSource
-import com.davidluna.tmdb.auth_framework.data.sources.LocalUserAccountDataSource
+import com.davidluna.tmdb.auth_framework.data.sources.SessionCloser
+import com.davidluna.tmdb.auth_framework.data.sources.AccountStore
 import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.MediaType.TV_SHOW
@@ -215,8 +215,8 @@ class MainIntegrationTest {
         selectedCatalogDataSource = buildSelectedCatalogDataSource()
 
         return MainViewModel(
-            getUserAccountUseCase = LocalUserAccountDataSource(accountDao),
-            closeSessionUseCase = CloseSessionDataSource(accountDao, sessionDao),
+            observeUserAccount = AccountStore(accountDao),
+            closeSession = SessionCloser(accountDao, sessionDao),
             ioDispatcher = coroutineTestRule.dispatcher,
             updateMediaCatalogUseCase = selectedCatalogDataSource
         )

@@ -4,8 +4,8 @@ import com.davidluna.tmdb.auth_domain.entities.Session
 import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDao
 import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDaoSpy
 import com.davidluna.tmdb.auth_framework.data.local.database.entities.RoomSession
-import com.davidluna.tmdb.auth_framework.data.sources.GuestSessionValidator
-import com.davidluna.tmdb.auth_framework.data.sources.LocalSessionDataSource
+import com.davidluna.tmdb.auth_framework.data.sources.GuestSessionExpirationValidator
+import com.davidluna.tmdb.auth_framework.data.sources.SessionStore
 import com.davidluna.tmdb.auth_ui.fakes.fakeGuestSession
 import com.davidluna.tmdb.auth_ui.fakes.fakeSession
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
@@ -78,13 +78,13 @@ class SplashIntegrationTest {
 
     private fun buildSUT(): SplashViewModel {
         sessionDao = SessionDaoSpy()
-        val isGuestSessionValid = GuestSessionValidator()
-        val getSessionUseCase = LocalSessionDataSource(sessionDao)
+        val isGuestSessionValid = GuestSessionExpirationValidator()
+        val getSessionUseCase = SessionStore(sessionDao)
 
         return SplashViewModel(
             ioDispatcher = coroutineTestRule.dispatcher,
             isGuestSessionValid = isGuestSessionValid,
-            getSessionUseCase = getSessionUseCase
+            observeSession = getSessionUseCase
         )
     }
 

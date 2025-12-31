@@ -77,6 +77,6 @@ class GuestUserAuthenticationRepositoryTest {
             assertTrue(actual.isLeft())
         }
 
-    private fun buildSUT() = GuestUserAuthenticationRepository(remote, local)
+    private fun buildSUT() = GuestSessionRepository(remote, local)
 
 }

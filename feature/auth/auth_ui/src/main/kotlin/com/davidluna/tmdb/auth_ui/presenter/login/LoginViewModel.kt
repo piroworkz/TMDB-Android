@@ -6,10 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.davidluna.tmdb.auth_domain.entities.LoginRequest
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.PASSWORD
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.USERNAME
-import com.davidluna.tmdb.auth_domain.usecases.CloseSessionUseCase
+import com.davidluna.tmdb.auth_domain.usecases.CloseSession
+import com.davidluna.tmdb.auth_domain.usecases.GetTextInputError
 import com.davidluna.tmdb.auth_domain.usecases.LoginAsGuest
 import com.davidluna.tmdb.auth_domain.usecases.LoginWithCredentials
-import com.davidluna.tmdb.auth_domain.usecases.ValidateInputUseCase
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.GuestButtonClicked
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.LoginButtonClicked
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetPassword
@@ -28,11 +28,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val closeSessionUseCase: CloseSessionUseCase,
+    private val closeSession: CloseSession,
     private val ioDispatcher: CoroutineDispatcher,
     private val loginGuest: LoginAsGuest,
     private val loginUser: LoginWithCredentials,
-    private val validateInput: ValidateInputUseCase,
+    private val validateInput: GetTextInputError,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(State())
@@ -63,17 +63,16 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private suspend fun closeSession(): Boolean = closeSessionUseCase()
-        .fold(
-            ifLeft = {
-                _state.update { s -> s.copy(appError = it.toAppError()) }
-                false
-            },
-            ifRight = { true }
-        )
+    private suspend fun endSession(): Boolean = closeSession().fold(
+        ifLeft = {
+            _state.update { s -> s.copy(appError = it.toAppError()) }
+            false
+        },
+        ifRight = { true }
+    )
 
     private fun login(username: String, password: String) = launchOnIO {
-        if (validateLoginForm() && closeSession()) {
+        if (validateLoginForm() && endSession()) {
             loginUser(LoginRequest(username, password)).fold(
                 ifLeft = { appError -> _state.update { s -> s.copy(appError = appError) } },
                 ifRight = { _ -> _state.update { s -> s.copy(isLoggedIn = true) } }

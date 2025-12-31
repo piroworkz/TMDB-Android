@@ -10,7 +10,7 @@ import java.util.TimeZone
 
 class GuestSessionValidatorTest {
 
-    private val sut = GuestSessionValidator()
+    private val sut = GuestSessionExpirationValidator()
 
     @Test
     fun `GIVEN expiration date is in the future WHEN isGuestSessionValid is called THEN returns true`() {

@@ -11,10 +11,10 @@ import com.davidluna.tmdb.auth_framework.data.remote.RemoteAuthenticationService
 import com.davidluna.tmdb.auth_framework.data.remote.RemoteAuthenticationServiceSpy
 import com.davidluna.tmdb.auth_framework.data.remote.UserAccountService
 import com.davidluna.tmdb.auth_framework.data.remote.UserAccountServiceSpy
-import com.davidluna.tmdb.auth_framework.data.sources.CloseSessionDataSource
-import com.davidluna.tmdb.auth_framework.data.sources.GuestUserAuthenticationRepository
-import com.davidluna.tmdb.auth_framework.data.sources.RegisteredUserAuthenticationRepository
-import com.davidluna.tmdb.auth_framework.data.sources.UserAccountRemoteDataSource
+import com.davidluna.tmdb.auth_framework.data.sources.SessionCloser
+import com.davidluna.tmdb.auth_framework.data.sources.GuestSessionRepository
+import com.davidluna.tmdb.auth_framework.data.sources.AuthenticationRepository
+import com.davidluna.tmdb.auth_framework.data.sources.UserAccountFetcher
 import com.davidluna.tmdb.auth_ui.fakes.fakePassword
 import com.davidluna.tmdb.auth_ui.fakes.fakeRemoteError
 import com.davidluna.tmdb.auth_ui.fakes.fakeUsername
@@ -185,25 +185,25 @@ class LoginIntegrationTest {
         remoteAuthenticationService = RemoteAuthenticationServiceSpy()
         sessionDao = SessionDaoSpy()
         userAccountService = UserAccountServiceSpy()
-        val closeSessionUseCase = CloseSessionDataSource(
+        val closeSessionUseCase = SessionCloser(
             accountDao = accountDao,
             sessionDao = sessionDao
         )
-        val fetchUserAccountUseCase = UserAccountRemoteDataSource(
+        val fetchUserAccountUseCase = UserAccountFetcher(
             remote = userAccountService,
             local = accountDao
         )
-        val loginAsGuest = GuestUserAuthenticationRepository(
+        val loginAsGuest = GuestSessionRepository(
             remote = remoteAuthenticationService,
             local = sessionDao
         )
-        val loginUser = RegisteredUserAuthenticationRepository(
+        val loginUser = AuthenticationRepository(
             remote = remoteAuthenticationService,
-            fetchUserAccountUseCase = fetchUserAccountUseCase,
+            fetchUserAccount = fetchUserAccountUseCase,
             local = sessionDao
         )
         return LoginViewModel(
-            closeSessionUseCase = closeSessionUseCase,
+            closeSession = closeSessionUseCase,
             ioDispatcher = coroutineTestRule.dispatcher,
             loginGuest = loginAsGuest,
             loginUser = loginUser,

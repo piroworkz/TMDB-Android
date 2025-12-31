@@ -1,13 +1,13 @@
 package com.davidluna.tmdb.auth_framework.data.sources
 
-import com.davidluna.tmdb.auth_domain.usecases.ValidateGuestSessionUseCase
+import com.davidluna.tmdb.auth_domain.usecases.IsGuestSessionValid
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
 
-class GuestSessionValidator @Inject constructor() : ValidateGuestSessionUseCase {
+class GuestSessionExpirationValidator @Inject constructor() : IsGuestSessionValid {
     override operator fun invoke(expirationDate: String?): Boolean = try {
         requireNotNull(expirationDate)
         val expiresAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.getDefault())

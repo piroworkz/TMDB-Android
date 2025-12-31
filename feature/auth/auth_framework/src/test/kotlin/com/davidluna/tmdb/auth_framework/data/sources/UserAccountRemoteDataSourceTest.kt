@@ -75,5 +75,5 @@ class UserAccountRemoteDataSourceTest {
         coVerify(exactly = 0) { local.insertAccount(any()) }
     }
 
-    private fun buildSUT() = UserAccountRemoteDataSource(remote, local)
+    private fun buildSUT() = UserAccountFetcher(remote, local)
 }

@@ -6,13 +6,13 @@ import arrow.core.right
 import com.davidluna.tmdb.auth_domain.entities.TextInputError.Required
 import com.davidluna.tmdb.auth_domain.usecases.LoginAsGuest
 import com.davidluna.tmdb.auth_domain.usecases.LoginWithCredentials
-import com.davidluna.tmdb.auth_domain.usecases.ValidateInputUseCase
+import com.davidluna.tmdb.auth_domain.usecases.GetTextInputError
 import com.davidluna.tmdb.auth_ui.fakes.fakeAppError
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.GuestButtonClicked
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.LoginButtonClicked
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetPassword
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetUsername
-import com.davidluna.tmdb.auth_domain.usecases.CloseSessionUseCase
+import com.davidluna.tmdb.auth_domain.usecases.CloseSession
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.called
 import io.mockk.coEvery
@@ -39,7 +39,7 @@ class LoginViewModelTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var closeSessionUseCase: CloseSessionUseCase
+    private lateinit var closeSession: CloseSession
 
     @MockK
     private lateinit var loginAsGuest: LoginAsGuest
@@ -48,7 +48,7 @@ class LoginViewModelTest {
     private lateinit var loginWithCredentials: LoginWithCredentials
 
     @MockK
-    private lateinit var validateInputUseCase: ValidateInputUseCase
+    private lateinit var getTextInputError: GetTextInputError
 
     private val initialState = LoginViewModel.State()
 
@@ -56,10 +56,10 @@ class LoginViewModelTest {
     fun `GIVEN ViewModel WHEN is created THEN verify no side effects`() {
         buildSUT()
 
-        verify { closeSessionUseCase wasNot called }
+        verify { closeSession wasNot called }
         verify { loginAsGuest wasNot called }
         verify { loginWithCredentials wasNot called }
-        verify { validateInputUseCase wasNot called }
+        verify { getTextInputError wasNot called }
     }
 
     @Test
@@ -76,8 +76,8 @@ class LoginViewModelTest {
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
 
-            coEvery { closeSessionUseCase.invoke() } returns fakeAppError.left()
-            every { validateInputUseCase.invoke(any(), any()) } returns null
+            coEvery { closeSession.invoke() } returns fakeAppError.left()
+            every { getTextInputError.invoke(any(), any()) } returns null
 
             sut.onEvent(LoginButtonClicked("username", "password"))
 
@@ -137,7 +137,7 @@ class LoginViewModelTest {
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
             every {
-                validateInputUseCase(
+                getTextInputError(
                     any(), any()
                 )
             } returns null andThen Required
@@ -145,7 +145,7 @@ class LoginViewModelTest {
             sut.onEvent(LoginButtonClicked("username", ""))
             advanceUntilIdle()
 
-            coVerify(exactly = 0) { closeSessionUseCase() }
+            coVerify(exactly = 0) { closeSession() }
             coVerify(exactly = 0) { loginWithCredentials.invoke(any()) }
         }
 
@@ -154,8 +154,8 @@ class LoginViewModelTest {
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
 
-            coEvery { closeSessionUseCase.invoke() } returns fakeAppError.left()
-            every { validateInputUseCase.invoke(any(), any()) } returns null
+            coEvery { closeSession.invoke() } returns fakeAppError.left()
+            every { getTextInputError.invoke(any(), any()) } returns null
 
             sut.onEvent(LoginButtonClicked("username", "password"))
 
@@ -175,8 +175,8 @@ class LoginViewModelTest {
             val sut = buildSUT()
 
             coEvery { loginWithCredentials.invoke(any()) } returns fakeAppError.left()
-            coEvery { closeSessionUseCase.invoke() } returns true.right()
-            every { validateInputUseCase.invoke(any(), any()) } returns null
+            coEvery { closeSession.invoke() } returns true.right()
+            every { getTextInputError.invoke(any(), any()) } returns null
 
             sut.onEvent(LoginButtonClicked("username", "password"))
 
@@ -196,7 +196,7 @@ class LoginViewModelTest {
             val sut = buildSUT()
             val expected = initialState.copy(password = "validPassword")
 
-            every { validateInputUseCase(any(), any()) } returns Required andThen null
+            every { getTextInputError(any(), any()) } returns Required andThen null
             sut.onEvent(SetPassword("invalidPassword"))
 
             sut.state.test {
@@ -216,7 +216,7 @@ class LoginViewModelTest {
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
 
-            every { validateInputUseCase(any(), any()) } returns Required andThen null
+            every { getTextInputError(any(), any()) } returns Required andThen null
             sut.onEvent(SetPassword("invalidPassword"))
 
             sut.state.test {
@@ -234,7 +234,7 @@ class LoginViewModelTest {
             val sut = buildSUT()
             val expected = initialState.copy(username = "validUsername")
 
-            every { validateInputUseCase(any(), any()) } returns Required andThen null
+            every { getTextInputError(any(), any()) } returns Required andThen null
             sut.onEvent(SetUsername("invalidUsername"))
 
             sut.state.test {
@@ -254,7 +254,7 @@ class LoginViewModelTest {
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
 
-            every { validateInputUseCase(any(), any()) } returns Required andThen null
+            every { getTextInputError(any(), any()) } returns Required andThen null
             sut.onEvent(SetUsername("invalidUsername"))
 
             sut.state.test {
@@ -267,11 +267,11 @@ class LoginViewModelTest {
         }
 
     private fun buildSUT(): LoginViewModel = LoginViewModel(
-        closeSessionUseCase = closeSessionUseCase,
+        closeSession = closeSession,
         ioDispatcher = coroutineTestRule.dispatcher,
         loginGuest = loginAsGuest,
         loginUser = loginWithCredentials,
-        validateInput = validateInputUseCase
+        validateInput = getTextInputError
     )
 
 }

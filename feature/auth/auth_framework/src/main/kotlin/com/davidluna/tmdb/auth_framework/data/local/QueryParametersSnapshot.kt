@@ -1,6 +1,6 @@
 package com.davidluna.tmdb.auth_framework.data.local
 
-import com.davidluna.tmdb.auth_domain.usecases.GetSessionUseCase
+import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
 import com.davidluna.tmdb.core_domain.usecases.GetCountryCodeUseCase
 import com.davidluna.tmdb.core_framework.data.remote.interceptors.ParametersSnapshot
 import com.davidluna.tmdb.core_framework.data.remote.interceptors.ParametersSnapshot.Keys
@@ -13,11 +13,11 @@ import javax.inject.Singleton
 @Singleton
 class QueryParametersSnapshot @Inject constructor(
     getCountryCode: GetCountryCodeUseCase,
-    getSessionUseCase: GetSessionUseCase,
+    observeSession: ObserveSession,
     scope: CoroutineScope,
 ) : ParametersSnapshot {
 
-    private val session = getSessionUseCase()
+    private val session = observeSession()
         .stateIn(scope, SharingStarted.Eagerly, null)
 
     private val country = getCountryCode()

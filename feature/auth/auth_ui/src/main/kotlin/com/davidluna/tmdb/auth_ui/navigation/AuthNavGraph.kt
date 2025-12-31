@@ -13,7 +13,6 @@ fun NavGraphBuilder.authNavGraph(
     navigation<Init>(
         startDestination = Login(),
     ) {
-
         composable<Login> { LoginScreen { navigateTo() } }
     }
 }

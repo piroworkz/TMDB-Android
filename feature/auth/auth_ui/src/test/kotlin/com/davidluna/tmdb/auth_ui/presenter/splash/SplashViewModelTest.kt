@@ -1,7 +1,7 @@
 package com.davidluna.tmdb.auth_ui.presenter.splash
 
-import com.davidluna.tmdb.auth_domain.usecases.GetSessionUseCase
-import com.davidluna.tmdb.auth_domain.usecases.ValidateGuestSessionUseCase
+import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
+import com.davidluna.tmdb.auth_domain.usecases.IsGuestSessionValid
 import com.davidluna.tmdb.auth_ui.fakes.fakeSession
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.every
@@ -25,10 +25,10 @@ class SplashViewModelTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var isGuestSessionValid: ValidateGuestSessionUseCase
+    private lateinit var isGuestSessionValid: IsGuestSessionValid
 
     @MockK
-    private lateinit var getSessionUseCase: GetSessionUseCase
+    private lateinit var observeSession: ObserveSession
 
     @Test
     fun `GIVEN the SplashViewModel is initialized THEN isLoggedIn_value should be null`() {
@@ -42,7 +42,7 @@ class SplashViewModelTest {
     @Test
     fun `GIVEN getSessionUseCase returns null WHEN checkSessionStatus is called THEN isLoggedIn should be false`() =
         coroutineTestRule.scope.runTest {
-            every { getSessionUseCase() } returns flowOf(null)
+            every { observeSession() } returns flowOf(null)
             val sut = buildSUT()
 
             val actual = sut.isLoggedIn.value
@@ -55,7 +55,7 @@ class SplashViewModelTest {
     fun `GIVEN getSessionUseCase returns a guest session AND isGuestSessionValid returns true WHEN checkSessionStatus is called THEN isLoggedIn should be true`() =
         coroutineTestRule.scope.runTest {
             val guestSession = fakeSession.copy(expiresAt = "guest_session_id", isGuest = true)
-            every { getSessionUseCase() } returns flowOf(guestSession)
+            every { observeSession() } returns flowOf(guestSession)
             every { isGuestSessionValid(any()) } returns true
             val sut = buildSUT()
 
@@ -71,7 +71,7 @@ class SplashViewModelTest {
     fun `GIVEN getSessionUseCase returns a guest session AND isGuestSessionValid returns false WHEN checkSessionStatus is called THEN isLoggedIn should be false`() =
         coroutineTestRule.scope.runTest {
             val guestSession = fakeSession.copy(expiresAt = "guest_session_id", isGuest = true)
-            every { getSessionUseCase() } returns flowOf(guestSession)
+            every { observeSession() } returns flowOf(guestSession)
             every { isGuestSessionValid(any()) } returns false
             val sut = buildSUT()
 
@@ -86,7 +86,7 @@ class SplashViewModelTest {
     @Test
     fun `GIVEN getSessionUseCase returns a valid non-guest session WHEN checkSessionStatus is called THEN isLoggedIn should be true`() =
         coroutineTestRule.scope.runTest {
-            every { getSessionUseCase() } returns flowOf(fakeSession)
+            every { observeSession() } returns flowOf(fakeSession)
             val sut = buildSUT()
 
             sut.checkSessionStatus()
@@ -99,6 +99,6 @@ class SplashViewModelTest {
     private fun buildSUT() = SplashViewModel(
         ioDispatcher = coroutineTestRule.dispatcher,
         isGuestSessionValid = isGuestSessionValid,
-        getSessionUseCase = getSessionUseCase
+        observeSession = observeSession
     )
 }

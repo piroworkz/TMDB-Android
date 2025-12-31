@@ -27,7 +27,7 @@ class LocalUserAccountDataSourceTest {
     @MockK
     private lateinit var accountDao: AccountDao
 
-    private fun buildSUT() = LocalUserAccountDataSource(accountDao)
+    private fun buildSUT() = AccountStore(accountDao)
 
     @Test
     fun `GIVEN RoomUserAccount exists WHEN flow is collected THEN it emits mapped UserAccount`() =

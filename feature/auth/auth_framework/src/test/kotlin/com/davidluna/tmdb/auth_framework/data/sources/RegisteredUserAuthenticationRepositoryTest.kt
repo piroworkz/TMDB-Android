@@ -8,7 +8,7 @@ import com.davidluna.tmdb.auth_framework.data.fakes.fakeRemoteSessionIdResponse
 import com.davidluna.tmdb.auth_framework.data.fakes.fakeRemoteTokenResponse
 import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDao
 import com.davidluna.tmdb.auth_framework.data.remote.RemoteAuthenticationService
-import com.davidluna.tmdb.auth_domain.usecases.FetchUserAccountUseCase
+import com.davidluna.tmdb.auth_domain.usecases.FetchUserAccount
 import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.called
@@ -35,14 +35,14 @@ class RegisteredUserAuthenticationRepositoryTest {
     private lateinit var local: SessionDao
 
     @MockK
-    private lateinit var fetchUserAccountUseCase: FetchUserAccountUseCase
+    private lateinit var fetchUserAccount: FetchUserAccount
 
     @Test
     fun `GIVEN sut WHEN sut is created THEN verify no side effects`() {
         buildSUT()
 
         verify { remote wasNot called }
-        verify { fetchUserAccountUseCase wasNot called }
+        verify { fetchUserAccount wasNot called }
         verify { local wasNot called }
     }
 
@@ -54,7 +54,7 @@ class RegisteredUserAuthenticationRepositoryTest {
             coEvery { remote.createRequestToken() } returns fakeRemoteTokenResponse.right()
             coEvery { remote.authorizeToken(any()) } returns fakeRemoteTokenResponse.right()
             coEvery { remote.createSessionId(any()) } returns fakeRemoteSessionIdResponse.right()
-            coEvery { fetchUserAccountUseCase() } returns Unit.right()
+            coEvery { fetchUserAccount() } returns Unit.right()
             coEvery { local.insertSession(any()) } returns Long.MIN_VALUE
 
             val actual = sut.invoke(fakeLoginRequest)
@@ -109,7 +109,7 @@ class RegisteredUserAuthenticationRepositoryTest {
             coEvery { remote.createRequestToken() } returns fakeRemoteTokenResponse.right()
             coEvery { remote.authorizeToken(any()) } returns fakeRemoteTokenResponse.right()
             coEvery { remote.createSessionId(any()) } returns fakeRemoteSessionIdResponse.right()
-            coEvery { fetchUserAccountUseCase() } returns fakeRemoteError.toAppError().left()
+            coEvery { fetchUserAccount() } returns fakeRemoteError.toAppError().left()
 
             val actual = sut.invoke(fakeLoginRequest)
 
@@ -124,7 +124,7 @@ class RegisteredUserAuthenticationRepositoryTest {
             coEvery { remote.createRequestToken() } returns fakeRemoteTokenResponse.right()
             coEvery { remote.authorizeToken(any()) } returns fakeRemoteTokenResponse.right()
             coEvery { remote.createSessionId(any()) } returns fakeRemoteSessionIdResponse.right()
-            coEvery { fetchUserAccountUseCase() } returns Unit.right()
+            coEvery { fetchUserAccount() } returns Unit.right()
             coEvery { local.insertSession(any()) } throws IllegalStateException("some test error")
 
             val actual = sut.invoke(fakeLoginRequest)
@@ -132,9 +132,9 @@ class RegisteredUserAuthenticationRepositoryTest {
             assertTrue(actual.isLeft())
         }
 
-    private fun buildSUT() = RegisteredUserAuthenticationRepository(
+    private fun buildSUT() = AuthenticationRepository(
         remote = remote,
-        fetchUserAccountUseCase = fetchUserAccountUseCase,
+        fetchUserAccount = fetchUserAccount,
         local = local
     )
 }

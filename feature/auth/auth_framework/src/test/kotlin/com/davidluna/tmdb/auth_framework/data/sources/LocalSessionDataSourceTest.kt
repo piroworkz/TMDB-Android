@@ -73,5 +73,5 @@ class LocalSessionDataSourceTest {
         }
     }
 
-    private fun buildSUT() = LocalSessionDataSource(sessionDao)
+    private fun buildSUT() = SessionStore(sessionDao)
 }

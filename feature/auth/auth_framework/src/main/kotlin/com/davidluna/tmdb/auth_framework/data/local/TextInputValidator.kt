@@ -2,10 +2,10 @@ package com.davidluna.tmdb.auth_framework.data.local
 
 import com.davidluna.tmdb.auth_domain.entities.TextInputError
 import com.davidluna.tmdb.auth_domain.entities.TextInputType
-import com.davidluna.tmdb.auth_domain.usecases.ValidateInputUseCase
+import com.davidluna.tmdb.auth_domain.usecases.GetTextInputError
 import javax.inject.Inject
 
-class TextInputValidator @Inject constructor() : ValidateInputUseCase {
+class TextInputValidator @Inject constructor() : GetTextInputError {
 
     override fun invoke(text: String?, type: TextInputType): TextInputError? = when (type) {
         TextInputType.USERNAME -> validateUsername(text)
