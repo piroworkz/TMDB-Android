@@ -4,7 +4,7 @@ import arrow.core.Either
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.AppErrorCode
 import com.davidluna.tmdb.core_domain.entities.tryCatch
-import com.davidluna.tmdb.core_domain.usecases.GetCountryCodeUseCase
+import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import com.davidluna.tmdb.core_framework.data.remote.model.buildModel
 import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
 import com.davidluna.tmdb.media_domain.entities.Catalog
@@ -43,7 +43,7 @@ class MediaDetailsCacheRepository @Inject constructor(
     private val local: MediaDetailsDao,
     private val remote: RemoteMediaService,
     private val isCacheExpired: IsCacheExpired,
-    private val getCountryCodeUseCase: GetCountryCodeUseCase,
+    private val observeCountryCode: ObserveCountryCode,
 ) : GetMediaDetailsUseCase {
 
     override suspend fun invoke(catalog: Catalog, mediaId: Int): Either<AppError, MediaDetails> =
@@ -51,7 +51,7 @@ class MediaDetailsCacheRepository @Inject constructor(
             val endpoint = catalog.toEndpointPath(forId = mediaId)
             val localDetails: RoomMediaDetailsRelations? = local.getFullDetail(mediaId)
             val isCacheExpired = isCacheExpired(localDetails?.details?.savedOnTimeMillis)
-            val countryCode = getCountryCodeUseCase().first()
+            val countryCode = observeCountryCode().first()
             if (localDetails != null && !isCacheExpired) {
                 localDetails.toDomain()
             } else {

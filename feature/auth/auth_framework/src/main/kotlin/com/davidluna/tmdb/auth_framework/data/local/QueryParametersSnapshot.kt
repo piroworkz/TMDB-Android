@@ -1,7 +1,7 @@
 package com.davidluna.tmdb.auth_framework.data.local
 
 import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
-import com.davidluna.tmdb.core_domain.usecases.GetCountryCodeUseCase
+import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import com.davidluna.tmdb.core_framework.data.remote.interceptors.ParametersSnapshot
 import com.davidluna.tmdb.core_framework.data.remote.interceptors.ParametersSnapshot.Keys
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Singleton
 class QueryParametersSnapshot @Inject constructor(
-    getCountryCode: GetCountryCodeUseCase,
+    getCountryCode: ObserveCountryCode,
     observeSession: ObserveSession,
     scope: CoroutineScope,
 ) : ParametersSnapshot {

@@ -3,7 +3,7 @@ package com.davidluna.tmdb.media_framework.data.repositories
 import arrow.core.left
 import arrow.core.right
 import com.davidluna.tmdb.core_domain.entities.toAppError
-import com.davidluna.tmdb.core_domain.usecases.GetCountryCodeUseCase
+import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
 import com.davidluna.tmdb.media_framework.data.fakes.fakeCatalog
 import com.davidluna.tmdb.media_framework.data.fakes.fakeMediaDetails
@@ -44,7 +44,7 @@ class MediaDetailsCacheRepositoryTest {
     private lateinit var isCacheExpired: IsCacheExpired
 
     @MockK
-    private lateinit var getCountryCodeUseCase: GetCountryCodeUseCase
+    private lateinit var observeCountryCode: ObserveCountryCode
 
     private val mediaId = fakeMediaDetails.id
 
@@ -175,6 +175,6 @@ class MediaDetailsCacheRepositoryTest {
         local = local,
         remote = remote,
         isCacheExpired = isCacheExpired,
-        getCountryCodeUseCase = getCountryCodeUseCase
+        observeCountryCode = observeCountryCode
     )
 }

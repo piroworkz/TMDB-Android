@@ -1,6 +1,6 @@
 package com.davidluna.tmdb.core_framework.data.local.sources
 
-import com.davidluna.tmdb.core_domain.usecases.GetCountryCodeUseCase
+import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -8,7 +8,7 @@ import javax.inject.Inject
 class AndroidLocationProvider @Inject constructor(
     private val resolver: CountryCodeResolver,
     private val getLocation: LocationService
-) : GetCountryCodeUseCase {
+) : ObserveCountryCode {
 
     override fun invoke(): Flow<String> = flow {
         val region = getRegionCode()
@@ -16,5 +16,5 @@ class AndroidLocationProvider @Inject constructor(
     }
 
     private suspend fun getRegionCode(): String =
-        getLocation()?.let(resolver::invoke) ?: CountryCodeResolver.Companion.DEFAULT_COUNTRY_CODE
+        getLocation()?.let(resolver::invoke) ?: CountryCodeResolver.DEFAULT_COUNTRY_CODE
 }

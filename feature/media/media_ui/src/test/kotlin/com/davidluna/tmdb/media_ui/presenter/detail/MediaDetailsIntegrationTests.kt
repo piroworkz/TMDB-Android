@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import app.cash.turbine.test
 import com.davidluna.tmdb.core_domain.entities.toAppError
-import com.davidluna.tmdb.core_domain.usecases.GetCountryCodeUseCase
+import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import com.davidluna.tmdb.core_framework.data.remote.model.RemoteError
 import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
 import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDetailsDao
@@ -112,7 +112,7 @@ class MediaDetailsIntegrationTests {
             local = mediaDetailsDao,
             remote = remoteMediaService,
             isCacheExpired = isCacheExpired,
-            getCountryCodeUseCase = getCountryCodeUseCase
+            observeCountryCode = getCountryCodeUseCase
         )
 
         return MediaDetailsViewModel(
@@ -127,8 +127,8 @@ class MediaDetailsIntegrationTests {
             scope = coroutineTestRule.scope,
         ) { File(tmp, "test.preferences_pb") }
 
-    private fun provideFakeGetCountryCodeUseCase(): GetCountryCodeUseCase {
-        return object : GetCountryCodeUseCase {
+    private fun provideFakeGetCountryCodeUseCase(): ObserveCountryCode {
+        return object : ObserveCountryCode {
             override fun invoke() = flowOf("US")
         }
     }

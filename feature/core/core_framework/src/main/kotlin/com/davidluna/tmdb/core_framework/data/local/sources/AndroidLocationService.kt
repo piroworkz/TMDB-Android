@@ -1,7 +1,7 @@
 package com.davidluna.tmdb.core_framework.data.local.sources
 
 import android.annotation.SuppressLint
-import com.davidluna.tmdb.core_domain.usecases.PermissionValidator
+import com.davidluna.tmdb.core_domain.usecases.IsPermissionValid
 import com.davidluna.tmdb.core_framework.data.local.model.Coordinates
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -10,7 +10,7 @@ import kotlin.coroutines.resume
 
 class AndroidLocationService @Inject constructor(
     private val client: FusedLocationProviderClient,
-    private val permissionsGranted: PermissionValidator
+    private val permissionsGranted: IsPermissionValid
 ) : LocationService {
 
     @SuppressLint("MissingPermission")
