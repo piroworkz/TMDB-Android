@@ -12,7 +12,7 @@ import com.davidluna.tmdb.media_domain.entities.details.Cast
 import com.davidluna.tmdb.media_domain.entities.details.Genre
 import com.davidluna.tmdb.media_domain.entities.details.Image
 import com.davidluna.tmdb.media_domain.entities.details.MediaDetails
-import com.davidluna.tmdb.media_domain.usecases.GetMediaDetailsUseCase
+import com.davidluna.tmdb.media_domain.usecases.GetMediaDetails
 import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDetailsDao
 import com.davidluna.tmdb.media_framework.data.local.database.entities.credits.RoomCast
 import com.davidluna.tmdb.media_framework.data.local.database.entities.details.RoomGenre
@@ -44,7 +44,7 @@ class MediaDetailsCacheRepository @Inject constructor(
     private val remote: RemoteMediaService,
     private val isCacheExpired: IsCacheExpired,
     private val observeCountryCode: ObserveCountryCode,
-) : GetMediaDetailsUseCase {
+) : GetMediaDetails {
 
     override suspend fun invoke(catalog: Catalog, mediaId: Int): Either<AppError, MediaDetails> =
         tryCatch {

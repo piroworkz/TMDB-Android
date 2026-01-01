@@ -3,7 +3,7 @@ package com.davidluna.tmdb.media_ui.presenter.media
 import app.cash.turbine.test
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.core_domain.entities.toAppError
-import com.davidluna.tmdb.media_domain.usecases.GetSelectedMediaCatalog
+import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
 import com.davidluna.tmdb.media_framework.fakes.fakeEmptyPagingData
 import com.davidluna.tmdb.media_framework.fakes.fakeMediaPagingData
@@ -33,7 +33,7 @@ class MediaCatalogViewModelTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var getSelectedMediaCatalogUseCase: GetSelectedMediaCatalog
+    private lateinit var observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog
 
     @MockK
     private lateinit var observeMediaCatalogUseCase: ObserveMediaCatalogUseCase
@@ -42,7 +42,7 @@ class MediaCatalogViewModelTest {
 
     @Test
     fun `GIVEN ViewModel is created WHEN getState is called THEN it returns initial state`() {
-        every { getSelectedMediaCatalogUseCase.selectedCatalog } returns emptyFlow()
+        every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns emptyFlow()
 
         val sut = buildSUT()
         val actual = sut.state.value
@@ -54,7 +54,7 @@ class MediaCatalogViewModelTest {
     fun `GIVEN an error occurs in getGridFlow WHEN getState is called THEN it reflects updated appError`() =
         coroutineTestRule.scope.runTest {
             val exception = IllegalStateException("Something went wrong")
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flow { throw exception }
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flow { throw exception }
             val sut = buildSUT()
 
             val getGridFlowJob = launch { sut.gridPagingDataFlow.collect {} }
@@ -74,7 +74,7 @@ class MediaCatalogViewModelTest {
     fun `GIVEN getGridFlow successfully processes a media catalog WHEN getState is called THEN it reflects updated gridCatalogTitle`() =
         coroutineTestRule.scope.runTest {
             val endpoint = Catalog.MOVIE_UPCOMING
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
             every { observeMediaCatalogUseCase(any(), any()) } returns emptyFlow()
             val sut = buildSUT()
 
@@ -95,7 +95,7 @@ class MediaCatalogViewModelTest {
     fun `GIVEN getPagerFlow successfully processes a media catalog WHEN getState is called THEN it reflects updated pagerCatalogTitle`() =
         coroutineTestRule.scope.runTest {
             val endpoint = Catalog.MOVIE_UPCOMING
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
             every { observeMediaCatalogUseCase(any(), any()) } returns emptyFlow()
 
             val sut = buildSUT()
@@ -117,7 +117,7 @@ class MediaCatalogViewModelTest {
     @Test
     fun `GIVEN updateLastKnownPosition is called WHEN getState is called THEN it reflects updated lastKnownPosition`() =
         coroutineTestRule.scope.runTest {
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns emptyFlow()
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns emptyFlow()
             val sut = buildSUT()
 
             sut.updateLastKnownPosition(10, 100)
@@ -131,7 +131,7 @@ class MediaCatalogViewModelTest {
     fun `GIVEN ViewModel is created WHEN pagerPagingDataFlow is collected THEN it emits initial empty PagingData`() =
         coroutineTestRule.scope.runTest {
 
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
             every { observeMediaCatalogUseCase.invoke(any(), any()) } returns flowOf(
                 fakeEmptyPagingData
             )
@@ -149,7 +149,7 @@ class MediaCatalogViewModelTest {
     @Test
     fun `GIVEN getSelectedMediaCatalogUseCase emits any WHEN pagerPagingDataFlow is collected THEN it emits Media PagingData`() =
         coroutineTestRule.scope.runTest {
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
             every { observeMediaCatalogUseCase.invoke(any(), any()) } returns flowOf(
                 fakeMediaPagingData
             )
@@ -168,7 +168,7 @@ class MediaCatalogViewModelTest {
     fun `GIVEN getMediaCatalogUseCase emits MOVIE WHEN pagerPagingDataFlow is collected THEN state's pagerCatalogTitle updates to MOVIE_UPCOMING title`() =
         coroutineTestRule.scope.runTest {
             val endpoint = Catalog.MOVIE_UPCOMING
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
             every { observeMediaCatalogUseCase(any(), any()) } returns emptyFlow()
             val sut = buildSUT()
 
@@ -186,7 +186,7 @@ class MediaCatalogViewModelTest {
         }
 
     private fun buildSUT(): MediaCatalogViewModel = MediaCatalogViewModel(
-        getSelectedMediaCatalogUseCase = getSelectedMediaCatalogUseCase,
+        observeSelectedMediaCatalogUseCase = observeSelectedMediaCatalogUseCase,
         observeMediaCatalogUseCase = observeMediaCatalogUseCase
     )
 }

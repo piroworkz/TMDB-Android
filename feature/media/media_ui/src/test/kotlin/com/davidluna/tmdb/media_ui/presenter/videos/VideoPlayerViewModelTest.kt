@@ -5,8 +5,8 @@ import arrow.core.left
 import arrow.core.right
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_ui.view.utils.UiState
-import com.davidluna.tmdb.media_domain.usecases.GetSelectedMediaCatalog
-import com.davidluna.tmdb.media_domain.usecases.GetMediaVideosUseCase
+import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
+import com.davidluna.tmdb.media_domain.usecases.GetCatalogVideos
 import com.davidluna.tmdb.media_framework.fakes.fakeAppError
 import com.davidluna.tmdb.media_framework.fakes.fakeVideos
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
@@ -30,14 +30,14 @@ class VideoPlayerViewModelTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var getSelectedMediaCatalogUseCase: GetSelectedMediaCatalog
+    private lateinit var observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog
 
     @MockK
-    private lateinit var getMediaVideosUseCase: GetMediaVideosUseCase
+    private lateinit var getCatalogVideos: GetCatalogVideos
 
     @Test
     fun `GIVEN initial state WHEN viewModel is created THEN mediaVideos is Loading`() {
-        every { getSelectedMediaCatalogUseCase.selectedCatalog } returns emptyFlow()
+        every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns emptyFlow()
         val sut = buildSUT()
 
         assert(sut.mediaVideos.value is UiState.Loading)
@@ -47,8 +47,8 @@ class VideoPlayerViewModelTest {
     fun `GIVEN getSelectedMediaCatalogUseCase emits any value and getMediaVideosUseCase returns Right WHEN fetching videos THEN mediaVideos emits Success with movie videos`() =
         coroutineTestRule.scope.runTest {
             val expected = UiState.Success(fakeVideos)
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
-            coEvery { getMediaVideosUseCase(any(), any()) } returns fakeVideos.right()
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
+            coEvery { getCatalogVideos(any(), any()) } returns fakeVideos.right()
             val sut = buildSUT()
 
             sut.mediaVideos.test {
@@ -65,8 +65,8 @@ class VideoPlayerViewModelTest {
     fun `GIVEN getSelectedMediaCatalogUseCase emits any value and getMediaVideosUseCase returns Left WHEN fetching videos THEN mediaVideos emits Failure`() =
         coroutineTestRule.scope.runTest {
             val expected = UiState.Failure(fakeAppError)
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
-            coEvery { getMediaVideosUseCase(any(), any()) } returns fakeAppError.left()
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
+            coEvery { getCatalogVideos(any(), any()) } returns fakeAppError.left()
             val sut = buildSUT()
 
             sut.mediaVideos.test {
@@ -80,8 +80,8 @@ class VideoPlayerViewModelTest {
         }
 
     private fun buildSUT() = VideoPlayerViewModel(
-        getSelectedMediaCatalogUseCase = getSelectedMediaCatalogUseCase,
-        getMediaVideosUseCase = getMediaVideosUseCase,
+        observeSelectedMediaCatalogUseCase = observeSelectedMediaCatalogUseCase,
+        getCatalogVideos = getCatalogVideos,
         mediaId = 1
     )
 

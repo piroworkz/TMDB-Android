@@ -172,7 +172,7 @@ class MediaCatalogIntegrationTest {
             mediatorFactory = mediatorFactory
         )
         return MediaCatalogViewModel(
-            getSelectedMediaCatalogUseCase = getSelectedMediaCatalog,
+            observeSelectedMediaCatalogUseCase = getSelectedMediaCatalog,
             observeMediaCatalogUseCase = observeMediaCatalogUseCase
         )
     }

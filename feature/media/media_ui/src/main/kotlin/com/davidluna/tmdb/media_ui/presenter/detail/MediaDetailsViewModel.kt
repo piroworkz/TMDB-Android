@@ -6,8 +6,8 @@ import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.media_domain.entities.details.MediaDetails
-import com.davidluna.tmdb.media_domain.usecases.GetMediaDetailsUseCase
-import com.davidluna.tmdb.media_domain.usecases.GetSelectedMediaCatalog
+import com.davidluna.tmdb.media_domain.usecases.GetMediaDetails
+import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_ui.di.DetailsMediaId
 import com.davidluna.tmdb.media_ui.view.utils.UiState
 import com.davidluna.tmdb.media_ui.view.utils.mediaType
@@ -23,8 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MediaDetailsViewModel @Inject constructor(
-    private val getSelectedMediaCatalogUseCase: GetSelectedMediaCatalog,
-    private val getMediaDetails: GetMediaDetailsUseCase,
+    private val observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog,
+    private val getMediaDetails: GetMediaDetails,
     @param:DetailsMediaId private val mediaId: Int,
 ) : ViewModel() {
 
@@ -35,7 +35,7 @@ class MediaDetailsViewModel @Inject constructor(
     )
 
     private fun fetchMediaDetail(): Flow<UiState<MediaDetails>> =
-        getSelectedMediaCatalogUseCase.selectedCatalog
+        observeSelectedMediaCatalogUseCase.selectedCatalog
             .distinctUntilChanged()
             .catch { UiState.Failure(it.toAppError()) }
             .map { mediaCatalog ->

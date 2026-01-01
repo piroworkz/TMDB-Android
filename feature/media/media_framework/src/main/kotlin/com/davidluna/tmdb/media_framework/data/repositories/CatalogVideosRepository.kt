@@ -6,7 +6,7 @@ import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.core_domain.entities.tryCatch
 import com.davidluna.tmdb.media_framework.data.remote.model.toEndpointPath
 import com.davidluna.tmdb.media_domain.entities.details.Video
-import com.davidluna.tmdb.media_domain.usecases.GetMediaVideosUseCase
+import com.davidluna.tmdb.media_domain.usecases.GetCatalogVideos
 import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaVideosDao
 import com.davidluna.tmdb.media_framework.data.local.database.entities.videos.RoomVideo
 import com.davidluna.tmdb.media_framework.data.paging.IsCacheExpired
@@ -15,11 +15,11 @@ import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaServic
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
-class MediaVideosRepository @Inject constructor(
+class CatalogVideosRepository @Inject constructor(
     private val local: MediaVideosDao,
     private val remote: RemoteMediaService,
     private val isCacheExpired: IsCacheExpired,
-) : GetMediaVideosUseCase {
+) : GetCatalogVideos {
 
     override suspend operator fun invoke(
         catalog: Catalog,

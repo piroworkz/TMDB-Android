@@ -10,7 +10,7 @@ import com.davidluna.tmdb.media_domain.entities.Catalog.MOVIE_UPCOMING
 import com.davidluna.tmdb.media_domain.entities.Catalog.TV_AIRING_TODAY
 import com.davidluna.tmdb.media_domain.entities.Media
 import com.davidluna.tmdb.media_domain.entities.MediaType.MOVIE
-import com.davidluna.tmdb.media_domain.usecases.GetSelectedMediaCatalog
+import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
 import com.davidluna.tmdb.media_ui.view.utils.mediaType
 import com.davidluna.tmdb.media_ui.view.utils.title
@@ -31,7 +31,7 @@ typealias MediaOffset = Int
 
 @HiltViewModel
 class MediaCatalogViewModel @Inject constructor(
-    private val getSelectedMediaCatalogUseCase: GetSelectedMediaCatalog,
+    private val observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog,
     private val observeMediaCatalogUseCase: ObserveMediaCatalogUseCase,
 ) : ViewModel() {
 
@@ -68,7 +68,7 @@ class MediaCatalogViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun getGridFlow() = getSelectedMediaCatalogUseCase.selectedCatalog
+    private fun getGridFlow() = observeSelectedMediaCatalogUseCase.selectedCatalog
         .distinctUntilChanged()
         .catch { e -> _state.update { it.copy(appError = e.toAppError()) } }
         .flatMapLatest { mediaCatalog ->
@@ -77,7 +77,7 @@ class MediaCatalogViewModel @Inject constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun getPagerFlow() = getSelectedMediaCatalogUseCase.selectedCatalog
+    private fun getPagerFlow() = observeSelectedMediaCatalogUseCase.selectedCatalog
         .distinctUntilChanged()
         .catch { e -> _state.update { it.copy(appError = e.toAppError()) } }
         .flatMapLatest { catalog ->

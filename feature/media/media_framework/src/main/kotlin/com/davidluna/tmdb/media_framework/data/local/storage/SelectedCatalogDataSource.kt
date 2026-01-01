@@ -8,7 +8,7 @@ import arrow.core.Either
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.core_domain.entities.tryCatch
-import com.davidluna.tmdb.media_domain.usecases.GetSelectedMediaCatalog
+import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class SelectedCatalogDataSource @Inject constructor(
     private val datastore: DataStore<Preferences>,
-) : UpdateSelectedEndpoint, GetSelectedMediaCatalog {
+) : UpdateSelectedEndpoint, ObserveSelectedMediaCatalog {
 
     private val key = stringPreferencesKey("selected_endpoint")
 

@@ -7,8 +7,8 @@ import com.davidluna.tmdb.media_domain.entities.Catalog.MOVIE_DETAIL
 import com.davidluna.tmdb.media_domain.entities.Catalog.TV_DETAIL
 import com.davidluna.tmdb.media_domain.entities.MediaType.MOVIE
 import com.davidluna.tmdb.media_domain.entities.details.Video
-import com.davidluna.tmdb.media_domain.usecases.GetMediaVideosUseCase
-import com.davidluna.tmdb.media_domain.usecases.GetSelectedMediaCatalog
+import com.davidluna.tmdb.media_domain.usecases.GetCatalogVideos
+import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_ui.di.VideosMediaId
 import com.davidluna.tmdb.media_ui.view.utils.UiState
 import com.davidluna.tmdb.media_ui.view.utils.mediaType
@@ -23,8 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VideoPlayerViewModel @Inject constructor(
-    private val getSelectedMediaCatalogUseCase: GetSelectedMediaCatalog,
-    private val getMediaVideosUseCase: GetMediaVideosUseCase,
+    private val observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog,
+    private val getCatalogVideos: GetCatalogVideos,
     @param:VideosMediaId private val mediaId: Int,
 ) : ViewModel() {
 
@@ -34,11 +34,11 @@ class VideoPlayerViewModel @Inject constructor(
         initialValue = UiState.Loading
     )
 
-    private fun fetchMediaVideos(): Flow<UiState<List<Video>>> = getSelectedMediaCatalogUseCase.selectedCatalog
+    private fun fetchMediaVideos(): Flow<UiState<List<Video>>> = observeSelectedMediaCatalogUseCase.selectedCatalog
         .distinctUntilChanged()
         .map { catalog: Catalog ->
             val selected = if (catalog.mediaType == MOVIE) MOVIE_DETAIL else TV_DETAIL
-            getMediaVideosUseCase(selected, mediaId).fold(
+            getCatalogVideos(selected, mediaId).fold(
                 ifLeft = { UiState.Failure(it) },
                 ifRight = { UiState.Success(it) }
             )

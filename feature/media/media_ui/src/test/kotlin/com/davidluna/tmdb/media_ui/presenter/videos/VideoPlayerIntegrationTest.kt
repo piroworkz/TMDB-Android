@@ -11,7 +11,7 @@ import com.davidluna.tmdb.media_framework.data.local.storage.SelectedCatalogData
 import com.davidluna.tmdb.media_framework.data.paging.CachePolicyValidator
 import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaService
 import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaServiceSpy
-import com.davidluna.tmdb.media_framework.data.repositories.MediaVideosRepository
+import com.davidluna.tmdb.media_framework.data.repositories.CatalogVideosRepository
 import com.davidluna.tmdb.media_framework.fakes.fakeVideos
 import com.davidluna.tmdb.media_ui.view.utils.UiState
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
@@ -85,15 +85,15 @@ class VideoPlayerIntegrationTest {
         remoteMediaService = RemoteMediaServiceSpy()
         val dataStore = newDataStore(temporaryFolderRule.newFolder())
         val getSelectedMediaCatalog = SelectedCatalogDataSource(dataStore)
-        val getMediaVideosUseCase = MediaVideosRepository(
+        val getMediaVideosUseCase = CatalogVideosRepository(
             local = mediaVideosDao,
             remote = remoteMediaService,
             isCacheExpired = CachePolicyValidator()
         )
 
         return VideoPlayerViewModel(
-            getSelectedMediaCatalogUseCase = getSelectedMediaCatalog,
-            getMediaVideosUseCase = getMediaVideosUseCase,
+            observeSelectedMediaCatalogUseCase = getSelectedMediaCatalog,
+            getCatalogVideos = getMediaVideosUseCase,
             mediaId = mediaId
         )
     }

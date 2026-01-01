@@ -3,6 +3,6 @@ package com.davidluna.tmdb.media_domain.usecases
 import arrow.core.Either
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.media_domain.entities.Catalog
-import com.davidluna.tmdb.media_domain.entities.details.Video
+import com.davidluna.tmdb.media_domain.entities.details.MediaDetails
 
-fun interface GetMediaVideosUseCase : suspend (Catalog, Int) -> Either<AppError, List<Video>>
+fun interface GetMediaDetails : suspend (Catalog, Int) -> Either<AppError, MediaDetails>

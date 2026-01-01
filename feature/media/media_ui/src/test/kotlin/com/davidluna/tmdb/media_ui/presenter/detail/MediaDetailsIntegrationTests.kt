@@ -116,7 +116,7 @@ class MediaDetailsIntegrationTests {
         )
 
         return MediaDetailsViewModel(
-            getSelectedMediaCatalogUseCase = getSelectedMediaCatalog,
+            observeSelectedMediaCatalogUseCase = getSelectedMediaCatalog,
             getMediaDetails = getMediaDetailsUseCase,
             mediaId = mediaId
         )

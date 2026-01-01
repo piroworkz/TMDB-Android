@@ -4,8 +4,8 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import com.davidluna.tmdb.media_domain.entities.Catalog
-import com.davidluna.tmdb.media_domain.usecases.GetMediaDetailsUseCase
-import com.davidluna.tmdb.media_domain.usecases.GetSelectedMediaCatalog
+import com.davidluna.tmdb.media_domain.usecases.GetMediaDetails
+import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_framework.fakes.fakeAppError
 import com.davidluna.tmdb.media_framework.fakes.fakeMediaDetails
 import com.davidluna.tmdb.media_ui.view.utils.UiState
@@ -30,14 +30,14 @@ class MovieDetailViewModelTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var getSelectedMediaCatalogUseCase: GetSelectedMediaCatalog
+    private lateinit var observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog
 
     @MockK
-    private lateinit var getMediaDetails: GetMediaDetailsUseCase
+    private lateinit var getMediaDetails: GetMediaDetails
 
     @Test
     fun `GIVEN initial state WHEN viewModel is created THEN mediaDetails is UiState Loading`() {
-        every { getSelectedMediaCatalogUseCase.selectedCatalog } returns emptyFlow()
+        every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns emptyFlow()
         val sut = buildSUT()
 
         val actual = sut.mediaDetails.value
@@ -49,7 +49,7 @@ class MovieDetailViewModelTest {
     fun `GIVEN getSelectedMediaCatalogUseCase emits MOVIE and getMediaDetails returns Right WHEN fetching movie details THEN mediaDetails is UiState Success with movie details`() =
         coroutineTestRule.scope.runTest {
             val expected = UiState.Success(fakeMediaDetails)
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
             coEvery { getMediaDetails(any(), any()) } returns fakeMediaDetails.right()
             val sut = buildSUT()
 
@@ -66,7 +66,7 @@ class MovieDetailViewModelTest {
     fun `GIVEN getMediaDetails returns Left WHEN fetching media details THEN mediaDetails is UiState Failure`() =
         coroutineTestRule.scope.runTest {
             val expected = UiState.Failure(fakeAppError)
-            every { getSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
             coEvery { getMediaDetails(any(), any()) } returns fakeAppError.left()
             val sut = buildSUT()
 
@@ -80,7 +80,7 @@ class MovieDetailViewModelTest {
         }
 
     private fun buildSUT(): MediaDetailsViewModel = MediaDetailsViewModel(
-        getSelectedMediaCatalogUseCase = getSelectedMediaCatalogUseCase,
+        observeSelectedMediaCatalogUseCase = observeSelectedMediaCatalogUseCase,
         getMediaDetails = getMediaDetails,
         mediaId = 1
     )
