@@ -3,8 +3,6 @@ package com.davidluna.tmdb.media_framework.data.local.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.davidluna.tmdb.media_framework.data.local.database.converters.RoomMediaConverters
 import com.davidluna.tmdb.media_framework.data.local.database.dao.FavoritesDao
 import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDao
@@ -35,7 +33,7 @@ import com.davidluna.tmdb.media_framework.data.local.database.entities.videos.Ro
         RoomVideo::class
     ],
     exportSchema = true,
-    version = 2
+    version = 1
 )
 abstract class MediaDatabase : RoomDatabase() {
     abstract val favoritesDao: FavoritesDao
@@ -43,20 +41,4 @@ abstract class MediaDatabase : RoomDatabase() {
     abstract val mediaDetailsDao: MediaDetailsDao
     abstract val remoteKeysDao: RemoteKeysDao
     abstract val videosDao: MediaVideosDao
-
-    companion object {
-        val migration1To2 = object : Migration(1, 2) {
-            override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL(
-                    "CREATE TABLE IF NOT EXISTS `RoomFavorite` (" +
-                        "`category` TEXT NOT NULL, " +
-                        "`id` INTEGER NOT NULL, " +
-                        "`posterPath` TEXT NOT NULL, " +
-                        "`title` TEXT NOT NULL, " +
-                        "PRIMARY KEY(`id`, `category`)" +
-                        ")"
-                )
-            }
-        }
-    }
 }
