@@ -10,7 +10,7 @@ UI depends on Domain; Framework depends on Domain; Domain has zero Android or da
 Features are split into `{feature}_domain`, `{feature}_framework`, and `{feature}_ui` modules. Module naming and registration in `settings.gradle.kts` are mandatory and must follow conventions.
 
 ### III. Test-First (Non-Negotiable)
-Use TDD. Write or update tests before implementation; follow Red-Green-Refactor. Prefer unit tests for domain and ViewModels, and Compose UI tests in `src/androidTest`.
+Use TDD. Write or update tests before implementation; follow Red-Green-Refactor. Tests define interfaces, models, and contracts. Prefer unit tests for domain and ViewModels, and Compose UI tests in `src/androidTest`.
 
 ### IV. Type-Safe Errors
 Use Arrow `Either<Error, Success>` for explicit error handling in domain use cases and repository flows. Prefer sealed error types and map failures explicitly.
