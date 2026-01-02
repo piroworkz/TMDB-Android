@@ -21,6 +21,7 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.verify
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -64,7 +65,7 @@ class MediaDetailsCacheRepositoryTest {
 
             coEvery { local.getFullDetail(mediaId) } returns fakeRoomMediaDetailsRelations
             coEvery { isCacheExpired(any()) } returns false
-
+            coEvery { observeCountryCode.invoke() } returns flowOf("US")
             val actual = sut.invoke(fakeCatalog, mediaId).getOrNull()
 
             assertEquals(fakeMediaDetails, actual)
@@ -77,6 +78,7 @@ class MediaDetailsCacheRepositoryTest {
 
             coEvery { local.getFullDetail(mediaId) } returns null andThen fakeRoomMediaDetailsRelations
             coEvery { isCacheExpired(any()) } returns false
+            coEvery { observeCountryCode.invoke() } returns flowOf("US")
             coEvery { remote.getDetailById(any()) } returns fakeRemoteMediaDetail.right()
             coEvery { remote.getCreditsById(any()) } returns fakeRemoteCredits.right()
             coEvery { remote.getImagesById(any()) } returns fakeRemoteImageResponse.right()
@@ -94,6 +96,7 @@ class MediaDetailsCacheRepositoryTest {
 
             coEvery { local.getFullDetail(mediaId) } returns fakeRoomMediaDetailsRelations
             coEvery { isCacheExpired(any()) } returns true
+            coEvery { observeCountryCode.invoke() } returns flowOf("US")
             coEvery { remote.getDetailById(any()) } returns fakeRemoteMediaDetail.right()
             coEvery { remote.getCreditsById(any()) } returns fakeRemoteCredits.right()
             coEvery { remote.getImagesById(any()) } returns fakeRemoteImageResponse.right()
@@ -112,6 +115,7 @@ class MediaDetailsCacheRepositoryTest {
 
             coEvery { local.getFullDetail(mediaId) } returns null andThen fakeRoomMediaDetailsRelations
             coEvery { isCacheExpired(any()) } returns false
+            coEvery { observeCountryCode.invoke() } returns flowOf("US")
             coEvery { remote.getDetailById(any()) } returns fakeRemoteError.left()
 
             val actual = sut.invoke(fakeCatalog, mediaId)
@@ -127,6 +131,7 @@ class MediaDetailsCacheRepositoryTest {
 
             coEvery { local.getFullDetail(mediaId) } returns null
             coEvery { isCacheExpired(any()) } returns false
+            coEvery { observeCountryCode.invoke() } returns flowOf("US")
             coEvery { remote.getDetailById(any()) } returns fakeRemoteMediaDetail.right()
             coEvery { remote.getCreditsById(any()) } returns fakeRemoteError.left()
 
@@ -143,6 +148,7 @@ class MediaDetailsCacheRepositoryTest {
 
             coEvery { local.getFullDetail(mediaId) } returns null
             coEvery { isCacheExpired(any()) } returns false
+            coEvery { observeCountryCode.invoke() } returns flowOf("US")
             coEvery { remote.getDetailById(any()) } returns fakeRemoteMediaDetail.right()
             coEvery { remote.getCreditsById(any()) } returns fakeRemoteCredits.right()
             coEvery { remote.getImagesById(any()) } returns fakeRemoteError.left()
@@ -161,6 +167,7 @@ class MediaDetailsCacheRepositoryTest {
 
             coEvery { local.getFullDetail(mediaId) } returns null
             coEvery { isCacheExpired(any()) } returns false
+            coEvery { observeCountryCode.invoke() } returns flowOf("US")
             coEvery { remote.getDetailById(any()) } returns fakeRemoteMediaDetail.right()
             coEvery { remote.getCreditsById(any()) } returns fakeRemoteCredits.right()
             coEvery { remote.getImagesById(any()) } returns fakeRemoteImageResponse.right()
