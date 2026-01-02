@@ -12,6 +12,7 @@ import com.davidluna.tmdb.media_framework.data.local.database.entities.credits.R
 import com.davidluna.tmdb.media_framework.data.local.database.entities.credits.RoomCrew
 import com.davidluna.tmdb.media_framework.data.local.database.entities.details.RoomGenre
 import com.davidluna.tmdb.media_framework.data.local.database.entities.details.RoomMediaDetails
+import com.davidluna.tmdb.media_framework.data.local.database.entities.favorites.RoomFavorite
 import com.davidluna.tmdb.media_framework.data.local.database.entities.images.RoomImage
 import com.davidluna.tmdb.media_framework.data.local.database.entities.media.RemoteKeys
 import com.davidluna.tmdb.media_framework.data.local.database.entities.media.RoomMedia
@@ -27,12 +28,14 @@ import com.davidluna.tmdb.media_framework.data.local.database.entities.videos.Ro
         RoomImage::class,
         RoomMedia::class,
         RoomMediaDetails::class,
+        RoomFavorite::class,
         RoomVideo::class
     ],
     exportSchema = true,
     version = 1
 )
 abstract class MediaDatabase : RoomDatabase() {
+    abstract val favoritesDao: FavoritesDao
     abstract val mediaDao: MediaDao
     abstract val mediaDetailsDao: MediaDetailsDao
     abstract val remoteKeysDao: RemoteKeysDao

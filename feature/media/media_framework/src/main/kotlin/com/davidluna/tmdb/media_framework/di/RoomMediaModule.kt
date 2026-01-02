@@ -16,6 +16,10 @@ object RoomMediaModule {
 
     @Singleton
     @Provides
+    fun provideFavoritesDao(db: MediaDatabase) = db.favoritesDao
+
+    @Singleton
+    @Provides
     fun provideMediaDetailsDao(db: MediaDatabase) = db.mediaDetailsDao
 
     @Singleton
@@ -26,4 +30,3 @@ object RoomMediaModule {
     @Provides
     fun provideVideosDao(db: MediaDatabase) = db.videosDao
 }
-

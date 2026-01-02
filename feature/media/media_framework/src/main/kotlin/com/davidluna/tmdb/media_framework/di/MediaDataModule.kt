@@ -4,7 +4,9 @@ import com.davidluna.tmdb.media_domain.usecases.GetMediaDetails
 import com.davidluna.tmdb.media_domain.usecases.GetCatalogVideos
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
+import com.davidluna.tmdb.media_domain.usecases.ToggleFavorite
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
+import com.davidluna.tmdb.media_framework.data.local.storage.LocalFavoritesDataSource
 import com.davidluna.tmdb.media_framework.data.local.storage.SelectedCatalogDataSource
 import com.davidluna.tmdb.media_framework.data.paging.CachePolicyValidator
 import com.davidluna.tmdb.media_framework.data.paging.IsCacheExpired
@@ -31,4 +33,7 @@ abstract class MediaDataModule {
     abstract fun bindGetContentKindUseCase(source: SelectedCatalogDataSource): ObserveSelectedMediaCatalog
     @Binds
     abstract fun bindUpdateContentKindUseCase(source: SelectedCatalogDataSource): UpdateSelectedEndpoint
+
+    @Binds
+    abstract fun bindToggleFavorite(source: LocalFavoritesDataSource): ToggleFavorite
 }
