@@ -6,6 +6,8 @@ import androidx.compose.ui.test.hasContentDescriptionExactly
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.assertContentDescriptionEquals
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
@@ -17,6 +19,9 @@ import com.davidluna.tmdb.media_domain.entities.Media
 import com.davidluna.tmdb.media_framework.fakes.buildFakeMediaList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import org.junit.Rule
 import org.junit.Test
 
@@ -73,9 +78,34 @@ class MediaScreenTest {
         onNodeWithText("Unexpected error").assertExists().assertIsDisplayed()
     }
 
+    @Test
+    fun clickingFavoriteToggle_updatesFavoriteState(): Unit = composeTestRule.run {
+        val fakeMedia = buildFakeMediaList().first()
+        val toggleTag = "grid-favorite-toggle-${fakeMedia.id}"
+        var favoriteIds by mutableStateOf(setOf<Int>())
+        setContentWithState(
+            favoriteIds = favoriteIds,
+            onToggleFavorite = { media ->
+                favoriteIds = if (favoriteIds.contains(media.id)) {
+                    favoriteIds - media.id
+                } else {
+                    favoriteIds + media.id
+                }
+            }
+        )
+
+        onNodeWithTag(toggleTag).assertExists().assertContentDescriptionEquals("Favorite")
+
+        onNodeWithTag(toggleTag).performClick()
+
+        onNodeWithTag(toggleTag).assertContentDescriptionEquals("Unfavorite")
+    }
+
     private fun setContentWithState(
         appError: AppError? = null,
         navigateTo: (Any) -> Unit = {},
+        favoriteIds: Set<Int> = emptySet(),
+        onToggleFavorite: (Media) -> Unit = {},
     ) {
         val fakeMedia = buildFakeMediaList()
 
@@ -91,7 +121,9 @@ class MediaScreenTest {
                 pagerCatalogTitle = "NOW PLAYING",
                 pagerLazyPagingItems = pagerLazyPagingItems,
                 navigateTo = { navigateTo(it) },
-                onPositionChanged = { _, _ -> }
+                onPositionChanged = { _, _ -> },
+                favoriteIds = favoriteIds,
+                onToggleFavorite = onToggleFavorite
             )
         }
     }

@@ -2,6 +2,7 @@ package com.davidluna.tmdb.media_ui.presenter.media
 
 import app.cash.turbine.test
 import com.davidluna.tmdb.media_domain.entities.Catalog
+import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
@@ -85,6 +86,27 @@ class MediaCatalogViewModelTest {
                 val actual = awaitItem().gridCatalogTitle
 
                 assertEquals(endpoint.title, actual)
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            getGridFlowJob.cancelAndJoin()
+        }
+
+    @Test
+    fun `GIVEN getGridFlow processes a media catalog WHEN getState is called THEN it reflects updated selectedMediaType`() =
+        coroutineTestRule.scope.runTest {
+            val endpoint = Catalog.MOVIE_UPCOMING
+            every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
+            every { observeMediaCatalogUseCase(any(), any()) } returns emptyFlow()
+            val sut = buildSUT()
+
+            val getGridFlowJob = launch { sut.gridPagingDataFlow.collect {} }
+
+            sut.state.test {
+                awaitItem()
+                val actual = awaitItem().selectedMediaType
+
+                assertEquals(MediaType.MOVIE, actual)
                 cancelAndIgnoreRemainingEvents()
             }
 
