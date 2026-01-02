@@ -1,6 +1,7 @@
 package com.davidluna.tmdb.media_ui.view.media
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -19,11 +21,21 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_ui.composables.ErrorDialogView
 import com.davidluna.tmdb.core_ui.navigation.Destination
 import com.davidluna.tmdb.core_ui.theme.dimens.Dimens
+import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.Media
+import com.davidluna.tmdb.media_domain.entities.MediaType as CatalogMediaType
+import com.davidluna.tmdb.media_domain.favorites.entities.FavoriteItem
+import com.davidluna.tmdb.media_domain.favorites.types.MediaType as FavoriteMediaType
+import com.davidluna.tmdb.media_ui.favorites.viewmodel.FavoritesViewModel
 import com.davidluna.tmdb.media_ui.navigation.MediaNavigation.Detail
 import com.davidluna.tmdb.media_ui.presenter.media.MediaCatalogViewModel
 import com.davidluna.tmdb.media_ui.view.media.composables.CarouselImageView
@@ -35,11 +47,13 @@ import com.davidluna.tmdb.media_ui.view.media.composables.ReelTitleView
 @Composable
 fun MediaCatalogScreen(
     viewModel: MediaCatalogViewModel = hiltViewModel(),
+    favoritesViewModel: FavoritesViewModel = hiltViewModel(),
     navigateTo: (Destination) -> Unit,
 ) {
     val pagerLazyPagingItems = viewModel.pagerPagingDataFlow.collectAsLazyPagingItems()
     val gridLazyPagingItems = viewModel.gridPagingDataFlow.collectAsLazyPagingItems()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val favoriteIds by favoritesViewModel.favoriteIds.collectAsStateWithLifecycle()
 
     MediaCatalogScreen(
         appError = state.appError,
@@ -48,7 +62,20 @@ fun MediaCatalogScreen(
         lastKnownPosition = state.lastKnownPosition,
         pagerCatalogTitle = state.pagerCatalogTitle?.let { stringResource(it) },
         pagerLazyPagingItems = pagerLazyPagingItems,
+        selectedCatalog = state.selectedCatalog,
+        favoriteIds = favoriteIds,
         navigateTo = { navigateTo(it) },
+        onToggleFavorite = { media, mediaType ->
+            favoritesViewModel.onToggleFavorite(
+                FavoriteItem(
+                    id = media.id,
+                    mediaType = mediaType,
+                    title = media.title,
+                    posterPath = media.posterPath,
+                    timestamp = System.currentTimeMillis()
+                )
+            )
+        },
         onPositionChanged = { index, offset -> viewModel.updateLastKnownPosition(index, offset) }
     )
 }
@@ -61,10 +88,14 @@ fun MediaCatalogScreen(
     lastKnownPosition: Pair<Int, Int>,
     pagerCatalogTitle: String?,
     pagerLazyPagingItems: LazyPagingItems<Media>,
+    selectedCatalog: Catalog?,
+    favoriteIds: Set<Int>,
     navigateTo: (Destination) -> Unit,
+    onToggleFavorite: (Media, FavoriteMediaType) -> Unit,
     onPositionChanged: (Int, Int) -> Unit,
 ) {
     val lazyGridState = rememberLazyGridState()
+    val favoriteMediaType = selectedCatalog?.toFavoriteMediaType()
 
     LaunchedEffect(gridCatalogTitle) {
         if (lazyGridState.firstVisibleItemIndex > 0) {
@@ -128,6 +159,7 @@ fun MediaCatalogScreen(
             key = gridLazyPagingItems.getOrNull { mediaItems -> mediaItems.itemKey { it.id } }
         ) { index ->
             val media: Media? = gridLazyPagingItems.getOrNull { it[index] }
+            val isFavorite = media?.id?.let { favoriteIds.contains(it) } == true
             Column(
                 modifier = Modifier
                     .clickable {
@@ -140,7 +172,24 @@ fun MediaCatalogScreen(
                         }
                     }
             ) {
-                FilmMaskImageView(model = media?.posterPath)
+                Box {
+                    FilmMaskImageView(model = media?.posterPath)
+                    IconButton(
+                        modifier = Modifier.align(Alignment.TopEnd),
+                        enabled = media != null && favoriteMediaType != null,
+                        onClick = {
+                            if (media != null && favoriteMediaType != null) {
+                                onToggleFavorite(media, favoriteMediaType)
+                            }
+                        }
+                    ) {
+                        val icon = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = if (isFavorite) "Remove favorite" else "Add favorite"
+                        )
+                    }
+                }
                 MediaTitleView(media?.title)
                 Spacer(modifier = Modifier.padding(top = Dimens.margins.xLarge))
             }
@@ -154,3 +203,6 @@ private fun <T : Any, R : Any> LazyPagingItems<T>.getOrNull(take: (LazyPagingIte
     } catch (_: IndexOutOfBoundsException) {
         null
     }
+
+private fun Catalog.toFavoriteMediaType(): FavoriteMediaType =
+    if (mediaType == CatalogMediaType.MOVIE) FavoriteMediaType.MOVIE else FavoriteMediaType.TV_SHOW

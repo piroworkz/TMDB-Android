@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.toAppError
+import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.Catalog.MOVIE_UPCOMING
 import com.davidluna.tmdb.media_domain.entities.Catalog.TV_AIRING_TODAY
 import com.davidluna.tmdb.media_domain.entities.Media
@@ -61,6 +62,7 @@ class MediaCatalogViewModel @Inject constructor(
         val gridCatalogTitle: Int? = null,
         val pagerCatalogTitle: Int? = null,
         val lastKnownPosition: Pair<MediaIndex, MediaOffset> = 0 to 0,
+        val selectedCatalog: Catalog? = null,
     )
 
     fun updateLastKnownPosition(index: MediaIndex, offset: MediaOffset) {
@@ -72,7 +74,7 @@ class MediaCatalogViewModel @Inject constructor(
         .distinctUntilChanged()
         .catch { e -> _state.update { it.copy(appError = e.toAppError()) } }
         .flatMapLatest { mediaCatalog ->
-            _state.update { it.copy(gridCatalogTitle = mediaCatalog.title) }
+            _state.update { it.copy(gridCatalogTitle = mediaCatalog.title, selectedCatalog = mediaCatalog) }
             observeMediaCatalogUseCase(mediaCatalog, viewModelScope)
         }
 
