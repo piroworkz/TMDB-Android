@@ -10,7 +10,7 @@ import javax.inject.Inject
 class LocalFavoritesDataSource @Inject constructor(
     private val favoritesDao: FavoritesDao,
 ) {
-    suspend operator fun invoke(favorite: RoomFavorite): Either<AppError, Boolean> = tryCatch {
+    suspend fun toggleFavorite(favorite: RoomFavorite): Either<AppError, Boolean> = tryCatch {
         val storedFavorite = favoritesDao.getFavorite(favorite.id, favorite.category)
         if (storedFavorite == null) {
             favoritesDao.upsertFavorite(favorite)

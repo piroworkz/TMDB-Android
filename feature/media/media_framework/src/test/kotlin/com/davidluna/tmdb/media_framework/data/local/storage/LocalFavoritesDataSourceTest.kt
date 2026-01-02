@@ -37,7 +37,7 @@ class LocalFavoritesDataSourceTest {
             coEvery { favoritesDao.upsertFavorite(favorite) } returns Unit
             val sut = LocalFavoritesDataSource(favoritesDao)
 
-            val actual = sut(favorite).getOrNull()
+            val actual = sut.toggleFavorite(favorite).getOrNull()
 
             assertEquals(true, actual)
             coVerify(exactly = 1) { favoritesDao.upsertFavorite(favorite) }
@@ -51,7 +51,7 @@ class LocalFavoritesDataSourceTest {
             coEvery { favoritesDao.deleteFavorite(favorite.id, favorite.category) } returns 1
             val sut = LocalFavoritesDataSource(favoritesDao)
 
-            val actual = sut(favorite).getOrNull()
+            val actual = sut.toggleFavorite(favorite).getOrNull()
 
             assertEquals(false, actual)
             coVerify(exactly = 1) { favoritesDao.deleteFavorite(favorite.id, favorite.category) }
