@@ -16,5 +16,7 @@ object MediaDataBaseModule {
     @Singleton
     @Provides
     fun provideMediaDatabase(app: Application): MediaDatabase =
-        Room.databaseBuilder(app, MediaDatabase::class.java, "media.db").build()
+        Room.databaseBuilder(app, MediaDatabase::class.java, "media.db")
+            .addMigrations(MediaDatabase.migration1To2)
+            .build()
 }
