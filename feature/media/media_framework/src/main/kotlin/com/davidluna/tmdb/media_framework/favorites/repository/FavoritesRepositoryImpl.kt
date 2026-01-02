@@ -35,11 +35,11 @@ class FavoritesRepositoryImpl @Inject constructor(
         }
 
     override suspend fun toggleFavorite(item: FavoriteItem): Either<AppError, Unit> = tryCatch {
-        val exists = favoritesDao.observeFavoritesByType(item.mediaType.name)
+        val existing = favoritesDao.observeFavoritesByType(item.mediaType.name)
             .first()
             .any { it.id == item.id }
 
-        if (exists) {
+        if (existing) {
             favoritesDao.deleteFavorite(item.id, item.mediaType.name)
         } else {
             favoritesDao.upsertFavorite(item.toEntity())
