@@ -26,6 +26,8 @@ description: "Task list for Favorites feature implementation"
 
 **Independent Test**: Mark an item as favorite and confirm it is saved and can be unmarked.
 
+**Note**: For new ViewModels, inject a CoroutineScope (or dispatcher + scope) instead of using `viewModelScope`.
+
 ### Tests for User Story 1 (TDD first)
 
 - [ ] T101 [P] [US1] Unit test for local data source toggle behavior in `feature/media/media_framework/src/test/kotlin/com/davidluna/tmdb/media_framework/data/local/storage/LocalFavoritesDataSourceTest.kt`

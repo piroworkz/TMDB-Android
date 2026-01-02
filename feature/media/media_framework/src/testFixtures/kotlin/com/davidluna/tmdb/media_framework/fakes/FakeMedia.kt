@@ -22,6 +22,7 @@ import com.davidluna.tmdb.test_shared.reader.Reader
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.time.format.FormatStyle
 import java.util.Locale
 
 val fakeEmptyPagingData: PagingData<Media> = PagingData.from(emptyList())
@@ -64,12 +65,7 @@ val fakeMediaDetails = MediaDetails(
     castList = fakeRemoteCredits.cast.map {
         it.toDomain()
     },
-    images = listOf(
-        Image(
-            fakeRemoteMediaDetail.posterPath?.buildModel().orEmpty(),
-            fakeRemoteMediaDetail.id ?: 0
-        )
-    ) + fakeRemoteImages.toDomain(fakeRemoteMediaDetail.id ?: 0)
+    images =  fakeRemoteImages.toDomain(fakeRemoteMediaDetail.id ?: 0)
 )
 
 private fun RemoteImages.toDomain(i: Int): List<Image> =
@@ -95,11 +91,19 @@ private fun RemoteGenre.toDomain(): Genre = Genre(
     name = name
 )
 
-private fun formatDate(releaseDate: String?): String? = try {
+private fun formatDate(releaseDate: String?, countryCode: String = "US"): String? = try {
     releaseDate?.let {
         val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)
         val date = LocalDate.parse(it, inputFormatter)
-        "${date.month.name.lowercase()} ${date.dayOfMonth}, ${date.year}"
+
+        val locale = if (countryCode.equals("MX", ignoreCase = true)) {
+            Locale("es", "MX")
+        } else {
+            Locale.US
+        }
+
+        val outputFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(locale)
+        date.format(outputFormatter)
     }
 } catch (_: DateTimeParseException) {
     null
