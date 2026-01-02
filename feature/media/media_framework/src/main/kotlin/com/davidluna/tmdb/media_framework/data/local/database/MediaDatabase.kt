@@ -15,6 +15,7 @@ import com.davidluna.tmdb.media_framework.data.local.database.entities.credits.R
 import com.davidluna.tmdb.media_framework.data.local.database.entities.credits.RoomCrew
 import com.davidluna.tmdb.media_framework.data.local.database.entities.details.RoomGenre
 import com.davidluna.tmdb.media_framework.data.local.database.entities.details.RoomMediaDetails
+import com.davidluna.tmdb.media_framework.data.local.database.entities.favorites.RoomFavorite
 import com.davidluna.tmdb.media_framework.data.local.database.entities.images.RoomImage
 import com.davidluna.tmdb.media_framework.data.local.database.entities.media.RemoteKeys
 import com.davidluna.tmdb.media_framework.data.local.database.entities.media.RoomMedia
@@ -59,4 +60,3 @@ abstract class MediaDatabase : RoomDatabase() {
         }
     }
 }
-import com.davidluna.tmdb.media_framework.data.local.database.entities.favorites.RoomFavorite
