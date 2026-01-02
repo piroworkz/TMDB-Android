@@ -75,6 +75,7 @@ class FavoritesViewModelTest {
         }
 
     private fun buildSUT(): FavoritesViewModel = FavoritesViewModel(
-        toggleFavorite = toggleFavorite
+        toggleFavorite = toggleFavorite,
+        scope = coroutineRule.scope,
     )
 }

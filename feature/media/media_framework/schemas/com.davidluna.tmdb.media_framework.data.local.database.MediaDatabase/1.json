@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0434b8a015f0dd03f0c2fc875cbb3227",
+    "identityHash": "ba30b0e5df26cdcd272492ec57b5c0f1",
     "entities": [
       {
         "tableName": "RemoteKeys",
@@ -380,6 +380,43 @@
         }
       },
       {
+        "tableName": "RoomFavorite",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`category` TEXT NOT NULL, `id` INTEGER NOT NULL, `posterPath` TEXT NOT NULL, `title` TEXT NOT NULL, PRIMARY KEY(`id`, `category`))",
+        "fields": [
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "posterPath",
+            "columnName": "posterPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id",
+            "category"
+          ]
+        }
+      },
+      {
         "tableName": "RoomVideo",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `key` TEXT NOT NULL, `mediaId` INTEGER NOT NULL, `savedTimeMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
@@ -418,7 +455,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0434b8a015f0dd03f0c2fc875cbb3227')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ba30b0e5df26cdcd272492ec57b5c0f1')"
     ]
   }
 }

@@ -12,10 +12,8 @@ import javax.inject.Inject
 class LocalFavoritesDataSource @Inject constructor(
     private val favoritesDao: FavoritesDao,
 ) : ToggleFavorite {
-    override suspend fun invoke(item: FavoriteItem): Either<AppError, Boolean> =
-        toggleFavorite(item.toRoomFavorite())
-
-    suspend fun toggleFavorite(favorite: RoomFavorite): Either<AppError, Boolean> = tryCatch {
+    override suspend fun invoke(item: FavoriteItem): Either<AppError, Boolean> = tryCatch {
+        val favorite = item.toRoomFavorite()
         val storedFavorite = favoritesDao.getFavorite(favorite.id, favorite.category)
         if (storedFavorite == null) {
             favoritesDao.upsertFavorite(favorite)
