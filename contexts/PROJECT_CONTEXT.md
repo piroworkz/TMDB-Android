@@ -8,14 +8,34 @@
 
 ---
 
-## 1. Project Structure Overview
+## How to Use This Doc
+- Scan the TOC, jump to the section you need.
+- Follow naming in §3; follow patterns in §7.
+- Build/test commands live in §6/§7 for quick copy/paste.
+
+## Table of Contents
+1. Project Overview
+2. Architecture & Principles
+3. Naming Conventions
+4. Code Style & Compose
+5. Dependencies & Stack
+6. Testing Strategy
+7. Build & Tooling
+8. Implementation Patterns
+9. Practices & Guidance
+10. Glossary
+11. Quick Links
+
+---
+
+## 1. Project Overview
 
 The TMDB-Android project follows a **multi-module, clean architecture** pattern with clear separation of concerns. The modular structure is organized as follows:
 
 ```
 TMDB-Android/
 ├── app/                          # Main application module
-├── feature/                       # Feature modules
+├── feature/                      # Feature modules
 │   ├── auth/
 │   │   ├── auth_domain/          # Business logic (pure Kotlin)
 │   │   ├── auth_framework/       # Data layer (Room, Retrofit, etc.)
@@ -31,14 +51,14 @@ TMDB-Android/
 ├── build-logic/                  # Convention plugins for Gradle
 │   └── convention/
 ├── test_shared/                  # Shared testing utilities and mocks
-├── gradle/                        # Gradle wrapper and version catalog
-├── contexts/                      # Documentation and context files
-└── settings.gradle.kts            # Gradle settings with module inclusions
+├── gradle/                       # Gradle wrapper and version catalog
+├── contexts/                     # Documentation and context files
+└── settings.gradle.kts           # Gradle settings with module inclusions
 ```
 
 ### Module Types
 
-- **Domain (`*_domain`)**: Pure Kotlin modules containing business logic, use cases, entities, and repository interfaces. Zero Android framework dependencies.
+- **Domain (`*_domain`)**: Pure Kotlin modules containing business rules, use case interfaces, entities, and value objects. Zero Android framework dependencies.
 - **Framework (`*_framework`)**: Android framework implementations including data sources, repositories, Room databases, Retrofit services, and persistence logic.
 - **UI (`*_ui`)**: Jetpack Compose UI implementations, ViewModels, screen composables, and navigation.
 - **Core**: Reusable components shared across all features (utilities, common UI components).
@@ -65,22 +85,21 @@ include(
 
 ---
 
-## 2. Architecture & Design Patterns
+## 2. Architecture & Principles
 
 ### 2.1 Clean Architecture
 
-The project implements **Clean Architecture** across three layers:
-
 1. **Domain Layer** (`*_domain`)
    - Business rules and pure Kotlin use cases
-   - Entities, value objects, and repository interfaces
-   - Use cases prefer `fun interface` when a single public method exists
+   - Entities, value objects, and use case interfaces
+   - Use cases are interfaces (prefer `fun interface` when a single public method exists)
    - Uses `Arrow`'s `Either<Error, Success>` for type-safe error handling
    - No dependencies on Android or data-specific frameworks
 
 2. **Framework Layer** (`*_framework`)
    - Local and remote data sources
-   - Repository implementations (when multiple data sources or multiple use cases share coordination)
+   - Repositories implement use case interfaces from domain (no `Impl` suffix)
+   - DataSources handle specific data operations (local DB, remote API)
    - Handles data persistence (Room) and network requests (Retrofit)
    - Depends on Domain; uses dependency injection (Hilt)
 
@@ -92,13 +111,8 @@ The project implements **Clean Architecture** across three layers:
 ### 2.2 Key Design Principles
 
 - **Unidirectional Dependency**: UI → Domain ← Framework (domain is independent)
-- **TDD First**: Always work with tests driving implementation; add or update tests before changes
+- **TDD First**: Add/update tests before changes
 - **Prefer composition** over inheritance; avoid base classes
-- **Clean Code & SOLID**: Keep small, cohesive types with single responsibilities
-- **Use Cases Pattern**:
-  - `fun interface` with a single `invoke()` method when a repository/data source exposes exactly one public operation
-  - If a repository supports multiple public operations, it can implement multiple use case interfaces as needed
-  - If only one data source is required and no repository adds value, the data source may implement the use case interface directly
 - **Type-Safe Error Handling**: `Arrow`'s `Either<L, R>` for explicit error propagation
 - **Reactive Programming**: Coroutines and Flow for asynchronous operations
 - **Dependency Injection**: Hilt for object lifecycle and dependency management
@@ -106,62 +120,59 @@ The project implements **Clean Architecture** across three layers:
 
 ---
 
-## 3. Code Style & Conventions
+## 3. Naming Conventions
 
-### 3.1 Language & Idioms
+### 3.1 General
+- **Classes**: PascalCase (`UserRepository`, `LoginScreen`)
+- **Functions & Variables**: camelCase (`getUserById()`, `isLoading`)
+- **Constants**: UPPER_SNAKE_CASE (`MAX_RETRY_ATTEMPTS`)
+- **Packages**: lowercase with dots (`com.davidluna.tmdb.auth.domain`)
+- **Composables**: PascalCase, often suffixed with `Screen` or `Dialog` (`LoginScreen`, `UserDialog`)
+- **ViewModels**: Suffixed with `ViewModel` (`LoginViewModel`)
 
-- **Primary Language**: Kotlin (exclusive)
-- **Null Safety**: Leverages Kotlin's null safety features; prefer non-null types
-- **Coroutines**: Used for all asynchronous operations
-- **Flow & StateFlow**: For reactive state management and observable data streams
-- **Extension Functions**: Encouraged for domain-agnostic utilities
-- **Higher-Order Functions**: Preferred for callbacks and composition
-- **Sealed Classes**: Used for type-safe ADTs (Algebraic Data Types) and result handling
+### 3.2 Layer-Specific Names (Framework/UI)
+- **Repositories**: `{Feature}Repository` (e.g., `FavoritesRepository`, `MediaRepository`); no `Impl` suffix.
+- **Data Sources**: `{Source}{Feature}DataSource` (e.g., `RemoteMediaDataSource`, `LocalFavoritesDataSource`); no `Impl` suffix.
+- **Use Cases**: Verb-first when possible (`ToggleFavorite`, `GetMovies`); no `UseCase` suffix..
 
-### 3.2 Naming Conventions
+### 3.3 Test Doubles
+- **Fake Values**: Prefix with `fake` (`fakeMedia`, `fakeUser`, `fakeMovieFavorite()`).
+- **Spies**: Suffix with `Spy` (`FavoritesRepositorySpy`, `MediaDaoSpy`).
+- Avoid `FakeRepository` / `MockRepository`; prefer `{Name}Spy`.
 
-- **Classes**: PascalCase (e.g., `UserRepository`, `LoginScreen`)
-- **Functions & Variables**: camelCase (e.g., `getUserById()`, `isLoading`)
-- **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_RETRY_ATTEMPTS`)
-- **Packages**: lowercase with dots (e.g., `com.davidluna.tmdb.auth.domain`)
-- **Composables**: PascalCase, often suffixed with `Screen` or `Dialog` (e.g., `LoginScreen`, `UserDialog`)
-- **ViewModels**: Suffixed with `ViewModel` (e.g., `LoginViewModel`)
-
-### 3.3 File Organization
-
-- One public class/interface per file
-- File name matches the public declaration (e.g., `UserRepository.kt` contains `interface UserRepository`)
-- Imports are organized (alphabetically, with blank lines separating groups)
-- Use `@Suppress` annotations sparingly and with documentation
-
-### 3.4 Module Naming
-
+### 3.4 Modules
 - Domain modules: `{feature}_domain`
 - Framework modules: `{feature}_framework`
 - UI modules: `{feature}_ui`
 - Core modules: `core_{layer}`
 
-### 3.5 Compose Conventions
+---
 
-- Composables follow the `@Composable` annotation convention
-- Preview functions: Suffixed with `Preview` and annotated with `@Preview`
-- State hoisting: Lift state to the lowest common parent
-- Use `remember` and `mutableStateOf` for local state, `StateFlow` for shared state
-- Material Design 3 components with Color and Shape system
+## 4. Code Style & Compose
 
-### 3.6 Code Formatting
+### 4.1 Language & Idioms
+- Kotlin-only; leverage null-safety.
+- Coroutines for async work; Flow/StateFlow for streams.
+- Extension functions for utilities; sealed classes for ADTs.
 
-- Indentation: 4 spaces
-- Line length: Keep under 120 characters (soft limit)
-- Blank lines: Separate logical sections within functions and classes
-- Comments: Use meaningful, concise comments; avoid obvious statements
-- Documentation: Public APIs should have KDoc comments
+### 4.2 Formatting & Organization
+- Indentation: 4 spaces; line length ~120 chars (soft).
+- One public class/interface per file; file name matches declaration.
+- Organized imports; sparing `@Suppress` with rationale.
+- No comments (inline/block/KDoc); code must be self-explanatory.
+
+### 4.3 Compose Conventions
+- Preview functions suffixed with `Preview` and annotated with `@Preview`.
+- State hoisting to lowest common parent.
+- `remember`/`mutableStateOf` for local state; `StateFlow` for shared state.
+- Composables describe UI only; move logic/state into a StateHolder (ViewModel or state holder class).
+- Material 3 components with Color and Shape system.
 
 ---
 
-## 4. Dependencies & Stack
+## 5. Dependencies & Stack
 
-### 4.1 Gradle & Build Tools
+### 5.1 Gradle & Build Tools
 
 | Component                   | Version      | Details                           |
 |-----------------------------|--------------|-----------------------------------|
@@ -170,7 +181,7 @@ The project implements **Clean Architecture** across three layers:
 | KSP                         | 2.2.21-2.0.4 | Symbol processing for annotations |
 | Room                        | 2.8.4        | ORM database framework            |
 
-### 4.2 UI & Jetpack
+### 5.2 UI & Jetpack
 
 | Library             | Version          | Purpose                      |
 |---------------------|------------------|------------------------------|
@@ -180,7 +191,7 @@ The project implements **Clean Architecture** across three layers:
 | Activity Compose    | 1.12.1           | Activity-Compose integration |
 | Coil Compose        | 2.7.0            | Image loading library        |
 
-### 4.3 Data & Networking
+### 5.3 Data & Networking
 
 | Library               | Version | Purpose                |
 |-----------------------|---------|------------------------|
@@ -190,7 +201,7 @@ The project implements **Clean Architecture** across three layers:
 | Room (Database)       | 2.8.4   | Local persistence      |
 | DataStore             | 1.2.0   | Secure preferences     |
 
-### 4.4 Dependency Injection & DI Frameworks
+### 5.4 Dependency Injection & DI Frameworks
 
 | Library                 | Version | Purpose                        |
 |-------------------------|---------|--------------------------------|
@@ -198,20 +209,20 @@ The project implements **Clean Architecture** across three layers:
 | Hilt Navigation Compose | 1.3.0   | ViewModel injection in Compose |
 | javax.inject            | 1       | Injection annotations          |
 
-### 4.5 Functional & Error Handling
+### 5.5 Functional & Error Handling
 
 | Library | Version | Purpose                                 |
 |---------|---------|-----------------------------------------|
 | Arrow   | 2.2.0   | Functional programming (Either, Option) |
 
-### 4.6 Asynchronous Programming
+### 5.6 Asynchronous Programming
 
 | Library            | Version | Purpose              |
 |--------------------|---------|----------------------|
 | Kotlinx Coroutines | 1.10.2  | Async/await and Flow |
 | Kotlinx DateTime   | 0.7.1   | Date/time operations |
 
-### 4.7 Testing
+### 5.7 Testing
 
 | Library              | Version          | Scope       | Purpose                     |
 |----------------------|------------------|-------------|-----------------------------|
@@ -229,7 +240,7 @@ The project implements **Clean Architecture** across three layers:
 | Android Test Core    | 1.7.0            | UI          | Core test utilities         |
 | Android Runner       | 1.7.0            | UI          | Test runner                 |
 
-### 4.8 Other Dependencies
+### 5.8 Other Dependencies
 
 | Library                | Version       | Purpose                |
 |------------------------|---------------|------------------------|
@@ -239,21 +250,58 @@ The project implements **Clean Architecture** across three layers:
 | Firebase BOM           | 34.7.0        | Firebase suite         |
 | Google Services Plugin | 4.4.4         | Firebase configuration |
 
-### 4.9 Version Catalog
+### 5.9 Version Catalog
 
-All dependencies are managed in `gradle/libs.versions.toml`. This centralized approach:
-- Ensures version consistency across modules
-- Simplifies dependency updates
-- Provides IDE auto-completion in `build.gradle.kts` files
-- Uses the alias syntax (e.g., `alias(libs.plugins.hiltPlugin)`)
+All dependencies are managed in `gradle/libs.versions.toml` for consistency and IDE completion. Use `alias(libs.*)` in Gradle files.
 
 ---
 
-## 5. Build System & Convention Plugins
+## 6. Testing Strategy
 
-### 5.1 Convention Plugins
+### 6.1 Approach
+- TDD-first: write/update tests before implementation. Tests define the contracts for interfaces, models, and use cases.
+- Choose test type based on scope: unit for isolation, integration for flows, Compose UI for rendering/interaction, E2E for happy paths.
 
-The `build-logic/convention` directory contains custom Gradle plugins that standardize module configurations:
+### 6.2 Unit Tests
+- ViewModels: verify state reducers, side-effects, navigation triggers.
+- Repositories: assert contracts with data sources and error propagation.
+- Data sources: validate mapping and persistence behaviors.
+- Compose components (unit style): semantics and callbacks in `src/androidTest`.
+
+Key patterns:
+- Use `@MockK` for dependencies; `MockKRule(order = 0)` and `CoroutineTestRule(order = 1)`.
+- `coEvery`/`every` for setup; `coVerify`/`verify` for assertions.
+- GIVEN-WHEN-THEN structure; use `runTest` for suspend code.
+
+### 6.3 Integration Tests
+- Real implementations + spies from `testFixtures`; avoid MockK inside the flow.
+- Good for ViewModel + Use Case + Repository stacks and persistence.
+
+### 6.4 Compose UI Tests (`src/androidTest`)
+- Test Composables directly; pass `uiState` and callbacks.
+- Use semantic matchers (`onNodeWithText`, `onNodeWithContentDescription`).
+
+### 6.5 Test Doubles
+- **Unit**: mocks only (`@MockK`).
+- **Integration**: spies/fakes from `testFixtures`.
+- **Compose UI**: mock ViewModel, real Composables.
+
+### 6.6 Quick Reference
+
+| Test Type | Location | Framework | Pattern | Coverage |
+|-----------|----------|-----------|---------|----------|
+| Unit - Domain | `src/test/` | JUnit4 + MockK + Turbine | `@MockK` dependencies | ≥85% |
+| Unit - Framework | `src/test/` | JUnit4 + MockK | `@MockK` DAOs | ≥80% |
+| Unit - ViewModel | `src/test/` | JUnit4 + MockK + Turbine | `@MockK` use cases | ≥70% |
+| Integration - ViewModel | `src/test/` | JUnit4 + Spies | Real impl + spies | Optional |
+| UI - Compose | `src/androidTest/` | Compose Test + MockK | Mock VM, semantic checks | ≥60% |
+| E2E | `app/src/androidTest/` | Hilt + MockWebServer | Happy paths | Selective |
+
+---
+
+## 7. Build & Tooling
+
+### 7.1 Convention Plugins
 
 | Plugin                           | Apply Method                      | Purpose                                     |
 |----------------------------------|-----------------------------------|---------------------------------------------|
@@ -264,500 +312,140 @@ The `build-logic/convention` directory contains custom Gradle plugins that stand
 | **tmdb.room.module.plugin**      | Framework modules with Room       | Room ORM configuration                      |
 | **tmdb.test.shared.plugin**      | `test_shared` module              | Testing utilities and mock setup            |
 
-### 5.2 Plugin Application
+Apply via `alias(libs.plugins.*)` inside module `*.gradle.kts` files.
 
-Plugins are applied via `alias()` in module-specific `{moduleName}.gradle.kts`:
-
-```kotlin
-plugins {
-    alias(libs.plugins.uiModuleConventionPlugin)
-}
-```
-
-### 5.3 Common Convention Functions
-
-Helper functions in `build-logic/convention/src/main/kotlin/com/davidluna/tmdb/convention/`:
-
-- `implementation()`: Add compile-time dependencies
-- `testImplementation()`: Add test-only dependencies
-- `androidTestImplementation()`: Add instrumented test dependencies
-- `ksp()`: Add KSP annotation processor dependencies
-- `composeUiBundle`: Bundle of Compose UI libraries
-- `unitTestingBundle`: JUnit, MockK, Turbine, etc.
-- `androidTestingBundle`: Espresso, Hilt Test, etc.
-
-### 5.4 When to Use Convention Plugins vs Module-Specific Dependencies
-
-**Use Convention Plugins when**:
-- The dependency is needed by **all or most modules** of a certain type (e.g., all UI modules need Hilt)
-- The dependency is part of the standard architecture (e.g., Arrow for domain, Retrofit for framework)
-- You want to ensure consistency across modules
-
-**Use Module-Specific Dependencies when**:
-- The dependency is unique to one feature (e.g., Biometric authentication only in `auth_ui`)
-- The dependency is experimental or temporary
-- The dependency is feature-specific (e.g., a payment SDK only in `payment_ui`)
-
-**Example**:
-
-```kotlin
-// In build-logic/convention/.../UiModuleConventionPlugin.kt
-// Common dependencies for ALL UI modules
-private fun Project.dependencies() {
-    dependencies {
-        implementation(libs.hiltAndroid)
-        implementation(libs.arrowCore)
-        composeUiBundle
-        unitTestingBundle
-    }
-}
-```
-
-```kotlin
-// In feature/auth/auth_ui/auth_ui.gradle.kts
-// Feature-specific dependency
-dependencies {
-    implementation(libs.biometric) // Only auth_ui needs this
-    implementation(projects.feature.auth.authDomain)
-}
-```
-
----
-
-## 6. Testing Strategy
-
-### 6.1 Testing Approach
-
-The project follows **Test-Driven Development (TDD)**: tests always drive implementation. Write or update tests before code changes to capture desired behavior.
-
-### 6.2 Unit Tests
-
-Expectations (align with patterns in existing tests):
-- ViewModels: verify state reducers, side-effects, and navigation triggers (patterned after the detail ViewModel tests)
-- Repositories: assert contract with data sources and error propagation (as in catalog repository tests)
-- Data sources: validate mapping and persistence behaviors (mirroring selected catalog data source tests)
-- Compose components: assert semantics, accessibility labels, and callbacks (e.g., text fields and app bars) — these live in `src/androidTest`
-
-**Location**: `src/test/` for pure unit tests; Compose UI component tests in `src/androidTest/`
-
-**Libraries**: JUnit 4, MockK, Turbine (for Flow), Coroutines Test
-
-**Scope**:
-- Domain: Use cases, entities, business logic
-- UI: ViewModels, state management
-- Framework: Repositories, data sources (mocked)
-
-**Dependencies**:
-- UI modules often depend on framework module's `testFixtures` for mock repositories and fake implementations
-- Framework modules may use `test_shared` for common test utilities
-
-**Example Pattern**:
-```kotlin
-class LoginUseCaseTest {
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
-    
-    @Test
-    fun loginWithValidCredentials_ReturnsSuccess() = runTest {
-        // Given
-        val mockRepository = mockk<LoginRepository>()
-        val useCase = LoginUseCase(mockRepository)
-        
-        // When
-        val result = useCase.invoke(validCredentials)
-        
-        // Then
-        assertTrue(result.isRight())
-    }
-}
-```
-
-**Using Test Fixtures**:
-```kotlin
-class LoginViewModelTest {
-    private val fakeRepository = FakeLoginRepository() // from testFixtures
-    
-    @Test
-    fun loginSuccess_UpdatesStateCorrectly() = runTest {
-        val useCase = LoginUseCase(fakeRepository)
-        val viewModel = LoginViewModel(useCase)
-        
-        viewModel.login(credentials)
-        
-        assertEquals(UiState.Success, viewModel.state.value)
-    }
-}
-```
-
-### 6.3 Integration Tests
-
-- Live in the presentation layer within UI modules; cover ViewModel ↔ repository/data source flows (see login/splash integration styles)
-- Prefer spies/fakes from framework `testFixtures` to observe interactions (e.g., DAO spies for session handling)
-
-### 6.4 UI Integration Tests (Compose)
-
-- Treat Compose UI as integration: drive screens through user flows and assert state/rendering (login/splash screen tests as reference)
-
-### 6.5 Test Fixtures
-
-- Home for shared fakes/spies/builders per module; UI modules consume framework fixtures for realistic doubles
-
-### 6.6 Test Utilities
-
-- Project-level shared rules, runners, and helpers live here; keep assertions/helpers reusable and small
-
-### 6.7 End-to-End Tests
-
-- All E2E instrumented tests reside in `TmdbAppEndToEndTest`; keep to happy paths, short, and fast
-- Add new scenarios to that class only; avoid creating additional E2E classes
-
----
-
-## 7. Execution Commands
-
-### 7.1 Building
+### 7.2 Build Commands
 
 ```bash
-# Build the entire project (debug variant)
-./gradlew build
-
-# Build only the app module
-./gradlew :app:build
-
-# Build a specific feature module
-./gradlew :feature:auth:auth_ui:build
-
-# Build release variant
-./gradlew :app:assembleRelease
-
-# Build and output debug APK
-./gradlew :app:assembleDebug
+./gradlew build                    # Build entire project (debug)
+./gradlew :app:build               # Build app module
+./gradlew :feature:auth:auth_ui:build  # Build a feature module
+./gradlew :app:assembleRelease     # Release APK
+./gradlew :app:assembleDebug       # Debug APK
 ```
 
-### 7.2 Testing
+### 7.3 Testing Commands
 
 ```bash
-# Run all unit tests across the project
-./gradlew test
-
-# Run unit tests for a specific module
-./gradlew :feature:auth:auth_domain:test
-
-# Run instrumented (Android) tests
-./gradlew connectedAndroidTest
-
-# Run UI tests for specific modules
-./gradlew connectedUiTests
-
-# Aggregate all UI test reports
-./gradlew aggregateUiAndroidTestReports
-
-# Run tests with coverage (if configured)
-./gradlew test --info
+./gradlew test                         # All unit tests
+./gradlew :feature:auth:auth_domain:test  # Module unit tests
+./gradlew connectedAndroidTest         # Instrumented tests
+./gradlew connectedUiTests             # UI tests aggregate
+./gradlew aggregateUiAndroidTestReports  # UI test reports
+./gradlew test --info                  # Unit tests with extra info
 ```
 
-### 7.3 Gradle Sync & Validation
+### 7.4 Gradle Sync & Validation
 
 ```bash
-# Sync project with Gradle files (recommended after build config changes)
 ./gradlew sync
-
-# Check for dependency updates
 ./gradlew dependencyUpdates
-
-# Validate Gradle wrapper
 ./gradlew wrapper --gradle-version=<version>
 ```
 
-### 7.4 Cleaning
+### 7.5 Cleaning
 
 ```bash
-# Clean build artifacts
 ./gradlew clean
-
-# Clean and build from scratch
 ./gradlew clean build
-
-# Clean specific module
 ./gradlew :feature:auth:auth_ui:clean
 ```
 
-### 7.5 Linting & Analysis (if configured)
+### 7.6 Linting & Analysis (if configured)
 
 ```bash
-# Run Lint checks (Android Lint)
 ./gradlew lint
-
-# Run Lint on specific module
 ./gradlew :app:lint
 ```
 
-### 7.6 Useful IDE Commands (Android Studio)
+---
 
-- **Sync Project with Gradle Files**: Recommended after any `build.gradle.kts` changes
-- **Invalidate Caches / Restart**: If Gradle sync issues persist
-- **Build → Make Project**: Incremental build
-- **Build → Generate APK**: UI for debug APK generation
+## 8. Implementation Patterns
+
+### 8.1 Use Cases
+
+**Fun Interface (with DI)**
+```kotlin
+fun interface GetMedia: () -> Either<Error, List<Media>>
+```
+
+**Interface + Implementation (pure business logic no data dependency)**
+```kotlin
+interface IsMovieValid: (Movie) -> Boolean
+
+class ValidateMovie : IsMovieValid {
+    override fun invoke(media: Media): Boolean =
+        media.title.isNotBlank()
+}
+```
+
+### 8.2 Layer Responsibilities
+- Prefer a Repository when coordinating multiple data sources or shared state.
+- Skip Repository when a single data source suffices; let the data source implement the use case.
+- Repositories and DataSources stay concrete (no `Impl` suffix); interfaces live in domain.
+- A repository may implement multiple use case interfaces if it owns the operations.
+
+### 8.3 Error Handling with Arrow
+- Model errors with the shared `AppError` type (`feature/core/core_domain/entities/AppError.kt`), which wraps an `AppErrorCode` enum (`SERVER`, `NOT_FOUND`, `BAD_REQUEST`, `LOCAL_ERROR`).
+- Use `Either<AppError, Success>` from use cases; map/propagate explicitly.
+
+### 8.4 Dependency Injection with Hilt
+- Declare modules with `@Module` + `@InstallIn`; use `@Binds` for interfaces and `@Provides` for factories.
+- ViewModels annotated with `@HiltViewModel` and injected constructor params.
+
+### 8.5 StateFlow for UI State
+- Expose immutable `StateFlow` from ViewModels; keep mutable state private.
+
+### 8.6 Type-Safe Navigation
+- Use `@Serializable` routes with `kotlinx.serialization` and Compose navigation.
+
+### 8.7 Room Setup (Framework Layer)
+- Entities annotated with `@Entity`; DAOs with `@Dao` and typed queries.
+- Databases extend `RoomDatabase`; expose DAOs.
+
+### 8.8 Firebase & Analytics
+- Firebase (Analytics, Crashlytics, Performance, FCM) configured via `google-services.json` and Google Services plugin in `app`.
 
 ---
 
-## 8. Key Implementation Details
+## 9. Practices & Guidance
 
-### 8.1 Use Cases Pattern
+### 9.1 Before Making Changes
+- Identify layer/module impact; domain stays Android-free.
+- Follow convention plugins; avoid manual dependency drift.
+- Review relevant tests; extend or add before coding.
 
-Use cases can be implemented in two ways depending on their dependencies and responsibilities:
+### 9.2 Adding Dependencies
+- Add version + alias in `gradle/libs.versions.toml`.
+- If shared by module type, add to convention plugin; otherwise, declare in that module.
+- Never hardcode versions in module Gradle files.
 
-**Option 1: Fun Interface (when requiring dependency injection)**
+### 9.3 Creating Modules
+- Layout: `feature/{name}/{name}_domain`, `{name}_framework`, `{name}_ui`.
+- Register in `settings.gradle.kts` with exact names.
+- Apply correct convention plugin per layer.
 
-Used when the use case delegates to repositories or other injected services:
+### 9.4 Testing Guidelines (quick)
+- Unit: mocks only; isolate component.
+- Integration: real impl + spies; avoid mocks.
+- Compose UI: mock ViewModel; real Composables.
 
-```kotlin
-fun interface GetMoviesUseCase {
-    suspend operator fun invoke(): Either<Error, List<Movie>>
-}
+### 9.5 Code Review Checklist
+- No Android deps in domain.
+- Error handling via `Either<Error, Success>`.
+- Dependencies declared via version catalog.
+- Compose state hoisted; navigation type-safe.
+- No hardcoded strings; resources used.
 
-class GetMoviesUseCaseImpl(
-    private val movieRepository: MovieRepository
-) : GetMoviesUseCase {
-    override suspend fun invoke(): Either<Error, List<Movie>> {
-        return movieRepository.getPopularMovies()
-    }
-}
-```
-
-**Option 2: Interface + Implementation (when encapsulating pure business logic)**
-
-Used for use cases that contain business logic without requiring external data sources:
-
-```kotlin
-interface ValidateMovieUseCase {
-    fun invoke(movie: Movie): Either<Error, ValidMovie>
-}
-
-class ValidateMovieUseCaseImpl : ValidateMovieUseCase {
-    override fun invoke(movie: Movie): Either<Error, ValidMovie> {
-        return if (movie.title.isNotBlank()) {
-            Either.Right(ValidMovie(movie))
-        } else {
-            Either.Left(ValidationError.EmptyTitle)
-        }
-    }
-}
-```
-
-The choice between these approaches depends on:
-- Whether the use case needs dependency injection
-- Whether it interfaces with data sources (repositories, data stores, etc.)
-- The complexity and reusability of the business logic
-
-### 8.2 Error Handling with Arrow
-
-Domain layer errors are modeled as sealed classes:
-
-```kotlin
-sealed interface MovieError : Error {
-    data class NetworkError(val message: String) : MovieError
-    data class NotFoundError(val id: Int) : MovieError
-}
-```
-
-Use cases return `Either<Error, Success>`:
-
-```kotlin
-return movieRepository.getMovie(id)
-    .mapLeft { MovieError.NotFoundError(id) }
-```
-
-### 8.3 Dependency Injection with Hilt
-
-Modules are registered in `@Module` classes with `@Provides` or `@Binds`:
-
-```kotlin
-@Module
-@InstallIn(SingletonComponent::class)
-interface AuthModule {
-    @Binds
-    fun bindLoginUseCase(impl: LoginUseCaseImpl): LoginUseCase
-}
-```
-
-Injection in ViewModels:
-```kotlin
-@HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
-) : ViewModel() { ... }
-```
-
-### 8.4 StateFlow for UI State
-
-ViewModels expose state as `StateFlow`:
-
-```kotlin
-@HiltViewModel
-class MovieListViewModel @Inject constructor(
-    private val getMoviesUseCase: GetMoviesUseCase
-) : ViewModel() {
-    private val _state = MutableStateFlow<UiState>(UiState.Loading)
-    val state: StateFlow<UiState> = _state.asStateFlow()
-}
-```
-
-### 8.5 Type-Safe Navigation
-
-Navigation with Compose using `kotlinx.serialization`:
-
-```kotlin
-@Serializable
-data class MovieDetailRoute(val movieId: Int)
-
-// Navigation
-navController.navigate(MovieDetailRoute(movieId))
-
-// Screen
-@Composable
-fun MovieDetailScreen(movieId: Int) { ... }
-```
-
-### 8.6 Room Database Setup
-
-Entities with Room annotations:
-```kotlin
-@Entity(tableName = "movies")
-data class MovieEntity(
-    @PrimaryKey val id: Int,
-    val title: String
-)
-```
-
-DAO:
-```kotlin
-@Dao
-interface MovieDao {
-    @Query("SELECT * FROM movies")
-    fun getAllMovies(): Flow<List<MovieEntity>>
-}
-```
-
-Database:
-```kotlin
-@Database(
-    entities = [MovieEntity::class],
-    version = 1,
-    exportSchema = true
-)
-abstract class MovieDatabase : RoomDatabase() {
-    abstract fun movieDao(): MovieDao
-}
-```
+### 9.6 Debugging Tips
+- Gradle sync issues → `./gradlew sync` or IDE cache invalidation.
+- KSP errors → check `@Inject`/`@Provides` correctness.
+- Navigation issues → verify `@Serializable` and route definitions.
+- Compose previews → ensure default params or provided values.
 
 ---
 
-## 9. Firebase & Analytics
-
-The project integrates Firebase for:
-- **Analytics**: Event tracking and user behavior
-- **Crashlytics**: Crash reporting and stability monitoring
-- **Performance Monitoring**: App performance metrics
-- **Cloud Messaging**: Push notifications
-
-Configuration is managed via `google-services.json` (app-specific) and the Gradle Google Services plugin.
-
----
-
-## 10. Important Notes for AI Agents & Developers
-
-### 10.1 Before Making Changes
-
-1. **Understand the Module Layer**: Know which layer (domain, framework, UI) your change affects
-2. **Check Dependencies**: Domain modules must NOT depend on Android or data frameworks
-3. **Follow Conventions**: Use convention plugins; avoid manual dependency management
-4. **Review Tests**: Check existing tests to understand the pattern
-
-### 10.2 Adding New Dependencies
-
-1. Add entry to `gradle/libs.versions.toml` with version
-2. Add library alias in the same file
-3. **If the dependency will be used in multiple modules**:
-   - Add it to the appropriate convention plugin in `build-logic/convention/`
-   - Example: Common dependencies for all UI modules go in `UiModuleConventionPlugin`
-4. **If the dependency is specific to one module only**:
-   - Use `alias()` directly in that module's `{moduleName}.gradle.kts` file
-5. Never hardcode versions directly in module files
-
-### 10.3 Creating New Modules
-
-1. Create directory structure: `feature/{name}/{name}_domain`, `{name}_framework`, `{name}_ui`
-2. Register in `settings.gradle.kts` (e.g., `:feature:auth:auth_domain`)
-3. Create Gradle build file named exactly as the module: `{module_name}.gradle.kts`
-   - Example: For module `auth_domain` → create `auth_domain.gradle.kts`
-   - Example: For module `media_ui` → create `media_ui.gradle.kts`
-4. Apply the appropriate convention plugin based on module type:
-   - Domain: `alias(libs.plugins.kotlinModuleConventionPlugin)`
-   - Framework: `alias(libs.plugins.frameworkModuleConventionPlugin)` or `roomModuleConventionPlugin`
-   - UI: `alias(libs.plugins.uiModuleConventionPlugin)`
-5. Follow the layered structure: domain → framework → UI
-
-### 10.4 Testing Guidelines
-
-1. Write tests in `src/test/` for unit tests
-2. Write tests in `src/androidTest/` for instrumented tests
-3. Use convention bundles (`unitTestingBundle`, `androidTestingBundle`)
-4. Mock external dependencies (Retrofit, Room, Hilt)
-5. Test use cases in isolation; mock repositories
-
-### 10.5 Code Review Checklist
-
-- [ ] No Android dependencies in domain modules
-- [ ] Error handling uses `Either<Error, Success>` pattern
-- [ ] Dependencies are declared in version catalog
-- [ ] Tests follow TDD patterns
-- [ ] Compose state is properly hoisted
-- [ ] Naming conventions are followed
-- [ ] No hardcoded strings (use resources)
-- [ ] Comments are meaningful and concise
-
-### 10.6 Debugging Tips
-
-- **Gradle Sync Issues**: Run `./gradlew sync` or invalidate caches in Android Studio
-- **KSP Compilation Errors**: Check Hilt annotation processing; ensure `@Inject` or `@Provides` are correct
-- **Test Failures**: Check for coroutine scope issues; use `runTest` for suspend functions
-- **Navigation Issues**: Verify `@Serializable` annotations and route definitions
-- **Compose Preview Errors**: Ensure all Composable parameters have defaults or are provided in preview
-
----
-
-## 11. Project-Specific Information
-
-### 11.1 Root Gradle File: `Tmdb2024.gradle.kts`
-
-This file:
-- Declares all plugins (not applied, just available)
-- Defines custom tasks like `connectedUiTests` and `aggregateUiAndroidTestReports`
-- Manages plugin versions via aliases
-
-### 11.2 App Module: `app/app.gradle.kts`
-
-The main application module:
-- Applies `architectCodersAndroidApplication` plugin
-- Depends on all feature modules
-- Integrates Firebase (via `google-services.json`)
-
-### 11.3 Namespace Convention
-
-Namespaces follow: `com.davidluna.tmdb.{module_name}`
-Example: `auth_ui` → `com.davidluna.tmdb.auth_ui`
-
-### 11.4 ProGuard Rules
-
-ProGuard configuration in `app/proguard-rules.pro`:
-- Protects Hilt-generated classes
-- Preserves Retrofit interfaces
-- Keeps Serializable classes
-
----
-
-## 12. Glossary
+## 10. Glossary
 
 | Term          | Definition                                                    |
 |---------------|---------------------------------------------------------------|
@@ -777,16 +465,16 @@ ProGuard configuration in `app/proguard-rules.pro`:
 
 ---
 
-## 13. Quick Reference Links
+## 11. Quick Links
 
-- **Kotlin Docs**: https://kotlinlang.org/docs/
-- **Jetpack Compose**: https://developer.android.com/develop/ui/compose
-- **Hilt Documentation**: https://dagger.dev/hilt/
-- **Room Persistence Library**: https://developer.android.com/training/data-storage/room
-- **Retrofit**: https://square.github.io/retrofit/
-- **Arrow**: https://arrow-kt.io/
-- **Coroutines**: https://kotlinlang.org/docs/coroutines-overview.html
-- **Firebase**: https://firebase.google.com/docs
+- Kotlin Docs: https://kotlinlang.org/docs/
+- Jetpack Compose: https://developer.android.com/develop/ui/compose
+- Hilt Documentation: https://dagger.dev/hilt/
+- Room Persistence Library: https://developer.android.com/training/data-storage/room
+- Retrofit: https://square.github.io/retrofit/
+- Arrow: https://arrow-kt.io/
+- Coroutines: https://kotlinlang.org/docs/coroutines-overview.html
+- Firebase: https://firebase.google.com/docs
 
 ---
 
