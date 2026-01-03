@@ -25,6 +25,7 @@ import com.davidluna.tmdb.core_ui.navigation.Destination
 import com.davidluna.tmdb.core_ui.theme.dimens.Dimens
 import com.davidluna.tmdb.media_domain.entities.Media
 import com.davidluna.tmdb.media_ui.navigation.MediaNavigation.Detail
+import com.davidluna.tmdb.media_ui.presenter.favorites.FavoritesViewModel
 import com.davidluna.tmdb.media_ui.presenter.media.MediaCatalogViewModel
 import com.davidluna.tmdb.media_ui.view.media.composables.CarouselImageView
 import com.davidluna.tmdb.media_ui.view.media.composables.FilmMaskImageView
@@ -35,11 +36,13 @@ import com.davidluna.tmdb.media_ui.view.media.composables.ReelTitleView
 @Composable
 fun MediaCatalogScreen(
     viewModel: MediaCatalogViewModel = hiltViewModel(),
+    favoritesViewModel: FavoritesViewModel = hiltViewModel(),
     navigateTo: (Destination) -> Unit,
 ) {
     val pagerLazyPagingItems = viewModel.pagerPagingDataFlow.collectAsLazyPagingItems()
     val gridLazyPagingItems = viewModel.gridPagingDataFlow.collectAsLazyPagingItems()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val favoriteIds by favoritesViewModel.favoriteIds.collectAsStateWithLifecycle()
 
     MediaCatalogScreen(
         appError = state.appError,
@@ -49,7 +52,14 @@ fun MediaCatalogScreen(
         pagerCatalogTitle = state.pagerCatalogTitle?.let { stringResource(it) },
         pagerLazyPagingItems = pagerLazyPagingItems,
         navigateTo = { navigateTo(it) },
-        onPositionChanged = { index, offset -> viewModel.updateLastKnownPosition(index, offset) }
+        onPositionChanged = { index, offset -> viewModel.updateLastKnownPosition(index, offset) },
+        favoriteIds = favoriteIds,
+        onToggleFavorite = { media ->
+            favoritesViewModel.toggleFavorite(
+                media,
+                state.selectedMediaType
+            )
+        }
     )
 }
 
@@ -63,6 +73,8 @@ fun MediaCatalogScreen(
     pagerLazyPagingItems: LazyPagingItems<Media>,
     navigateTo: (Destination) -> Unit,
     onPositionChanged: (Int, Int) -> Unit,
+    favoriteIds: Set<Int>,
+    onToggleFavorite: (Media?) -> Unit,
 ) {
     val lazyGridState = rememberLazyGridState()
 
@@ -110,7 +122,12 @@ fun MediaCatalogScreen(
                 }
             ) { index ->
                 val media = pagerLazyPagingItems.getOrNull { it[index] }
-                CarouselImageView(media?.posterPath, 2F)
+                CarouselImageView(
+                    model = media?.posterPath,
+                    aspectRatio = 2F,
+                    isFavorite = favoriteIds.contains(media?.id),
+                    onToggleFavorite = { onToggleFavorite(media) }
+                )
                 MediaTitleView(media?.title)
             }
         }
@@ -140,7 +157,12 @@ fun MediaCatalogScreen(
                         }
                     }
             ) {
-                FilmMaskImageView(model = media?.posterPath)
+                FilmMaskImageView(
+                    favoriteButtonModifier = Modifier.padding(top = Dimens.margins.medium),
+                    model = media?.posterPath,
+                    isFavorite = favoriteIds.contains(media?.id),
+                    onToggle = { onToggleFavorite(media) },
+                )
                 MediaTitleView(media?.title)
                 Spacer(modifier = Modifier.padding(top = Dimens.margins.xLarge))
             }

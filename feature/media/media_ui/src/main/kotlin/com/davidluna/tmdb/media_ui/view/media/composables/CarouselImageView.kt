@@ -1,5 +1,6 @@
 package com.davidluna.tmdb.media_ui.view.media.composables
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -23,21 +24,30 @@ import com.davidluna.tmdb.core_ui.theme.TmdbTheme
 fun CarouselImageView(
     model: String?,
     aspectRatio: Float = 1.7F,
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit
 ) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(model)
-            .crossfade(1000)
-            .build(),
-        contentDescription = "CarouselImageView",
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(aspectRatio)
-            .shimmer(model == null),
-        placeholder = painterResource(com.davidluna.tmdb.core_ui.R.drawable.logo_v1),
-        alignment = Alignment.Center,
-        contentScale = ContentScale.Crop
-    )
+    Box {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(model)
+                .crossfade(1000)
+                .build(),
+            contentDescription = "CarouselImageView",
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(aspectRatio)
+                .shimmer(model == null),
+            placeholder = painterResource(com.davidluna.tmdb.core_ui.R.drawable.logo_v1),
+            alignment = Alignment.Center,
+            contentScale = ContentScale.Crop
+        )
+
+        FavoriteToggleButton(
+            isFavorite = isFavorite,
+            onToggle = onToggleFavorite
+        )
+    }
 }
 
 @Preview
@@ -51,7 +61,9 @@ fun CarouselImagePreView() {
 
     TmdbTheme {
         CarouselImageView(
-            model = model
+            model = model,
+            isFavorite = false,
+            onToggleFavorite = {}
         )
     }
 }

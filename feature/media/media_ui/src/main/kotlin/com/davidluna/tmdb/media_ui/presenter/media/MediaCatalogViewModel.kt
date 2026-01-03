@@ -9,6 +9,7 @@ import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.media_domain.entities.Catalog.MOVIE_UPCOMING
 import com.davidluna.tmdb.media_domain.entities.Catalog.TV_AIRING_TODAY
 import com.davidluna.tmdb.media_domain.entities.Media
+import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.media_domain.entities.MediaType.MOVIE
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
@@ -60,6 +61,7 @@ class MediaCatalogViewModel @Inject constructor(
         val appError: AppError? = null,
         val gridCatalogTitle: Int? = null,
         val pagerCatalogTitle: Int? = null,
+        val selectedMediaType: MediaType? = null,
         val lastKnownPosition: Pair<MediaIndex, MediaOffset> = 0 to 0,
     )
 
@@ -72,7 +74,12 @@ class MediaCatalogViewModel @Inject constructor(
         .distinctUntilChanged()
         .catch { e -> _state.update { it.copy(appError = e.toAppError()) } }
         .flatMapLatest { mediaCatalog ->
-            _state.update { it.copy(gridCatalogTitle = mediaCatalog.title) }
+            _state.update {
+                it.copy(
+                    gridCatalogTitle = mediaCatalog.title,
+                    selectedMediaType = mediaCatalog.mediaType
+                )
+            }
             observeMediaCatalogUseCase(mediaCatalog, viewModelScope)
         }
 
@@ -83,7 +90,12 @@ class MediaCatalogViewModel @Inject constructor(
         .flatMapLatest { catalog ->
             val pagerCatalog =
                 if (catalog.mediaType == MOVIE) MOVIE_UPCOMING else TV_AIRING_TODAY
-            _state.update { it.copy(pagerCatalogTitle = pagerCatalog.title) }
+            _state.update {
+                it.copy(
+                    pagerCatalogTitle = pagerCatalog.title,
+                    selectedMediaType = catalog.mediaType
+                )
+            }
             observeMediaCatalogUseCase(pagerCatalog, viewModelScope)
         }
 }

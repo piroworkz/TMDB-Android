@@ -1,5 +1,7 @@
 package com.davidluna.tmdb.media_ui.view.media
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescriptionExactly
@@ -73,9 +75,30 @@ class MediaScreenTest {
         onNodeWithText("Unexpected error").assertExists().assertIsDisplayed()
     }
 
+    @Test
+    fun clickingFavoriteToggle_updatesFavoriteState(): Unit = composeTestRule.run {
+        val favoriteIds = mutableSetOf<Int>()
+        setContentWithState(
+            favoriteIds = favoriteIds,
+            onToggleFavorite = { media ->
+                favoriteIds.add(media?.id ?: -1)
+            }
+        )
+        onAllNodes(
+            hasContentDescriptionExactly(Icons.Outlined.FavoriteBorder.name),
+            useUnmergedTree = true
+        )
+            .onFirst()
+            .assertExists()
+            .performClick()
+        assert(favoriteIds.isNotEmpty())
+    }
+
     private fun setContentWithState(
         appError: AppError? = null,
         navigateTo: (Any) -> Unit = {},
+        favoriteIds: Set<Int> = emptySet(),
+        onToggleFavorite: (Media?) -> Unit = {},
     ) {
         val fakeMedia = buildFakeMediaList()
 
@@ -91,7 +114,9 @@ class MediaScreenTest {
                 pagerCatalogTitle = "NOW PLAYING",
                 pagerLazyPagingItems = pagerLazyPagingItems,
                 navigateTo = { navigateTo(it) },
-                onPositionChanged = { _, _ -> }
+                onPositionChanged = { _, _ -> },
+                favoriteIds = favoriteIds,
+                onToggleFavorite = { onToggleFavorite(it) }
             )
         }
     }
