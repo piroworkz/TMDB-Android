@@ -23,6 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -74,6 +76,7 @@ private fun CinemaFilmFrame(
 ) {
     Box(
         modifier = modifier
+            .semantics { contentDescription = "FilmMaskImageFrameView" }
             .padding(Dimens.margins.small)
             .clip(RoundedCornerShape(Dimens.margins.medium))
             .background(Color.Black)
