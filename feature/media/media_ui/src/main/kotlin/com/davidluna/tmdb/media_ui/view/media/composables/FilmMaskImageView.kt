@@ -1,5 +1,6 @@
 package com.davidluna.tmdb.media_ui.view.media.composables
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,24 +33,35 @@ import com.davidluna.tmdb.core_ui.theme.dimens.Dimens
 
 @Composable
 fun FilmMaskImageView(
+    @SuppressLint("ModifierParameter")
+    favoriteButtonModifier: Modifier = Modifier,
     model: String?,
     aspectRatio: Float = .66F,
+    isFavorite: Boolean,
+    onToggle: () -> Unit,
 ) {
-    CinemaFilmFrame {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(model)
-                .crossfade(500)
-                .build(),
-            contentDescription = "FilmMaskImageView",
-            modifier = Modifier
-                .aspectRatio(aspectRatio)
-                .shimmer(model == null),
-            alignment = Alignment.Center,
-            placeholder = painterResource(R.drawable.logo_v1),
-            contentScale = ContentScale.Crop,
-        )
+    Box {
+        CinemaFilmFrame {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(model)
+                    .crossfade(500)
+                    .build(),
+                contentDescription = "FilmMaskImageView",
+                modifier = Modifier
+                    .aspectRatio(aspectRatio)
+                    .shimmer(model == null),
+                alignment = Alignment.Center,
+                placeholder = painterResource(R.drawable.logo_v1),
+                contentScale = ContentScale.Crop,
+            )
+        }
 
+        FavoriteToggleButton(
+            modifier = favoriteButtonModifier,
+            isFavorite = isFavorite,
+            onToggle = { onToggle() }
+        )
     }
 }
 

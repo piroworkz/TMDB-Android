@@ -25,5 +25,9 @@ object RoomMediaModule {
     @Singleton
     @Provides
     fun provideVideosDao(db: MediaDatabase) = db.videosDao
+
+    @Singleton
+    @Provides
+    fun provideFavoritesDao(db: MediaDatabase) = db.favoritesDao
 }
 

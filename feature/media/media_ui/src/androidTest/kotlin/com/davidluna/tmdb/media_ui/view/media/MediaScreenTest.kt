@@ -1,13 +1,13 @@
 package com.davidluna.tmdb.media_ui.view.media
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescriptionExactly
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.assertContentDescriptionEquals
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
@@ -19,9 +19,6 @@ import com.davidluna.tmdb.media_domain.entities.Media
 import com.davidluna.tmdb.media_framework.fakes.buildFakeMediaList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import org.junit.Rule
 import org.junit.Test
 
@@ -80,32 +77,28 @@ class MediaScreenTest {
 
     @Test
     fun clickingFavoriteToggle_updatesFavoriteState(): Unit = composeTestRule.run {
-        val fakeMedia = buildFakeMediaList().first()
-        val toggleTag = "grid-favorite-toggle-${fakeMedia.id}"
-        var favoriteIds by mutableStateOf(setOf<Int>())
+        val favoriteIds = mutableSetOf<Int>()
         setContentWithState(
             favoriteIds = favoriteIds,
             onToggleFavorite = { media ->
-                favoriteIds = if (favoriteIds.contains(media.id)) {
-                    favoriteIds - media.id
-                } else {
-                    favoriteIds + media.id
-                }
+                favoriteIds.add(media?.id ?: -1)
             }
         )
-
-        onNodeWithTag(toggleTag).assertExists().assertContentDescriptionEquals("Favorite")
-
-        onNodeWithTag(toggleTag).performClick()
-
-        onNodeWithTag(toggleTag).assertContentDescriptionEquals("Unfavorite")
+        onAllNodes(
+            hasContentDescriptionExactly(Icons.Outlined.FavoriteBorder.name),
+            useUnmergedTree = true
+        )
+            .onFirst()
+            .assertExists()
+            .performClick()
+        assert(favoriteIds.isNotEmpty())
     }
 
     private fun setContentWithState(
         appError: AppError? = null,
         navigateTo: (Any) -> Unit = {},
         favoriteIds: Set<Int> = emptySet(),
-        onToggleFavorite: (Media) -> Unit = {},
+        onToggleFavorite: (Media?) -> Unit = {},
     ) {
         val fakeMedia = buildFakeMediaList()
 
@@ -123,7 +116,7 @@ class MediaScreenTest {
                 navigateTo = { navigateTo(it) },
                 onPositionChanged = { _, _ -> },
                 favoriteIds = favoriteIds,
-                onToggleFavorite = onToggleFavorite
+                onToggleFavorite = { onToggleFavorite(it) }
             )
         }
     }

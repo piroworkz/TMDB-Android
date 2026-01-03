@@ -108,7 +108,12 @@ fun MediaDetailScreen(
             itemCount = images.size
         ) {
             val media = images[it].filePath
-            CarouselImageView(media, .66F)
+            CarouselImageView(
+                model = media,
+                aspectRatio = .66F,
+                isFavorite = false,
+                onToggleFavorite = {}
+            )
         }
 
         MediaDetailsView(
