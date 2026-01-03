@@ -15,7 +15,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -73,6 +73,7 @@ class FavoritesViewModelTest {
                 assertEquals(UiState.Success(true), awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
+            coroutineRule.scope.coroutineContext.cancelChildren()
         }
 
     @Test
@@ -90,6 +91,7 @@ class FavoritesViewModelTest {
                 assertEquals(UiState.Failure(fakeAppError), awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
+            coroutineRule.scope.coroutineContext.cancelChildren()
         }
 
     @Test
@@ -103,11 +105,12 @@ class FavoritesViewModelTest {
                 assertEquals(UiState.Success(listOf(favoriteItem)), awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
+            coroutineRule.scope.coroutineContext.cancelChildren()
         }
 
     private fun buildSUT(): FavoritesViewModel = FavoritesViewModel(
         toggleFavorite = toggleFavorite,
         observeFavorites = observeFavorites,
-        scope = CoroutineScope(coroutineRule.dispatcher),
+        scope = coroutineRule.scope
     )
 }
