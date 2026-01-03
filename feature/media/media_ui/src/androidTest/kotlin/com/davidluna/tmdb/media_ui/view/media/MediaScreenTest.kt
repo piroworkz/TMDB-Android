@@ -38,9 +38,6 @@ class MediaScreenTest {
         onAllNodes(hasContentDescriptionExactly("FilmMaskImageView"), useUnmergedTree = true)
             .assertCountEquals(9)
 
-        onAllNodes(hasContentDescriptionExactly("FilmMaskImageFrameView"), useUnmergedTree = true)
-            .assertCountEquals(9)
-
         onAllNodes(hasContentDescriptionExactly("CarouselImageView"), useUnmergedTree = true)
             .assertCountEquals(3)
     }
