@@ -27,7 +27,7 @@ class FavoritesScreenTest {
                 id = 2,
                 posterPath = "/two.jpg",
                 title = "Favorite Two",
-                mediaType = MediaType.TV
+                mediaType = MediaType.TV_SHOW
             )
         )
 
