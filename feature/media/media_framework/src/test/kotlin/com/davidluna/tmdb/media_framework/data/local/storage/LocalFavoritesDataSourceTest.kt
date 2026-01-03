@@ -1,14 +1,18 @@
 package com.davidluna.tmdb.media_framework.data.local.storage
 
-import com.davidluna.tmdb.media_framework.data.local.database.dao.FavoritesDao
-import com.davidluna.tmdb.media_framework.data.local.database.entities.favorites.RoomFavorite
 import com.davidluna.tmdb.media_domain.entities.FavoriteItem
 import com.davidluna.tmdb.media_domain.entities.MediaType
+import com.davidluna.tmdb.media_framework.data.local.database.dao.FavoritesDao
+import com.davidluna.tmdb.media_framework.data.local.database.entities.favorites.RoomFavorite
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
+import app.cash.turbine.test
+import io.mockk.every
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -44,6 +48,7 @@ class LocalFavoritesDataSourceTest {
         coroutineRule.scope.runTest {
             coEvery { favoritesDao.getFavorite(roomFavorite.id, roomFavorite.category) } returns null
             coEvery { favoritesDao.upsertFavorite(roomFavorite) } returns Unit
+            every { favoritesDao.observeFavorites() } returns emptyFlow()
             val sut = LocalFavoritesDataSource(favoritesDao)
 
             val actual = sut.invoke(favoriteItem).getOrNull()
@@ -64,6 +69,7 @@ class LocalFavoritesDataSourceTest {
             coEvery {
                 favoritesDao.deleteFavorite(roomFavorite.id, roomFavorite.category)
             } returns 1
+            every { favoritesDao.observeFavorites() } returns emptyFlow()
             val sut = LocalFavoritesDataSource(favoritesDao)
 
             val actual = sut.invoke(favoriteItem).getOrNull()
@@ -73,5 +79,19 @@ class LocalFavoritesDataSourceTest {
                 favoritesDao.deleteFavorite(roomFavorite.id, roomFavorite.category)
             }
             coVerify(exactly = 0) { favoritesDao.upsertFavorite(roomFavorite) }
+        }
+
+    @Test
+    fun `GIVEN favorites are stored WHEN favorites are observed THEN it emits mapped favorites`() =
+        coroutineRule.scope.runTest {
+            every { favoritesDao.observeFavorites() } returns flowOf(listOf(roomFavorite))
+            val sut = LocalFavoritesDataSource(favoritesDao)
+
+            sut.favorites.test {
+                val actual = awaitItem()
+
+                assertEquals(listOf(favoriteItem), actual)
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 }

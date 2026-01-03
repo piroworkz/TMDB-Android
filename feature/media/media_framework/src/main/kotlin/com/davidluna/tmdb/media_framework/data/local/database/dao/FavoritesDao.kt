@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.davidluna.tmdb.media_framework.data.local.database.entities.favorites.RoomFavorite
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoritesDao {
@@ -15,4 +16,7 @@ interface FavoritesDao {
 
     @Query("DELETE FROM RoomFavorite WHERE id = :id AND category = :category")
     suspend fun deleteFavorite(id: Int, category: String): Int
+
+    @Query("SELECT * FROM RoomFavorite")
+    fun observeFavorites(): Flow<List<RoomFavorite>>
 }
