@@ -63,6 +63,18 @@ TMDB-Android/
 - **UI (`*_ui`)**: Jetpack Compose UI implementations, ViewModels, screen composables, and navigation.
 - **Core**: Reusable components shared across all features (utilities, common UI components).
 
+### Shared UI Resources Policy
+
+All UI resources are **centralized and shared by default**.
+
+- **ALL UI resources** (`strings`, `drawables`, `colors`, `dimens`, `fonts`, `styles`, and any other assets under `res/`) **MUST** be defined in:
+  `feature/core/core_ui/src/main/res/`
+- Feature modules **MUST NOT** define or own any `res/` resources.
+- There are **NO feature-exclusive resources**.
+- Any new UI resource introduced for a feature is considered **shared** and must live in `core_ui`.
+
+This rule guarantees a single source of truth for UI assets and prevents duplication or architectural drift.
+
 ### Module Registry
 
 Modules are registered in `settings.gradle.kts`:

@@ -9,13 +9,25 @@ UI depends on Domain; Framework depends on Domain; Domain has zero Android or da
 ### II. Modular Feature Structure
 Features are split into `{feature}_domain`, `{feature}_framework`, and `{feature}_ui` modules. Module naming and registration in `settings.gradle.kts` are mandatory and must follow conventions.
 
-### III. Test-First (When Appropriate)
+### III. UI Resource Ownership (Non-Negotiable)
+
+All UI resources are globally shared and centrally owned.
+
+- **ALL UI resources** (`strings`, `drawables`, `colors`, `dimens`, `fonts`, `styles`, and any other `res/` assets) **MUST** live in:
+  `feature/core/core_ui/src/main/res/`
+- Feature modules **MUST NOT** contain `res/` directories.
+- There are **NO feature-exclusive UI resources**.
+- Any deviation from this rule is an **architectural violation** and is not allowed.
+
+This clause supersedes any feature-level discretion regarding UI resource placement.
+
+### IV. Test-First (When Appropriate)
 Use TDD for behavioral logic: ViewModels, use case implementations, repositories, data sources, and complex Composables. Red-Green-Refactor is mandatory for code with behavior or state transformations. **TDD is NOT required for**: pure data models (entities, DTOs), use case interfaces (contracts only), DI module configuration, constants/enums, or inventory/exploration tasks. Tests define behavior, not structure.
 
-### IV. Type-Safe Errors
+### V. Type-Safe Errors
 Use Arrow `Either<Error, Success>` for explicit error handling in domain use cases and repository flows. Prefer sealed error types and map failures explicitly.
 
-### V. Convention-Driven Build
+### VI. Convention-Driven Build
 Use version catalog aliases and convention plugins. Do not hardcode versions in module files; add shared dependencies to convention plugins, and feature-specific ones to module Gradle files.
 
 ## Additional Constraints
