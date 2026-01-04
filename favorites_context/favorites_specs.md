@@ -2,7 +2,7 @@
 
 **Feature Branch**: `feature/favorites`  
 **Created**: 2026-01-03  
-**Status**: Completed  
+**Status**: Draft  
 **Input**: User description: "Allow all users, signed in and guests to mark/unmark favorites so they can return to favorite media items anytime.
 Users can do so from any list from main screen.
 movies and TV shows can be marked as favorites.
@@ -74,7 +74,7 @@ Users can remove favorites from the Favorites screen and see an empty state when
 - **FR-005**: The Favorites screen MUST present two lists by media type (Movies and TV Shows) and allow switching between them using the same bottom navigation control as the main screen.
 - **FR-006**: When both lists are non-empty, the Favorites screen MUST open on Movies; when only one list is non-empty, it MUST open on that list.
 - **FR-007**: The system MUST show the message "You haven't added Favorites yet" when the Favorites screen has no items.
-- **FR-008**: Favorites MUST remain available during the current session and MUST be cleared when the session ends. **Completed**
+- **FR-008**: Favorites MUST remain available during the current session and MUST be cleared when the session ends.
 - **FR-009**: The system MUST allow users to unmark favorites from the Favorites screen lists.
 
 ### Key Entities *(include if feature involves data)*
