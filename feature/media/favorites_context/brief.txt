@@ -1,7 +1,7 @@
 # Favorites Feature
 
 ## Overview
-Users can mark movies and TV shows as favorites to quickly access their preferred content. This feature allows both authenticated and guest users to save favorites during their session, accessible through a dedicated Favorites screen in the navigation drawer. Favorites persist only during the active session and are cleared when the app closes.
+Users can mark movies and TV shows as favorites to quickly access their preferred content. This feature allows both authenticated and guest users to save favorites during their session, accessible through a dedicated Favorites screen in the navigation drawer. Favorites persist across app restarts during a session and are cleared when the session ends (explicit logout for signed-in users, session expiration for guest users).
 
 ## Functional Requirements
 
@@ -17,14 +17,14 @@ Users can mark movies and TV shows as favorites to quickly access their preferre
 All users (authenticated and guest users) can access favorites functionality. No authentication required.
 
 ### Data Management
-Session-based local storage using in-memory cache. Favorites persist only during the current app session and are automatically cleared when the app/session closes. No persistence to disk, no server synchronization, and no cross-device availability.
+Session-based local storage using local database. Favorites persist during the current user session across app restarts and are cleared when the session ends (explicit logout for signed-in users, expiresAt timestamp for guest users). No server synchronization, and no cross-device availability.
 
 ## UI/UX Specifications
 
 ### Visual Components
 - [ ] Favorite toggle button: Heart icon button displayed on each media item card in lists
 - [ ] Favorite icon states: Outlined heart (not favorited), filled heart (favorited)
-- [ ] Bottom navigation bar: Two tabs labeled "Movies" and "TV Shows" (consistent with MediaCatalogScreen design)
+- [ ] Bottom navigation bar: Two tabs labeled "Movies" and "TV Shows" (consistent with MediaCatalogScreen design) only show if favorites exist in both categories. Default tab is "Movies" unless it is empty.
 - [ ] Feedback mechanism: Icon animation (fill/unfill) when toggling favorite status
 - [ ] Empty state illustration: Centered message with optional icon
 
@@ -35,8 +35,8 @@ Session-based local storage using in-memory cache. Favorites persist only during
 
 ### States
 - [ ] Empty state: Display centered message "No favorites yet. Start adding your favorite movies and TV shows!" when no items in current tab
-- [ ] Loading state: Display circular progress indicator when retrieving favorites from cache
-- [ ] Error state: Show snackbar with message "Could not update favorite. Please try again." with retry option
+- [ ] Loading state: Display circular progress indicator when retrieving favorites
+- [ ] Error state: Show ErrorView with message "Could not update favorite. Please try again."
 
 ## Accessibility
 - [ ] Screen reader labels for favorite toggle buttons: "Add to favorites" / "Remove from favorites"
@@ -46,10 +46,10 @@ Session-based local storage using in-memory cache. Favorites persist only during
 
 ## Success Criteria
 - Users can successfully mark and unmark movies/TV shows as favorites with immediate visual feedback
-- Favorites persist during the session and are correctly displayed in the Favorites screen
+- Favorites persist across app restarts during the session and are correctly displayed in the Favorites screen
 - Bottom navigation correctly switches between Movies and TV Shows lists without data loss
 - Empty state is properly displayed when no favorites exist in either category
-- All favorites are automatically cleared when the app session ends
+- All favorites are automatically cleared when the session ends (logout for signed-in users, guest session expiration)
 
 ## Implementation Notes
-This feature extends the existing MediaCatalogScreen with favorite toggle functionality and adds a new FavoritesScreen accessible via the navigation drawer. Session-based storage will be used (no persistence).
+This feature extends the existing MediaCatalogScreen with favorite toggle functionality and adds a new FavoritesScreen accessible via the navigation drawer. Session-based storage will be used with persistence across app restarts until the session ends.
