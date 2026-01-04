@@ -9,6 +9,7 @@
 .DS_Store
 .cxx
 .externalNativeBuild
+.github/
 .gradle
 .idea/
 .kotlin
