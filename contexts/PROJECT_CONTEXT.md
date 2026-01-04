@@ -111,7 +111,7 @@ include(
 ### 2.2 Key Design Principles
 
 - **Unidirectional Dependency**: UI → Domain ← Framework (domain is independent)
-- **TDD First**: Add/update tests before changes
+- **TDD First**: Add/update tests before changes; use Red-Green-Refactor as the mandatory loop for behavior changes
 - **Prefer composition** over inheritance; avoid base classes
 - **Type-Safe Error Handling**: `Arrow`'s `Either<L, R>` for explicit error propagation
 - **Reactive Programming**: Coroutines and Flow for asynchronous operations
@@ -259,7 +259,7 @@ All dependencies are managed in `gradle/libs.versions.toml` for consistency and 
 ## 6. Testing Strategy
 
 ### 6.1 Approach
-- TDD-first: write/update tests before implementation. Tests define the contracts for interfaces, models, and use cases.
+- TDD-first: write/update tests before implementation. Tests define the contracts for interfaces, models, and use cases. Red-Green-Refactor is required for new or changed behavior.
 - Choose test type based on scope: unit for isolation, integration for flows, Compose UI for rendering/interaction, E2E for happy paths.
 
 ### 6.2 Unit Tests
@@ -413,7 +413,7 @@ class ValidateMovie : IsMovieValid {
 ### 9.1 Before Making Changes
 - Identify layer/module impact; domain stays Android-free.
 - Follow convention plugins; avoid manual dependency drift.
-- Review relevant tests; extend or add before coding.
+- Review relevant tests; extend or add before coding; follow Red-Green-Refactor for behavior changes.
 
 ### 9.2 Adding Dependencies
 - Add version + alias in `gradle/libs.versions.toml`.

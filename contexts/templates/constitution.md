@@ -10,7 +10,7 @@ UI depends on Domain; Framework depends on Domain; Domain has zero Android or da
 Features are split into `{feature}_domain`, `{feature}_framework`, and `{feature}_ui` modules. Module naming and registration in `settings.gradle.kts` are mandatory and must follow conventions.
 
 ### III. Test-First (Non-Negotiable)
-Use TDD. Write or update tests before implementation; follow Red-Green-Refactor. Tests define interfaces, models, and contracts. Prefer unit tests for domain and ViewModels, and Compose UI tests in `src/androidTest`.
+Use TDD. Write or update tests before implementation; Red-Green-Refactor is mandatory for new or changed behavior. Tests define interfaces, models, and contracts. Prefer unit tests for domain and ViewModels, and Compose UI tests in `src/androidTest`.
 
 ### IV. Type-Safe Errors
 Use Arrow `Either<Error, Success>` for explicit error handling in domain use cases and repository flows. Prefer sealed error types and map failures explicitly.
@@ -29,7 +29,7 @@ Use version catalog aliases and convention plugins. Do not hardcode versions in 
 ## Development Workflow & Quality Gates
 
 - Verify layer boundaries (no Android in domain) before changes.
-- Add or update tests first; follow established test patterns and fixtures.
+- Add or update tests first; Red-Green-Refactor is required; follow established test patterns and fixtures.
 - Apply dependency changes via `gradle/libs.versions.toml` and the appropriate convention plugin.
 - Keep code style: 4-space indentation, <120 char soft limit, minimal meaningful comments, KDoc for public APIs.
 
