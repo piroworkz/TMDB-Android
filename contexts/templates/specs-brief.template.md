@@ -14,7 +14,7 @@
 [Specify who can access this feature: all users, specific roles, authenticated users only, etc. Be explicit about access restrictions.]
 
 ### Data Management
-[Explain where data is stored (local, server, cache), how long it persists, and cleanup rules. Include: storage type, persistence strategy, and data lifecycle]
+[Explain where data is stored (local, server, cache), how long it persists, and cleanup rules. Keep it high-level: "local storage", "server database", "session only". Avoid technical implementation details.]
 
 ## UI/UX Specifications
 
