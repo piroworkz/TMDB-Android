@@ -5,8 +5,8 @@ description: "Task list template for feature implementation"
 
 # Tasks: [FEATURE NAME]
 
-**Input**: Design documents from `/specs/[###-feature-name]/`
-**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
+**Input**: Design documents from `/[feature-name]/`
+**Prerequisites**: [feature]_plan.md (required), [feature]_specs.md (required for user stories)
 
 **Tests**: Tests are REQUIRED for every user story and must follow TDD with Red → Green → Refactor (explicitly include all three phases in the task list).
 
@@ -23,24 +23,22 @@ description: "Task list template for feature implementation"
 - **Single project**: `src/`, `tests/` at repository root
 - **Web app**: `backend/src/`, `frontend/src/`
 - **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- Paths shown below assume single project - adjust based on [feature]_plan.md structure
 
 <!-- 
   ============================================================================
   IMPORTANT: The tasks below are SAMPLE TASKS for illustration purposes only.
   
-  The /speckit.tasks command MUST replace these with actual tasks based on:
-  - User stories from spec.md (with their priorities P1, P2, P3...)
-  - Feature requirements from plan.md
-  - Entities from data-model.md
-  - Endpoints from contracts/
+  The tasks prompt MUST replace these with actual tasks based on:
+  - User stories from [feature]_specs.md (with their priorities P1, P2, P3...)
+  - Feature requirements from [feature]_plan.md
   
   Tasks MUST be organized by user story so each story can be:
   - Implemented independently
   - Tested independently
   - Delivered as an MVP increment
   
-  DO NOT keep these sample tasks in the generated tasks.md file.
+  DO NOT keep these sample tasks in the generated [feature]_tasks.md file.
   ============================================================================
 -->
 
