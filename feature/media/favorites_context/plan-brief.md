@@ -44,7 +44,7 @@ The Favorites feature lives within the media context since it deals with marking
 **Known coupling constraints:**
 - Cannot create new databases - must use existing `MediaDatabase` in `media_framework`
 - Must reuse existing `Media` domain entity and `RoomMedia` persistence entity
-- Session lifecycle is managed by `auth_framework` - favorites must react to session changes
+- Session lifecycle is managed by `auth_framework` - favorites must react to session changes (if necessary to avoid circular dependencies, could clear database from app module, look at MainViewModel.kt)
 
 ---
 
@@ -58,42 +58,43 @@ Database(s):
 Entities / Tables:
 - Entity name: RoomMedia (existing - will be reused for context)
 - File path: feature/media/media_framework/src/main/kotlin/com/davidluna/tmdb/media_framework/data/local/database/entities/media/RoomMedia.kt
-- Fields: category: String, id: Int, posterPath: String, title: String
-- Primary Key: composite (id, category)
-
-- NEW Entity required: RoomFavorite
-- File path: feature/media/media_framework/src/main/kotlin/com/davidluna/tmdb/media_framework/data/local/database/entities/favorites/RoomFavorite.kt (to be created)
-- Expected fields: mediaId: Int, mediaType: String (MOVIE/TV_SHOW), sessionId: String, addedAt: Long
+- Current fields: category: String, id: Int, posterPath: String, title: String
+- NEW fields to add:
+  - mediaType: String (values: "MOVIE" or "TV_SHOW" - derived from catalog in MediaCatalogRemoteMediator)
+  - isFavorite: Boolean (default: false - toggleable by user)
+- Primary Key: composite (id, category) - NO CHANGES
+- Note: NO new table needed - reusing existing RoomMedia entity
 
 DAOs:
 - Existing: MediaDao
 - File path: feature/media/media_framework/src/main/kotlin/com/davidluna/tmdb/media_framework/data/local/database/dao/MediaDao.kt
 - Current operations: insertMedia, getMedia (with paging), deleteCatalog
+- NO new operations needed - favorites handled by separate DAO
 
-- NEW DAO required: FavoritesDao
-- File path: feature/media/media_framework/src/main/kotlin/com/davidluna/tmdb/media_framework/data/local/database/dao/FavoritesDao.kt (to be created)
-```
-
-**Session Database:**
-```md
-Database: AuthenticationDatabase
-Location: feature/auth/auth_framework/src/main/kotlin/com/davidluna/tmdb/auth_framework/data/local/database/AuthenticationDatabase.kt
-
-Entity: RoomSession
-Fields: id: Int, sessionId: String, isGuest: Boolean, expiresAt: String?
-
-DAO: SessionDao
-Location: feature/auth/auth_framework/src/main/kotlin/com/davidluna/tmdb/auth_framework/data/local/database/dao/SessionDao.kt
+- NEW DAO: FavoritesDao (to be created)
+- File path: feature/media/media_framework/src/main/kotlin/com/davidluna/tmdb/media_framework/data/local/database/dao/FavoritesDao.kt
+- Responsible for all favorite-related operations on RoomMedia table
+- Expected operations:
+  - toggleFavorite(mediaId: Int, category: String, isFavorite: Boolean): Int
+  - getFavoritesByMediaType(mediaType: String): PagingSource<Int, RoomMedia>
+  - clearAllFavorites(): Int
+  - Note: Queries RoomMedia table filtering by isFavorite and mediaType fields
 ```
 
 **Constraints:**
-- Reuse required: YES - must use existing `MediaDatabase` and `AuthenticationDatabase`
-- New tables allowed: YES - can add `RoomFavorite` table to `MediaDatabase`
-- Migration strategy: Room database version bump from 1 to 2 required in `MediaDatabase` with proper migration strategy
-- Favorites MUST be linked to `sessionId` to enable session-based lifecycle
-- Favorites MUST be cleared when:
-  - Authenticated user logs out (session deleted)
-  - Guest session expires (`expiresAt` timestamp passed)
+- Reuse required: YES - must extend existing `RoomMedia` entity (NO new tables)
+- Database access: Only `MediaDatabase` (NO access to `AuthenticationDatabase` to avoid circular dependency)
+- Migration strategy: **NOT REQUIRED** - app not published yet, can modify schema freely
+- Schema changes needed:
+  - Add `mediaType: String` field to `RoomMedia` (derived from `Catalog.mediaType` in RemoteMediator)
+  - Add `isFavorite: Boolean` field to `RoomMedia` (default: false)
+  - Mapping happens in `MediaCatalogRemoteMediator.kt` during remote to local conversion
+- Favorites cleanup strategy:
+  - **NO sessionId linking in database** - this would create tight coupling with auth module
+  - Instead: Simple "set all isFavorite = false" strategy triggered from `app` module when session ends
+  - `MainViewModel` orchestrates: `CloseSession` → `ClearAllFavorites` (sequential execution)
+  - This keeps `media_framework` independent from `auth_framework`
+  - Guest session expiration handled similarly via `MainViewModel` on app startup or screen navigation
 
 ---
 
@@ -101,45 +102,68 @@ Location: feature/auth/auth_framework/src/main/kotlin/com/davidluna/tmdb/auth_fr
 
 ```md
 Domain models involved:
-- Media (existing - will be extended with favorite status in UI state)
+- Media (existing - will be EXTENDED)
   Path: feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/entities/Media.kt
-  Fields: id: Int, posterPath: String, title: String
+  Current fields: id: Int, posterPath: String, title: String
+  NEW fields to add:
+    - mediaType: MediaType (to differentiate MOVIE vs TV_SHOW)
+    - isFavorite: Boolean (default: false, reflects favorite status)
 
 - MediaType (existing - will be used to differentiate movie vs TV favorites)
   Path: feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/entities/MediaType.kt
   Values: MOVIE, TV_SHOW
 
-- Session (existing - used for session-based favorites lifecycle)
+- Catalog (existing - will be EXTENDED with mediaType property)
+  Path: feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/entities/Catalog.kt
+  NEW property to add:
+    - val mediaType: MediaType (computed property to derive MediaType from catalog name)
+    - Example: MOVIE_NOW_PLAYING.mediaType → MediaType.MOVIE
+    - Example: TV_AIRING_TODAY.mediaType → MediaType.TV_SHOW
+
+NO new domain entities required:
+- NO Favorite entity needed - favorite status is now a field in Media entity
+- Session entity (existing - read-only for app module orchestration):
   Path: feature/auth/auth_domain/src/main/kotlin/com/davidluna/tmdb/auth_domain/entities/Session.kt
   Fields: sessionId: String, isGuest: Boolean, expiresAt: String?
+  Usage: Only used by `app` module to trigger cleanup - NO direct usage in media module
 
-- Catalog (existing - used for navigation and categorization)
-  Path: feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/entities/Catalog.kt
-
-NEW domain models required:
-- Favorite entity (to be created in media_domain)
-  Expected path: feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/entities/Favorite.kt
-  Expected fields: mediaId: Int, mediaType: MediaType, addedAt: Long
-
-Use case interfaces involved (existing):
-- ObserveSession (to react to session changes)
+Use case interfaces involved from other modules (read-only, used by app module):
+- ObserveSession (already used by MainViewModel)
   Path: feature/auth/auth_domain/src/main/kotlin/com/davidluna/tmdb/auth_domain/usecases/ObserveSession.kt
+  Usage: `app` module can observe session state changes if needed for cleanup triggers
 
-- IsGuestSessionValid (to check guest session expiration)
-  Path: feature/auth/auth_domain/src/main/kotlin/com/davidluna/tmdb/auth_domain/usecases/IsGuestSessionValid.kt
+- CloseSession (already used by MainViewModel)
+  Path: feature/auth/auth_domain/src/main/kotlin/com/davidluna/tmdb/auth_domain/usecases/CloseSession.kt
+  Current usage: MainViewModel.endSession() → will be extended to also call ClearAllFavorites
+
+Note: `media_domain` and `media_framework` MUST NOT depend on these auth use cases directly
 
 NEW use case interfaces required (to be created in media_domain):
-- ToggleFavorite: (mediaId: Int, mediaType: MediaType) -> Either<AppError, Unit>
-- ObserveFavorites: (mediaType: MediaType?) -> Flow<List<Favorite>>
-- IsFavorite: (mediaId: Int, mediaType: MediaType) -> Flow<Boolean>
-- ClearSessionFavorites: () -> Either<AppError, Unit>
+- Favorites use cases are interfaces with named members (no `operator invoke`):
+  - ToggleFavorite
+    - fun toggle(mediaId: Int, category: String): Either<AppError, Unit>
+    - Note: Takes category instead of mediaType since RoomMedia primary key is (id, category)
+  - ObserveFavorites
+    - val favorites: Flow<PagingData<Media>>
+    - Note: Returns paginated Media items filtered by mediaType and isFavorite = true
+    - Consistent with existing media catalog pagination pattern
+  - ClearAllFavorites
+    - fun clear(): Either<AppError, Unit>
+    - Note: Invoked from `app` module's `MainViewModel` when session ends
+    - Implemented in `media_framework` to set isFavorite = false for all RoomMedia entries
+    - NO dependency on auth modules - pure favorites cleanup logic
 ```
 
 **Notes:**
-- Existing contracts are stable - NO changes to `Media`, `MediaType`, `Session` entities
-- New use cases follow existing patterns (fun interface with Either for error handling)
+- Existing contracts are stable where not explicitly extended in this document
+- Favorites use cases are interfaces with named members (no `operator invoke`)
 - Favorite status will be derived at UI layer by combining Media + IsFavorite flow
-- Session management is read-only from favorites perspective
+- **Session cleanup orchestration strategy:**
+  - `MainViewModel` already uses `ObserveSession` from `auth_domain` (read-only access)
+  - `MainViewModel.endSession()` calls `CloseSession` use case which deletes session from auth database
+  - After successful session deletion, `MainViewModel` will also call `ClearAllFavorites` use case
+  - This avoids circular dependency: `media_framework` doesn't depend on `auth_framework`
+  - Clean separation: auth manages session lifecycle, media manages favorites data, app orchestrates both
 
 ---
 
@@ -169,13 +193,29 @@ Navigation:
 - Existing routes affected:
   - Drawer menu MUST add new "Favorites" item between media categories and "Close Session"
   - New route required: FavoritesScreen destination in MoviesNavGraph
+
+- Session cleanup coordination:
+  - Location: app/src/main/kotlin/com/davidluna/tmdb/app/main_ui/presenter/MainViewModel.kt
+  - Current behavior: `endSession()` calls `CloseSession` use case to delete session/account from auth database
+  - Required modification: After successful `CloseSession`, also invoke `ClearAllFavorites` to clean favorites
+  - This ensures atomic cleanup: session ends → favorites cleared
 ```
 
-**Navigation flow:**
+**Navigation & lifecycle flows:**
+
+User navigation:
 1. User taps "Favorites" in drawer → navigates to FavoritesScreen
 2. FavoritesScreen shows bottom tabs (Movies/TV Shows) only when both categories have favorites
 3. Default tab: Movies (unless empty, then TV Shows)
 4. User can tap media item → navigates to existing MediaDetailScreen
+
+Session cleanup flow:
+1. User taps "Close Session" in drawer → triggers `MainEvent.OnCloseSession`
+2. `MainViewModel.endSession()` executes:
+   - Calls `CloseSession` use case (deletes session from auth database)
+   - On success, calls `ClearAllFavorites` use case (deletes all favorites from media database)
+   - Updates `state.isSessionClosed = true`
+3. FavoritesScreen observes empty favorites list → shows empty state automatically
 
 ---
 
@@ -186,25 +226,7 @@ UI resources policy:
 - ALL resources MUST live in: feature/core/core_ui/src/main/res/
 - NO feature-exclusive resources allowed
 - Resources are shared across all features by design
-
-Required new resources (to be added in core_ui):
-- Strings:
-  - drawer_favorites ("Favorites")
-  - favorites_empty_state ("No favorites yet. Start adding your favorite movies and TV shows!")
-  - favorites_error_toggle ("Could not update favorite. Please try again.")
-  - favorites_tab_movies ("Movies")
-  - favorites_tab_tv_shows ("TV Shows")
-  - content_description_favorite ("Marked as favorite")
-  - content_description_not_favorite ("Not marked as favorite")
-  - action_add_favorite ("Add to favorites")
-  - action_remove_favorite ("Remove from favorites")
-
-- Drawables (icons):
-  - Material Icons already available: Icons.Outlined.Favorite, Icons.Filled.Favorite
-  - Drawer icon: Icons.Outlined.Star (or similar for Favorites menu item)
 ```
-
-**Constraint:** All string resources MUST be added to `feature/core/core_ui/src/main/res/values/strings.xml`
 
 ---
 
@@ -212,21 +234,30 @@ Required new resources (to be added in core_ui):
 
 ```md
 Must NOT:
-- Create new databases (reuse MediaDatabase and AuthenticationDatabase)
-- Change existing Media, Session, or MediaType entities
+- Create new databases or tables (extend existing RoomMedia entity only)
+- Create separate Favorite entity (reuse Media with isFavorite field)
 - Introduce new libraries (use existing Stack: Room, Hilt, Arrow, Compose, Flow)
 - Add server synchronization (local-only, session-based storage)
 - Support cross-device favorites (session-scoped only)
+- Break existing MediaType or Session entities
+- Add a repository for single data source flows (use data source directly)
+- Define favorites use cases as `fun interface` with `operator invoke`
 
 Must DO:
-- Use session-based lifecycle (clear on logout or guest expiration)
-- Store sessionId with each favorite for proper cleanup
-- Implement Room migration for MediaDatabase version bump
+- Extend `Media` domain entity with `mediaType: MediaType` and `isFavorite: Boolean` fields
+- Extend `RoomMedia` entity with `mediaType: String` and `isFavorite: Boolean` fields
+- Add computed property `mediaType` to `Catalog` enum
+- Map `mediaType` in `MediaCatalogRemoteMediator` when converting RemoteMedia → RoomMedia
+- Preserve existing `isFavorite` value when updating media from remote
+- Use session-based lifecycle (clear on logout) orchestrated from `app` module
+- Keep `media_framework` independent - NO direct auth dependencies
 - Follow TDD for ViewModels, repositories, data sources, and use case implementations
 - Use Arrow's Either<AppError, Success> for error handling
+- Use named functions for favorites use cases so the local data source implements them
 - Follow existing naming conventions (no Impl suffix, Spy for test doubles)
 - Apply proper convention plugins per module type
 - Ensure all UI resources live in core_ui module
+- Extend `MainViewModel.endSession()` to call `ClearAllFavorites` after successful `CloseSession`
 
 Architectural Constraints:
 - Domain layer MUST remain Android-free
@@ -239,26 +270,19 @@ Architectural Constraints:
 
 ---
 
-## 8. References
-
-- Reference assets root: `feature/media/favorites_context/screenshots`
-- `feature/media/favorites_context/screenshots/FavsHome.png`: Confirms heart overlay placement/state on home media cards
-- `feature/media/favorites_context/screenshots/FavsDrawer.png`: Confirms drawer entry label and position near "Close Session"
-
----
-
-## 9. Known Risks / Gotchas (Optional)
+## 8. Known Risks / Gotchas (Optional)
 
 ```md
 Risk: Session expiration cleanup timing
 - Guest sessions expire based on expiresAt timestamp
-- Need background mechanism or on-app-start check to clear expired favorites
-- Suggestion: Check session validity on FavoritesScreen initialization and app startup
+- Cleanup strategy: Orchestrate from `MainViewModel` on app startup
+- Option 1: Check session validity via `ObserveSession` or `IsGuestSessionValid` in MainActivity/MainViewModel init
+- Option 2: Clear favorites when FavoritesScreen detects expired session (defensive approach)
+- Recommended: MainViewModel init checks session validity → triggers cleanup if expired
+- This centralizes session lifecycle management in app module (Single Responsibility)
 
 Risk: Database migration complexity
-- MediaDatabase version 1 → 2 requires migration strategy
-- Must handle existing data gracefully
-- Test migration thoroughly with existing media data
+- NOT APPLICABLE: app not published yet, schema can change without migration
 
 Risk: Drawer item selection state
 - Adding Favorites item to drawer requires updating DrawerItem sealed class
@@ -273,17 +297,38 @@ Risk: Bottom navigation tab visibility logic
 Risk: Favorite toggle race conditions
 - User might toggle favorite rapidly
 - Need debouncing or state management to prevent duplicate operations
-- Consider optimistic UI updates with rollback on error
+- Note: PagingSource invalidation happens asynchronously - UI update has slight delay
+- Consider optimistic UI updates with rollback on error for better UX
 
-Gotcha: Media entity doesn't include mediaType
-- RoomMedia has "category" field but it's catalog-specific (e.g., "MOVIE_NOW_PLAYING")
-- Need to derive MediaType from catalog or add mediaType field to Favorite entity
-- MediaType must be stored in RoomFavorite for filtering
+Risk: PagingSource invalidation performance
+- Every ToggleFavorite triggers PagingSource invalidation
+- Could cause unnecessary re-fetches if user toggles multiple items quickly
+- Consider batching updates or debouncing invalidation if performance issues arise
+- For MVP: Simple invalidation is acceptable given expected usage patterns
+
+Gotcha: MediaType derivation from Catalog
+- RoomMedia has "category" field which is catalog-specific (e.g., "MOVIE_NOW_PLAYING")
+- Solution: Add computed property `mediaType` to Catalog enum
+- Mapping happens in MediaCatalogRemoteMediator when converting RemoteMedia → RoomMedia
+- Store derived `mediaType: String` in RoomMedia for efficient querying
+- FavoritesDao queries: `WHERE isFavorite = 1 AND mediaType = :mediaType`
+
+Gotcha: Preserving existing isFavorite on update
+- MediaCatalogRemoteMediator updates media from remote (pagination, refresh)
+- Must preserve existing `isFavorite` value when updating RoomMedia
+- Strategy: Use Room @Upsert with conflict strategy or check existing value before update
+- Avoid resetting user's favorites when new pages load
+
+Gotcha: Module dependency direction
+- `app` module already depends on both `media_domain` and `auth_domain` (see MainViewModel imports)
+- This makes `app` the ideal orchestration layer for cross-module workflows
+- `media_framework` MUST NOT depend on `auth_framework` - violates clean architecture
+- Solution: `app` module acts as composition root and workflow coordinator
 ```
 
 ---
 
-## 10. Authority Statement (DO NOT REMOVE)
+## 9. Authority Statement (DO NOT REMOVE)
 
 ```md
 If this PlanBrief is present:
@@ -291,10 +336,3 @@ If this PlanBrief is present:
 - The Plan MUST NOT contradict it.
 - If conflicts or ambiguities are detected, the agent MUST ask before proceeding.
 ```
-
----
-
-**Document Version**: 1.0  
-**Created**: 2026-01-04  
-**Author**: Tech Lead / Software Architect  
-**Status**: Draft - Ready for Plan Creation
