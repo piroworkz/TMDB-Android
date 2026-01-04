@@ -18,6 +18,7 @@
     <string name="play_trailer_button">Play Trailer</string>
     <string name="drawer_movies">Movies</string>
     <string name="drawer_tv_shows">Tv Shows</string>
+    <string name="drawer_favorites">Favorites</string>
     <string name="drawer_close_session">Close Session</string>
     <string name="title_airing_today">AIRING TODAY</string>
     <string name="title_on_air">ON AIR</string>
@@ -43,6 +44,14 @@
     <string name="catalog_on_the_air_title">ON THE AIR</string>
     <string name="catalog_top_rated_title">TOP RATED</string>
     <string name="dismiss_button">DISMISS</string>
+    <string name="favorites_tab_movies">Movies</string>
+    <string name="favorites_tab_tv_shows">TV Shows</string>
+    <string name="favorites_empty_state">No favorites yet. Start adding your favorite movies and TV shows!</string>
+    <string name="favorites_update_error">Could not update favorite. Please try again.</string>
+    <string name="favorite_action_add">Add to favorites</string>
+    <string name="favorite_action_remove">Remove from favorites</string>
+    <string name="favorite_status_marked">Marked as favorite</string>
+    <string name="favorite_status_unmarked">Not marked as favorite</string>
 
     <!--Notification Categories-->
     <string-array name="notification_channel_names">

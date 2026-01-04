@@ -19,11 +19,14 @@ Each task is a small, actionable unit of work.
 ### Format (block)
 
 - [ ] <ID> <P?> <Story?> <Title>
+
   Description: <what/why in 2–4 lines; keep indentation>
     <optional extra description lines>
+
   Paths:
     - <path/to/file1>
     - <path/to/file2>
+
   Depends on: <optional, e.g., T006>
 
 Where:
@@ -38,11 +41,14 @@ Where:
 ### Example
 
 - [ ] T004 [P] Setup database schema and migrations framework
+
   Description: Establish the baseline persistence structure and migration strategy required by all user stories.
     Include a simple initial migration and guidelines for future schema changes.
+
   Paths:
     - feature/<feature>/src/main/kotlin/.../Database.kt
     - feature/<feature>/src/main/kotlin/.../dao/*.kt
+
   Depends on: T002
 
 
@@ -75,22 +81,31 @@ Where:
 **Purpose**: Project initialization and basic structure
 
 - [ ] T001 Create project structure per implementation plan
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T002 Initialize [language] project with [framework] dependencies
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T003 [P] Configure linting and formatting tools
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 ---
@@ -104,40 +119,58 @@ Where:
 Examples of foundational tasks (adjust based on your project):
 
 - [ ] T004 Setup database schema and migrations framework
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T005 [P] Implement authentication/authorization framework
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T006 [P] Setup API routing and middleware structure
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T007 Create base models/entities that all stories depend on
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T008 Configure error handling and logging infrastructure
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T009 Setup environment configuration management
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
@@ -155,64 +188,91 @@ Examples of foundational tasks (adjust based on your project):
 > **NOTE: Red = write tests first and ensure they FAIL before implementation. Green = implement the minimum to pass. Refactor = improve code with tests still passing.**
 
 - [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 ### Implementation for User Story 1
 
 - [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T016 [US1] Add validation and error handling
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T017 [US1] Add logging for user story 1 operations
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 ### Refactor for User Story 1 (MANDATORY)
 
 - [ ] T018 [US1] Refactor for readability/performance while keeping tests green
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
@@ -230,52 +290,73 @@ Examples of foundational tasks (adjust based on your project):
 > **NOTE: Red = write tests first and ensure they FAIL before implementation. Green = implement the minimum to pass. Refactor = improve code with tests still passing.**
 
 - [ ] T019 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T020 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 ### Implementation for User Story 2
 
 - [ ] T021 [P] [US2] Create [Entity] model in src/models/[entity].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T022 [US2] Implement [Service] in src/services/[service].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T023 [US2] Implement [endpoint/feature] in src/[location]/[file].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T024 [US2] Integrate with User Story 1 components (if needed)
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 ### Refactor for User Story 2 (MANDATORY)
 
 - [ ] T025 [US2] Refactor for readability/performance while keeping tests green
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
@@ -293,46 +374,64 @@ Examples of foundational tasks (adjust based on your project):
 > **NOTE: Red = write tests first and ensure they FAIL before implementation. Green = implement the minimum to pass. Refactor = improve code with tests still passing.**
 
 - [ ] T026 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T027 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 ### Implementation for User Story 3
 
 - [ ] T028 [P] [US3] Create [Entity] model in src/models/[entity].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T029 [US3] Implement [Service] in src/services/[service].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 - [ ] T030 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 ### Refactor for User Story 3 (MANDATORY)
 
 - [ ] T031 [US3] Refactor for readability/performance while keeping tests green
+
   Description: <Explain what needs to be done and why.>
     <Add 1–3 more lines if needed.>
+
   Paths:
     - <path/to/file/or/dir>
+
   Depends on: <optional T###>
 
 **Checkpoint**: All user stories should now be independently functional
