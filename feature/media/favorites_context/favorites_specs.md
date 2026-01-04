@@ -45,8 +45,8 @@ Session-based local storage using local database. Favorites persist during the c
 - [ ] Error state: Show ErrorView with message \"Could not update favorite. Please try again.\"
 
 ## Accessibility
-- [ ] Screen reader labels for favorite toggle buttons: \"Add to favorites\" / \"Remove from favorites\"
-- [ ] Content descriptions for favorite status icons: \"Marked as favorite\" / \"Not marked as favorite\"
+- [x] Screen reader labels for favorite toggle buttons: \"Add to favorites\" / \"Remove from favorites\"
+- [x] Content descriptions for favorite status icons: \"Marked as favorite\" / \"Not marked as favorite\"
 - [ ] Keyboard navigation support for bottom navigation tabs
 - [ ] High contrast for favorite icon (sufficient contrast ratio for visibility)
 
