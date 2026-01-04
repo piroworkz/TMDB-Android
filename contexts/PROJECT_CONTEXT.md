@@ -259,7 +259,8 @@ All dependencies are managed in `gradle/libs.versions.toml` for consistency and 
 ## 6. Testing Strategy
 
 ### 6.1 Approach
-- TDD-first: write/update tests before implementation. Tests define the contracts for interfaces, models, and use cases. Red-Green-Refactor is required for new or changed behavior.
+- **TDD for behavior**: Write/update tests before implementing code with logic or state transformations (ViewModels, use case implementations, repositories, data sources, complex Composables). Red-Green-Refactor is required for behavioral changes.
+- **No tests for structure**: Pure data models (entities, DTOs, value objects), use case interfaces (contracts only), DI configuration, constants/enums, and exploration/inventory tasks do not require tests.
 - Choose test type based on scope: unit for isolation, integration for flows, Compose UI for rendering/interaction, E2E for happy paths.
 
 ### 6.2 Unit Tests
@@ -413,7 +414,8 @@ class ValidateMovie : IsMovieValid {
 ### 9.1 Before Making Changes
 - Identify layer/module impact; domain stays Android-free.
 - Follow convention plugins; avoid manual dependency drift.
-- Review relevant tests; extend or add before coding; follow Red-Green-Refactor for behavior changes.
+- Review relevant tests; extend or add before coding behavioral logic (ViewModels, use cases with implementation, repositories, data sources); follow Red-Green-Refactor for behavior changes.
+- Skip tests for pure structures (entities, interfaces, DI config, constants).
 
 ### 9.2 Adding Dependencies
 - Add version + alias in `gradle/libs.versions.toml`.

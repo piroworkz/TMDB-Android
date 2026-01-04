@@ -9,8 +9,8 @@ UI depends on Domain; Framework depends on Domain; Domain has zero Android or da
 ### II. Modular Feature Structure
 Features are split into `{feature}_domain`, `{feature}_framework`, and `{feature}_ui` modules. Module naming and registration in `settings.gradle.kts` are mandatory and must follow conventions.
 
-### III. Test-First (Non-Negotiable)
-Use TDD. Write or update tests before implementation; Red-Green-Refactor is mandatory for new or changed behavior. Tests define interfaces, models, and contracts. Prefer unit tests for domain and ViewModels, and Compose UI tests in `src/androidTest`.
+### III. Test-First (When Appropriate)
+Use TDD for behavioral logic: ViewModels, use case implementations, repositories, data sources, and complex Composables. Red-Green-Refactor is mandatory for code with behavior or state transformations. **TDD is NOT required for**: pure data models (entities, DTOs), use case interfaces (contracts only), DI module configuration, constants/enums, or inventory/exploration tasks. Tests define behavior, not structure.
 
 ### IV. Type-Safe Errors
 Use Arrow `Either<Error, Success>` for explicit error handling in domain use cases and repository flows. Prefer sealed error types and map failures explicitly.
@@ -29,7 +29,8 @@ Use version catalog aliases and convention plugins. Do not hardcode versions in 
 ## Development Workflow & Quality Gates
 
 - Verify layer boundaries (no Android in domain) before changes.
-- Add or update tests first; Red-Green-Refactor is required; follow established test patterns and fixtures.
+- Add or update tests first for behavioral logic (ViewModels, use case implementations, repositories, data sources, complex Composables); Red-Green-Refactor is required for behavior changes; follow established test patterns and fixtures.
+- Skip tests for pure structures: entities, DTOs, use case interfaces, DI modules, constants/enums, inventory tasks.
 - Apply dependency changes via `gradle/libs.versions.toml` and the appropriate convention plugin.
 - Keep code style: 4-space indentation, <120 char soft limit, minimal meaningful comments, KDoc for public APIs.
 
