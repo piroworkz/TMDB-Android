@@ -27,16 +27,17 @@ Session-based local storage using local database. Favorites persist during the c
 ## UI/UX Specifications
 
 ### Visual Components
-- [ ] Favorite toggle button: Heart icon button displayed on each media item card in lists
+- [ ] Favorite toggle button: Heart icon overlay inside a semi-transparent light-gray circular chip on the top-right of each media poster card in lists
 - [ ] Favorite icon states: Outlined heart (not favorited), filled heart (favorited)
 - [ ] Bottom navigation bar: Two tabs labeled \"Movies\" and \"TV Shows\" (consistent with MediaCatalogScreen design) only show if favorites exist in both categories. Default tab is \"Movies\" unless it is empty.
 - [ ] Feedback mechanism: Icon animation (fill/unfill) when toggling favorite status
 - [ ] Empty state illustration: Centered message with optional icon
 
 ### Navigation
-- [ ] Entry point: \"Favorites\" menu item in navigation drawer
+- [ ] Entry point: \"Favorites\" menu item in navigation drawer (heart icon + label \"Favorites\")
 - [ ] Flow between screens: Drawer → FavoritesScreen → Bottom navigation switches between Movies/TV tabs
 - [ ] Exit point: Back button or drawer menu selection returns to previous screen
+- [ ] Session end: \"Close Session\" menu item in navigation drawer clears favorites when used by signed-in users
 
 ### States
 - [ ] Empty state: Display centered message \"No favorites yet. Start adding your favorite movies and TV shows!\" when no items in current tab
@@ -48,6 +49,10 @@ Session-based local storage using local database. Favorites persist during the c
 - [ ] Content descriptions for favorite status icons: \"Marked as favorite\" / \"Not marked as favorite\"
 - [ ] Keyboard navigation support for bottom navigation tabs
 - [ ] High contrast for favorite icon (sufficient contrast ratio for visibility)
+
+## References
+- `feature/media/favorites_context/screenshots/FavsHome.png`: Heart overlay placement/state on home media cards
+- `feature/media/favorites_context/screenshots/FavsDrawer.png`: Navigation drawer entry label and session close item
 
 ## Success Criteria
 - Users can successfully mark and unmark movies/TV shows as favorites with immediate visual feedback
