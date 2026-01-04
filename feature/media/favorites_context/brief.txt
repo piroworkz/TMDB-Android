@@ -1,0 +1,6 @@
+Allow all users, signed in and guests to mark/unmark favorites so they can return to favorite media items anytime.
+Users can do so from any list from main screen.
+movies and TV shows can be marked as favorites.
+Favorites will be shown on a dedicated Favorites screen, through new drawer option "Favorites" two lists by media type (movies, tv shows) with bottom navigation bar like in main screen to switch between lists of favorites.
+When the Favorites list is empty show empty message.
+Favorites expected to persist only within the current session, persisted locally only.
