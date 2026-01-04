@@ -1,6 +1,55 @@
-Allow all users, signed in and guests to mark/unmark favorites so they can return to favorite media items anytime.
-Users can do so from any list from main screen.
-movies and TV shows can be marked as favorites.
-Favorites will be shown on a dedicated Favorites screen, through new drawer option "Favorites" two lists by media type (movies, tv shows) with bottom navigation bar like in main screen to switch between lists of favorites.
-When the Favorites list is empty show empty message.
-Favorites expected to persist only within the current session, persisted locally only.
+# Favorites Feature
+
+## Overview
+Users can mark movies and TV shows as favorites to quickly access their preferred content. This feature allows both authenticated and guest users to save favorites during their session, accessible through a dedicated Favorites screen in the navigation drawer. Favorites persist only during the active session and are cleared when the app closes.
+
+## Functional Requirements
+
+### Core Features
+- [ ] Users can mark/unmark movies as favorites from main screen movie lists
+- [ ] Users can mark/unmark TV shows as favorites from main screen TV show lists
+- [ ] Users can access all favorites through a "Favorites" option in navigation drawer
+- [ ] Favorites screen displays two separate tabs: Movies and TV Shows
+- [ ] Users can switch between Movies and TV Shows using bottom navigation bar
+- [ ] Favorite status is visually indicated on each media item card
+
+### User Scope
+All users (authenticated and guest users) can access favorites functionality. No authentication required.
+
+### Data Management
+Session-based local storage using in-memory cache. Favorites persist only during the current app session and are automatically cleared when the app/session closes. No persistence to disk, no server synchronization, and no cross-device availability.
+
+## UI/UX Specifications
+
+### Visual Components
+- [ ] Favorite toggle button: Heart icon button displayed on each media item card in lists
+- [ ] Favorite icon states: Outlined heart (not favorited), filled heart (favorited)
+- [ ] Bottom navigation bar: Two tabs labeled "Movies" and "TV Shows" (consistent with MediaCatalogScreen design)
+- [ ] Feedback mechanism: Icon animation (fill/unfill) when toggling favorite status
+- [ ] Empty state illustration: Centered message with optional icon
+
+### Navigation
+- [ ] Entry point: "Favorites" menu item in navigation drawer
+- [ ] Flow between screens: Drawer → FavoritesScreen → Bottom navigation switches between Movies/TV tabs
+- [ ] Exit point: Back button or drawer menu selection returns to previous screen
+
+### States
+- [ ] Empty state: Display centered message "No favorites yet. Start adding your favorite movies and TV shows!" when no items in current tab
+- [ ] Loading state: Display circular progress indicator when retrieving favorites from cache
+- [ ] Error state: Show snackbar with message "Could not update favorite. Please try again." with retry option
+
+## Accessibility
+- [ ] Screen reader labels for favorite toggle buttons: "Add to favorites" / "Remove from favorites"
+- [ ] Content descriptions for favorite status icons: "Marked as favorite" / "Not marked as favorite"
+- [ ] Keyboard navigation support for bottom navigation tabs
+- [ ] High contrast for favorite icon (sufficient contrast ratio for visibility)
+
+## Success Criteria
+- Users can successfully mark and unmark movies/TV shows as favorites with immediate visual feedback
+- Favorites persist during the session and are correctly displayed in the Favorites screen
+- Bottom navigation correctly switches between Movies and TV Shows lists without data loss
+- Empty state is properly displayed when no favorites exist in either category
+- All favorites are automatically cleared when the app session ends
+
+## Implementation Notes
+This feature extends the existing MediaCatalogScreen with favorite toggle functionality and adds a new FavoritesScreen accessible via the navigation drawer. Session-based storage will be used (no persistence).
