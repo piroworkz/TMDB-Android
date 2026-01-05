@@ -5,4 +5,5 @@ plugins {
 dependencies {
     implementation(projects.feature.core.coreDomain)
     implementation(libs.pagingJVM)
+    testImplementation(libs.junit)
 }

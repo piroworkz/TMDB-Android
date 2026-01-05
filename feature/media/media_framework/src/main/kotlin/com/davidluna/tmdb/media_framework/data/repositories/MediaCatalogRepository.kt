@@ -39,6 +39,8 @@ class MediaCatalogRepository @Inject constructor(
     private fun RoomMedia.toDomain(): Media = Media(
         id = id,
         posterPath = posterPath,
-        title = title
+        title = title,
+        mediaType = Catalog.valueOf(category).mediaType,
+        isFavorite = false
     )
 }

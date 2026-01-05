@@ -12,6 +12,7 @@ import com.davidluna.tmdb.auth_framework.data.remote.model.RemoteLoginRequest
 import com.davidluna.tmdb.auth_framework.data.remote.model.RemoteTokenResponse
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.toAppError
+import com.davidluna.tmdb.core_domain.entities.tryCatch
 import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
 import javax.inject.Inject
 
@@ -28,7 +29,8 @@ class AuthenticationRepository @Inject constructor(
         val session =
             remote.createSessionId(RemoteLoginRequest(requestToken = authorization.requestToken))
                 .getOrElse { raise(it.toAppError()) }
-        local.insertSession(session.toLocalStorage())
+        tryCatch { local.insertSession(session.toLocalStorage()) }
+            .getOrElse { raise(it) }
         fetchUserAccount().getOrElse { raise(it.toAppError()) }
     }
 }

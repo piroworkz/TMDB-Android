@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.AppErrorCode
 import com.davidluna.tmdb.media_domain.entities.Media
+import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.media_domain.entities.details.Cast
 import com.davidluna.tmdb.media_domain.entities.details.Genre
 import com.davidluna.tmdb.media_domain.entities.details.Image
@@ -37,7 +38,9 @@ fun buildFakeMediaList(): List<Media> {
         Media(
             id = it.id ?: 0,
             posterPath = it.posterPath?.buildModel().orEmpty(),
-            title = it.title.orEmpty()
+            title = it.title.orEmpty(),
+            mediaType = MediaType.MOVIE,
+            isFavorite = false
         )
     }
 }
@@ -65,11 +68,8 @@ val fakeMediaDetails = MediaDetails(
         it.toDomain()
     },
     images = listOf(
-        Image(
-            fakeRemoteMediaDetail.posterPath?.buildModel().orEmpty(),
-            fakeRemoteMediaDetail.id ?: 0
-        )
-    ) + fakeRemoteImages.toDomain(fakeRemoteMediaDetail.id ?: 0)
+        fakeRemoteImages.toDomain(fakeRemoteMediaDetail.id ?: 0)
+    ).flatten()
 )
 
 private fun RemoteImages.toDomain(i: Int): List<Image> =
@@ -99,7 +99,9 @@ private fun formatDate(releaseDate: String?): String? = try {
     releaseDate?.let {
         val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)
         val date = LocalDate.parse(it, inputFormatter)
-        "${date.month.name.lowercase()} ${date.dayOfMonth}, ${date.year}"
+        val outputFormatter = DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.LONG)
+            .withLocale(Locale.US)
+        date.format(outputFormatter)
     }
 } catch (_: DateTimeParseException) {
     null

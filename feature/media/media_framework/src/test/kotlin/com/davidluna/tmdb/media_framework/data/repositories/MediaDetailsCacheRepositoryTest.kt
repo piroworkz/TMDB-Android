@@ -18,9 +18,11 @@ import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaServic
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.called
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.verify
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -176,5 +178,7 @@ class MediaDetailsCacheRepositoryTest {
         remote = remote,
         isCacheExpired = isCacheExpired,
         observeCountryCode = observeCountryCode
-    )
+    ).also {
+        every { observeCountryCode() } returns flowOf("US")
+    }
 }

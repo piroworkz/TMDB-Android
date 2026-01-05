@@ -1,7 +1,8 @@
 package com.davidluna.tmdb.auth_framework.data.sources
 
 import arrow.core.Either
-import arrow.core.left
+import arrow.core.getOrElse
+import arrow.core.raise.either
 import com.davidluna.tmdb.auth_domain.usecases.LoginAsGuest
 import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDao
 import com.davidluna.tmdb.auth_framework.data.remote.RemoteAuthenticationService
@@ -15,10 +16,9 @@ class GuestSessionRepository @Inject constructor(
     private val local: SessionDao
 ) : LoginAsGuest {
 
-    override suspend fun invoke(): Either<AppError, Unit> = tryCatch {
-        remote.createGuestSession().fold(
-            ifLeft = { it.toAppError().left() },
-            ifRight = { local.insertSession(session = it.toLocalStorage()) }
-        )
+    override suspend fun invoke(): Either<AppError, Unit> = either {
+        val session = remote.createGuestSession().getOrElse { raise(it.toAppError()) }
+        tryCatch { local.insertSession(session.toLocalStorage()) }
+            .getOrElse { raise(it) }
     }
 }

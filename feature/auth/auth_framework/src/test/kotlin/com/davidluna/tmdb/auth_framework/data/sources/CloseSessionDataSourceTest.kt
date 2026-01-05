@@ -33,6 +33,8 @@ class CloseSessionDataSourceTest {
     fun `GIVEN closeSession returns true WHEN invoke is called THEN Right true is returned`() =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            coEvery { sessionDao.hasSession() } returns true
+            coEvery { accountDao.hasAccount() } returns true
             coEvery { sessionDao.deleteSession() } returns 1
             coEvery { accountDao.deleteAccount() } returns 1
 
@@ -46,6 +48,8 @@ class CloseSessionDataSourceTest {
     fun `GIVEN closeSession returns false WHEN invoke is called THEN Right false is returned`() =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            coEvery { sessionDao.hasSession() } returns true
+            coEvery { accountDao.hasAccount() } returns true
             coEvery { sessionDao.deleteSession() } returns -1
             coEvery { accountDao.deleteAccount() } returns 1
 
@@ -59,6 +63,8 @@ class CloseSessionDataSourceTest {
     fun `GIVEN DAO throws exception WHEN invoke is called THEN Left AppError is returned`() =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            coEvery { sessionDao.hasSession() } returns true
+            coEvery { accountDao.hasAccount() } returns true
             coEvery { accountDao.deleteAccount() } throws RuntimeException("boom")
 
             val result = sut.invoke()

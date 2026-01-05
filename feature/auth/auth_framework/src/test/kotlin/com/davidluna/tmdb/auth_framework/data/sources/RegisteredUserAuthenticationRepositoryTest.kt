@@ -110,6 +110,7 @@ class RegisteredUserAuthenticationRepositoryTest {
             coEvery { remote.authorizeToken(any()) } returns fakeRemoteTokenResponse.right()
             coEvery { remote.createSessionId(any()) } returns fakeRemoteSessionIdResponse.right()
             coEvery { fetchUserAccount() } returns fakeRemoteError.toAppError().left()
+            coEvery { local.insertSession(any()) } returns Long.MIN_VALUE
 
             val actual = sut.invoke(fakeLoginRequest)
 

@@ -10,6 +10,7 @@ import androidx.paging.RemoteMediator.MediatorResult.Success
 import androidx.paging.testing.asSnapshot
 import com.davidluna.tmdb.media_framework.data.remote.model.toEndpointPath
 import com.davidluna.tmdb.media_domain.entities.Media
+import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.media_framework.data.fakes.fakeCatalog
 import com.davidluna.tmdb.media_framework.data.fakes.fakeRoomMediaList
 import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDao
@@ -136,7 +137,9 @@ class MediaCatalogRepositoryTest {
         return Media(
             id = id,
             posterPath = posterPath,
-            title = title
+            title = title,
+            mediaType = MediaType.MOVIE,
+            isFavorite = false
         )
     }
 
