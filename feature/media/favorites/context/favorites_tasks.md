@@ -58,7 +58,7 @@ Where:
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 Extend media domain entities for favorites and media type
+- [x] T002 Extend media domain entities for favorites and media type
 
   Description: Add mediaType to Catalog and isFavorite/mediaType to Media in the domain layer.
     Remove or update UI extensions that duplicate the domain mediaType logic.
