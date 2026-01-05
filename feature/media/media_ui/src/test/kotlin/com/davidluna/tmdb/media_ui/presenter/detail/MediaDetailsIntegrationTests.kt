@@ -128,8 +128,6 @@ class MediaDetailsIntegrationTests {
         ) { File(tmp, "test.preferences_pb") }
 
     private fun provideFakeGetCountryCodeUseCase(): ObserveCountryCode {
-        return object : ObserveCountryCode {
-            override fun invoke() = flowOf("US")
-        }
+        return ObserveCountryCode { flowOf("US") }
     }
 }
