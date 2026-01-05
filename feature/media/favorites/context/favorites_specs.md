@@ -51,8 +51,8 @@ Session-based local storage using local database. Favorites persist during the c
 - [ ] High contrast for favorite icon (sufficient contrast ratio for visibility)
 
 ## References
-- `feature/media/favorites_context/screenshots/FavsHome.png`: Heart overlay placement/state on home media cards
-- `feature/media/favorites_context/screenshots/FavsDrawer.png`: Navigation drawer entry label and session close item
+- `feature/media/favorites/screenshots/FavsHome.png`: Heart overlay placement/state on home media cards
+- `feature/media/favorites/screenshots/FavsDrawer.png`: Navigation drawer entry label and session close item
 
 ## Success Criteria
 - Users can successfully mark and unmark movies/TV shows as favorites with immediate visual feedback
