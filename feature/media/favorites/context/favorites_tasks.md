@@ -70,7 +70,7 @@ Where:
     - app/src/main/kotlin/com/davidluna/tmdb/app/main_ui/view/composables/AppBottomBar.kt
     - app/src/main/kotlin/com/davidluna/tmdb/app/main_ui/model/DrawerItem.kt
 
-- [ ] T003 Add favorites use case contracts in media_domain
+- [x] T003 Add favorites use case contracts in media_domain
 
   Description: Define ToggleFavorite, ObserveFavorites, and ClearAllFavorites as named-method interfaces.
     Keep the interfaces framework-agnostic and aligned with Arrow Either error handling.
