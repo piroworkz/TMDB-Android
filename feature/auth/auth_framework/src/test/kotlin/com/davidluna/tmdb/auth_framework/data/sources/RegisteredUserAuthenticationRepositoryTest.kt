@@ -9,6 +9,8 @@ import com.davidluna.tmdb.auth_framework.data.fakes.fakeRemoteTokenResponse
 import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDao
 import com.davidluna.tmdb.auth_framework.data.remote.RemoteAuthenticationService
 import com.davidluna.tmdb.auth_domain.usecases.FetchUserAccount
+import com.davidluna.tmdb.auth_framework.data.local.database.dao.AccountDao
+import com.davidluna.tmdb.auth_framework.data.remote.UserAccountService
 import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.called
@@ -36,6 +38,12 @@ class RegisteredUserAuthenticationRepositoryTest {
 
     @MockK
     private lateinit var fetchUserAccount: FetchUserAccount
+
+    @MockK
+    private lateinit var accountDao: AccountDao
+
+    @MockK
+    private lateinit var userAccountService: UserAccountService
 
     @Test
     fun `GIVEN sut WHEN sut is created THEN verify no side effects`() {
@@ -109,6 +117,9 @@ class RegisteredUserAuthenticationRepositoryTest {
             coEvery { remote.createRequestToken() } returns fakeRemoteTokenResponse.right()
             coEvery { remote.authorizeToken(any()) } returns fakeRemoteTokenResponse.right()
             coEvery { remote.createSessionId(any()) } returns fakeRemoteSessionIdResponse.right()
+            coEvery { local.insertSession(any()) } returns 1L
+            coEvery { accountDao.hasAccount() } returns false
+            coEvery { userAccountService.getAccount() } returns fakeRemoteError.left()
             coEvery { fetchUserAccount() } returns fakeRemoteError.toAppError().left()
 
             val actual = sut.invoke(fakeLoginRequest)

@@ -1,5 +1,6 @@
 package com.davidluna.tmdb.auth_framework.data.sources
 
+import arrow.core.Either
 import arrow.core.getOrElse
 import com.davidluna.tmdb.auth_framework.data.local.database.dao.AccountDao
 import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDao
@@ -33,6 +34,8 @@ class CloseSessionDataSourceTest {
     fun `GIVEN closeSession returns true WHEN invoke is called THEN Right true is returned`() =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            coEvery { sessionDao.hasSession() } returns true
+            coEvery { accountDao.hasAccount() } returns true
             coEvery { sessionDao.deleteSession() } returns 1
             coEvery { accountDao.deleteAccount() } returns 1
 
@@ -46,12 +49,13 @@ class CloseSessionDataSourceTest {
     fun `GIVEN closeSession returns false WHEN invoke is called THEN Right false is returned`() =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            coEvery { sessionDao.hasSession() } returns true
+            coEvery { accountDao.hasAccount() } returns true
             coEvery { sessionDao.deleteSession() } returns -1
             coEvery { accountDao.deleteAccount() } returns 1
 
-            val result = sut.invoke()
+            val result: Either<AppError, Boolean> = sut.invoke()
 
-            assertTrue(result.isRight())
             assertEquals(false, result.getOrElse { true })
         }
 

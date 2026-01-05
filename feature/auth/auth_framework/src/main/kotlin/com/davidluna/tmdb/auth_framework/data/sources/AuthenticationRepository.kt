@@ -28,7 +28,13 @@ class AuthenticationRepository @Inject constructor(
         val session =
             remote.createSessionId(RemoteLoginRequest(requestToken = authorization.requestToken))
                 .getOrElse { raise(it.toAppError()) }
-        local.insertSession(session.toLocalStorage())
-        fetchUserAccount().getOrElse { raise(it.toAppError()) }
+        try {
+            local.insertSession(session.toLocalStorage())
+        } catch (e: Exception) {
+            raise(e.toAppError())
+        }
+        fetchUserAccount().getOrElse {
+            raise(it.toAppError())
+        }
     }
 }

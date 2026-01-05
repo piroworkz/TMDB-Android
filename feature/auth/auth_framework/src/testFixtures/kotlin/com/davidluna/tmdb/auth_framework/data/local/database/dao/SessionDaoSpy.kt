@@ -22,6 +22,11 @@ class SessionDaoSpy : SessionDao {
     override fun getSession(): Flow<RoomSession?> = inMemoryDataBase
         .onStart { tryThrow() }
 
+    override suspend fun hasSession(): Boolean {
+        tryThrow()
+        return inMemoryDataBase.value != null
+    }
+
     override suspend fun deleteSession(): Int {
         tryThrow()
         inMemoryDataBase.update { null }

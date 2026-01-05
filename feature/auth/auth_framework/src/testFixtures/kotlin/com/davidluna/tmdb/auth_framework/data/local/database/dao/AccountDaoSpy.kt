@@ -22,7 +22,10 @@ class AccountDaoSpy : AccountDao {
     override fun getAccount(): Flow<RoomUserAccount?> = inMemoryDatabase
         .onStart { tryThrow() }
 
-    override suspend fun hasAccount(): Boolean = inMemoryDatabase.value != null
+    override suspend fun hasAccount(): Boolean {
+        tryThrow()
+        return inMemoryDatabase.value != null
+    }
 
     override suspend fun deleteAccount(): Int {
         tryThrow()
