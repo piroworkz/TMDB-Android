@@ -49,7 +49,9 @@ val fakeRoomMediaList = fakeRemoteMediaList.map {
         category = fakeCatalog.name,
         id = it.id ?: 0,
         posterPath = it.posterPath.orEmpty(),
-        title = it.title.orEmpty()
+        title = it.title.orEmpty(),
+        mediaType = fakeCatalog.mediaType.name,
+        isFavorite = false
     )
 }
 

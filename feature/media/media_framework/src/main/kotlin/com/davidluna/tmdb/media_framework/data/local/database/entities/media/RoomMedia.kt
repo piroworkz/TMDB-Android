@@ -8,4 +8,6 @@ data class RoomMedia(
     val id: Int,
     val posterPath: String,
     val title: String,
+    val mediaType: String = "",
+    val isFavorite: Boolean = false,
 )
