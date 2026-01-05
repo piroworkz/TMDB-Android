@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.AppErrorCode
 import com.davidluna.tmdb.media_domain.entities.Media
+import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.media_domain.entities.details.Cast
 import com.davidluna.tmdb.media_domain.entities.details.Genre
 import com.davidluna.tmdb.media_domain.entities.details.Image
@@ -37,7 +38,8 @@ fun buildFakeMediaList(): List<Media> {
         Media(
             id = it.id ?: 0,
             posterPath = it.posterPath?.buildModel().orEmpty(),
-            title = it.title.orEmpty()
+            title = it.title.orEmpty(),
+            mediaType = MediaType.MOVIE
         )
     }
 }
