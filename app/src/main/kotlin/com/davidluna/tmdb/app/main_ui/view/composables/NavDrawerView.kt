@@ -42,7 +42,6 @@ import com.davidluna.tmdb.core_ui.theme.TmdbTheme
 import com.davidluna.tmdb.core_ui.theme.dimens.Dimens
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_ui.view.media.composables.rememberItemWidth
-import com.davidluna.tmdb.media_ui.view.utils.mediaType
 
 @Composable
 fun NavDrawerView(

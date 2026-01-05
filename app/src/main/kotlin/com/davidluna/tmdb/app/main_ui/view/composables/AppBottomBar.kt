@@ -28,7 +28,6 @@ import com.davidluna.tmdb.core_ui.theme.TmdbTheme
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.MediaType.MOVIE
 import com.davidluna.tmdb.media_ui.view.utils.bottomBarItems
-import com.davidluna.tmdb.media_ui.view.utils.mediaType
 import com.davidluna.tmdb.media_ui.view.utils.title
 
 @Composable
