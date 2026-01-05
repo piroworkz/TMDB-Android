@@ -42,7 +42,7 @@ Where:
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Add shared Favorites strings and accessibility labels
+- [x] T001 Add shared Favorites strings and accessibility labels
 
   Description: Define drawer, tabs, empty state, error copy, and favorite toggle labels in core_ui.
     Keep all UI strings centralized to comply with the shared resource policy.
