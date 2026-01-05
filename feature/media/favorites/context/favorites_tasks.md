@@ -80,7 +80,7 @@ Where:
     - feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/usecases/ObserveFavorites.kt
     - feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/usecases/ClearAllFavorites.kt
 
-- [ ] T004 Update RoomMedia schema for favorites state and media type
+- [x] T004 Update RoomMedia schema for favorites state and media type
 
   Description: Add mediaType and isFavorite columns, bump the MediaDatabase version, and update test fakes.
     Keep schema changes scoped to the existing RoomMedia table as required by the plan.
