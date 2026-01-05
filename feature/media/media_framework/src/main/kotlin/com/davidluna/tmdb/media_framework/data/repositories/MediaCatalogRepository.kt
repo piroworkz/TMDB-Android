@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.davidluna.tmdb.media_domain.entities.Catalog
+import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.media_framework.data.remote.model.toEndpointPath
 import com.davidluna.tmdb.media_domain.entities.Media
 import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
@@ -33,12 +34,13 @@ class MediaCatalogRepository @Inject constructor(
             config = PagingConfig(pageSize = 20),
             remoteMediator = mediatorFactory.create(path, catalog.name),
             pagingSourceFactory = { mediaDao.getMedia(catalog.name) }
-        ).flow.cachedIn(scope).map { pagingData -> pagingData.map { it.toDomain() } }
+        ).flow.cachedIn(scope).map { pagingData -> pagingData.map { it.toDomain(catalog.mediaType) } }
     }
 
-    private fun RoomMedia.toDomain(): Media = Media(
+    private fun RoomMedia.toDomain(mediaType: MediaType): Media = Media(
         id = id,
         posterPath = posterPath,
-        title = title
+        title = title,
+        mediaType = mediaType
     )
 }

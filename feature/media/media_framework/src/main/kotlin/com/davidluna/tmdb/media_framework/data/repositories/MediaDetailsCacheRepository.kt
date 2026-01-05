@@ -43,7 +43,7 @@ class MediaDetailsCacheRepository @Inject constructor(
     private val local: MediaDetailsDao,
     private val remote: RemoteMediaService,
     private val isCacheExpired: IsCacheExpired,
-    private val observeCountryCode: ObserveCountryCode,
+    private val observeCountryCode: ObserveCountryCode
 ) : GetMediaDetails {
 
     override suspend fun invoke(catalog: Catalog, mediaId: Int): Either<AppError, MediaDetails> =

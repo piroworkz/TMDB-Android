@@ -17,7 +17,7 @@ class GuestSessionRepository @Inject constructor(
 
     override suspend fun invoke(): Either<AppError, Unit> = tryCatch {
         remote.createGuestSession().fold(
-            ifLeft = { it.toAppError().left() },
+            ifLeft = { throw it.toAppError() },
             ifRight = { local.insertSession(session = it.toLocalStorage()) }
         )
     }

@@ -114,8 +114,12 @@ class LoginViewModel @Inject constructor(
 
     private fun guestLogin() = launchOnIO {
         loginGuest().fold(
-            ifLeft = { appError -> _state.update { it.copy(appError = appError) } },
-            ifRight = { _ -> _state.update { it.copy(isLoggedIn = true) } }
+            ifLeft = { appError ->
+                _state.update { it.copy(appError = appError) }
+            },
+            ifRight = { _ ->
+                _state.update { it.copy(isLoggedIn = true) }
+            }
         )
     }
 

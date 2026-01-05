@@ -12,7 +12,6 @@ import androidx.compose.ui.test.performClick
 import com.davidluna.tmdb.core_ui.theme.TmdbTheme
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_ui.view.utils.bottomBarItems
-import com.davidluna.tmdb.media_ui.view.utils.mediaType
 import org.junit.Rule
 import org.junit.Test
 

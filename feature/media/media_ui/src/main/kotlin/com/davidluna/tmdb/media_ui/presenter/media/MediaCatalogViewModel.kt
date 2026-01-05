@@ -12,7 +12,6 @@ import com.davidluna.tmdb.media_domain.entities.Media
 import com.davidluna.tmdb.media_domain.entities.MediaType.MOVIE
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
-import com.davidluna.tmdb.media_ui.view.utils.mediaType
 import com.davidluna.tmdb.media_ui.view.utils.title
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

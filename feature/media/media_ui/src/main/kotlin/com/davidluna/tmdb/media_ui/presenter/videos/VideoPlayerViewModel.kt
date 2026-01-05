@@ -11,7 +11,6 @@ import com.davidluna.tmdb.media_domain.usecases.GetCatalogVideos
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_ui.di.VideosMediaId
 import com.davidluna.tmdb.media_ui.view.utils.UiState
-import com.davidluna.tmdb.media_ui.view.utils.mediaType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

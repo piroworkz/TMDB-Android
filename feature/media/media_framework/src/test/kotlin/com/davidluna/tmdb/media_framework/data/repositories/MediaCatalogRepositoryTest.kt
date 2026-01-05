@@ -136,7 +136,8 @@ class MediaCatalogRepositoryTest {
         return Media(
             id = id,
             posterPath = posterPath,
-            title = title
+            title = title,
+            mediaType = fakeCatalog.mediaType
         )
     }
 
