@@ -10,8 +10,9 @@
 
 ## How to Use This Doc
 - Scan the TOC, jump to the section you need.
-- Follow naming in §3; follow patterns in §7.
-- Build/test commands live in §6/§7 for quick copy/paste.
+- Follow naming in section 3; follow patterns in section 8.
+- Build/test commands live in sections 7/8 for quick copy/paste.
+- **Section 6 defines HOW we work (TDD process)** - this takes precedence for development workflow.
 
 ## Table of Contents
 1. Project Overview
@@ -19,12 +20,13 @@
 3. Naming Conventions
 4. Code Style & Compose
 5. Dependencies & Stack
-6. Testing Strategy
-7. Build & Tooling
-8. Implementation Patterns
-9. Practices & Guidance
-10. Glossary
-11. Quick Links
+6. TDD Workflow & Methodology
+7. Testing Strategy
+8. Build & Tooling
+9. Implementation Patterns
+10. Practices & Guidance
+11. Glossary
+12. Quick Links
 
 ---
 
@@ -101,29 +103,17 @@ include(
 
 ### 2.1 Clean Architecture
 
-1. **Domain Layer** (`*_domain`)
-   - Business rules and pure Kotlin use cases
-   - Entities, value objects, and use case interfaces
-   - Use cases are interfaces (prefer `fun interface` when a single public method exists)
-   - Uses `Arrow`'s `Either<Error, Success>` for type-safe error handling
-   - No dependencies on Android or data-specific frameworks
+The project follows a three-layer clean architecture:
 
-2. **Framework Layer** (`*_framework`)
-   - Local and remote data sources
-   - Repositories implement use case interfaces from domain (no `Impl` suffix)
-   - DataSources handle specific data operations (local DB, remote API)
-   - Handles data persistence (Room) and network requests (Retrofit)
-   - Depends on Domain; uses dependency injection (Hilt)
+- **Domain Layer** (`*_domain`): Pure Kotlin business logic with use case interfaces, entities, and error models. Zero Android dependencies.
+- **Framework Layer** (`*_framework`): Data sources and repositories implementing domain contracts. Handles Room, Retrofit, and persistence.
+- **UI Layer** (`*_ui`): Jetpack Compose UI, ViewModels, and presentation logic.
 
-3. **UI Layer** (`*_ui`)
-   - Jetpack Compose UI and presentation (screens, components, ViewModels)
-   - State management via `StateFlow`
-   - Depends on Domain for use cases
+**Dependency Flow**: UI → Domain ← Framework (domain is independent and pure Kotlin)
 
 ### 2.2 Key Design Principles
 
 - **Unidirectional Dependency**: UI → Domain ← Framework (domain is independent)
-- **TDD First**: Add/update tests before changes; use Red-Green-Refactor as the mandatory loop for behavior changes
 - **Prefer composition** over inheritance; avoid base classes
 - **Type-Safe Error Handling**: `Arrow`'s `Either<L, R>` for explicit error propagation
 - **Reactive Programming**: Coroutines and Flow for asynchronous operations
@@ -268,14 +258,427 @@ All dependencies are managed in `gradle/libs.versions.toml` for consistency and 
 
 ---
 
-## 6. Testing Strategy
+## 6. TDD Workflow & Methodology
 
-### 6.1 Approach
-- **TDD for behavior**: Write/update tests before implementing code with logic or state transformations (ViewModels, use case implementations, repositories, data sources, complex Composables). Red-Green-Refactor is required for behavioral changes.
-- **No tests for structure**: Pure data models (entities, DTOs, value objects), use case interfaces (contracts only), DI configuration, constants/enums, and exploration/inventory tasks do not require tests.
+### Scope and authority
+This document defines **how work is done**, not what the product is.
+
+If there is any conflict between this file and other documentation (specs, plans), **this file takes precedence for process, TDD flow, and testing rules**.
+
+---
+
+### Role
+You are a **Senior Android Engineer** working on an **Android-first** project using **Kotlin**, **Coroutines**, and **Clean Architecture**.
+
+Your responsibility is to evolve the codebase using **strict Test Driven Development (TDD)** while applying **Clean Code**, **SOLID**, **DRY**, and **YAGNI** principles.
+
+The goal is not speed, but correctness, clarity, and long-term maintainability.
+
+---
+
+### Non-negotiable rules
+
+1. **TDD is mandatory for behavior**.
+2. **Design must emerge from tests**, never upfront.
+3. **RED → GREEN → REFACTOR** is mandatory.
+4. **RED may be non-compiling**.
+5. **No side effects in constructors or `init {}` blocks**.
+6. **Fix tooling failures before behavior failures**.
+7. **Temporary scaffolding is allowed and expected**.
+8. **Delete tests that stop adding value**.
+9. **Mock collaborators, not the SUT (once boundaries exist)**.
+10. **Move code to final modules/packages only after behavior stabilizes**.
+
+---
+
+### Clean Architecture boundaries (process-oriented)
+
+**Layers**
+- **Domain**
+  - Business models
+  - Use case interfaces
+  - Error models
+- **Data / Framework**
+  - Remote and local data sources
+  - Repository implementations
+  - Mapping logic (private)
+- **UI**
+  - ViewModels
+  - Compose UI
+
+**Dependency rules**
+- Domain depends on nothing
+- Data depends on Domain
+- UI depends on Domain
+
+These rules are enforced **after** behavior is complete, not before.
+
+---
+
+### What is tested (and what is not)
+
+**MUST be tested**
+- Data sources with behavior
+- Repositories with coordination logic (including implementations of domain use case contracts)
+- ViewModels (state + events)
+- Error paths and meaningful edge cases
+
+**MUST NOT be tested**
+- Domain use case interfaces (contracts only)
+- Pure data models (DTOs, entities without logic)
+- Private mapping helpers
+- Interfaces / contracts
+- DI wiring
+- Constants and enums
+
+If a test only validates *structure*, delete it.
+
+---
+
+### Use cases in this project (contracts only)
+
+**Rule**
+In this codebase, use cases live in the **Domain layer** as **interfaces (contracts only)**.
+They define behavior signatures but contain no logic.
+
+**Where implementations live**
+The behavior defined by use case interfaces is implemented in the **Framework/Data layer**, typically as:
+- a **Repository**, when coordinating multiple data sources or shared state, or
+- a **DataSource**, when a single source is sufficient.
+
+There are **no standalone UseCaseImpl / Interactor classes**.
+
+**Testing implication**
+- Do **not** write tests for domain use case interfaces.
+- Write tests for the **Repository/DataSource** that implements the contract, covering behavior.
+
+---
+
+### TDD workflow (edge-first)
+
+When starting a new feature:
+
+1. Start from the **data edge** (remote SDK or local DB)
+2. Prefer **Remote DataSource first** when remote + local exist
+3. Let tests define:
+   - the public API
+   - collaborators
+   - return types
+   - error model
+
+Never pre-design these.
+
+---
+
+### RED can mean "does not compile"
+
+**Rule**
+A failing compilation **is a valid RED state**.
+
+This is expected when:
+- a class does not exist yet
+- a method signature is being introduced
+
+Do not bypass this by designing ahead.
+
+---
+
+### Guardrail test: no side effects on creation
+
+Every new component should start with this test.
+
+**Rule**
+Object creation must never:
+- trigger IO
+- start coroutines
+- call collaborators
+
+This prevents hidden behavior in constructors and `init {}` blocks.
+
+---
+
+### Tooling RED vs Behavioral RED
+
+**Rule**
+If a test fails due to:
+- MockK misuse
+- coroutine test setup
+- dispatcher configuration
+
+**Fix the test first**.
+
+RED must represent **missing behavior**, not broken tooling.
+
+---
+
+### Temporary GREEN is allowed
+
+Sometimes tests must be brought to GREEN to:
+- validate the test harness
+- unblock the next RED
+
+This does **not** mean behavior is complete.
+
+Scaffolding is expected and short-lived.
+
+---
+
+### Tests may be deleted
+
+**Rule**
+As design evolves:
+- earlier tests may break
+- some tests may stop adding value
+
+Delete tests that:
+- only verify call mechanics
+- only validated scaffolding
+- block refactoring without protecting behavior
+
+Apply **YAGNI to tests**.
+
+---
+
+### Coroutines rules
+
+**Production**
+- All IO-facing work must be `suspend`
+- No blocking calls
+
+**Testing**
+- Use `kotlinx-coroutines-test`
+- Use `TestDispatcher` + `TestScope`
+- Override `Dispatchers.Main`
+- Use `coEvery` / `coVerify` for suspend calls
+
+**CoroutineTestRule**
+```kotlin
+@OptIn(ExperimentalCoroutinesApi::class)
+class CoroutineTestRule : TestWatcher() {
+
+    lateinit var dispatcher: TestDispatcher
+        private set
+
+    lateinit var scope: TestScope
+        private set
+
+    override fun starting(description: Description) {
+        dispatcher = StandardTestDispatcher()
+        scope = TestScope(dispatcher)
+        Dispatchers.setMain(dispatcher)
+    }
+
+    override fun finished(description: Description) {
+        Dispatchers.resetMain()
+    }
+}
+```
+
+---
+
+### Collaborator rule
+
+**Rule**
+- Early scaffolding may mock the SUT
+- Once a real boundary exists, the **SUT must be real**
+- Mock collaborators, not the SUT
+
+Behavior is validated through:
+- collaborator interactions
+- returned results
+
+---
+
+### Result modeling with Either
+
+**Rules**
+- Remote services return `Either<AppError, RemoteModel>`
+- Data sources return `Either<AppError, DomainModel>`
+- Errors are explicit and typed
+
+---
+
+### Mapping rules
+
+**Rule**
+- Remote models stay encapsulated in the data layer
+- Mapping functions are **private** inside the data source
+- Do **not** unit-test mapping helpers directly
+
+Mapping correctness is covered by behavior tests.
+
+---
+
+### Few-shots (step-by-step examples)
+
+> These examples are authoritative. They define the expected TDD flow.
+
+### Shot 1 — First RED may not compile
+```kotlin
+class RemoteMediaDataSourceTest {
+
+    @Test
+    fun `on sut creation does not have side effects`() {
+        val sut = RemoteMediaDataSource()
+        verify { sut wasNot called }
+    }
+}
+```
+
+Expected: does not compile.
+
+---
+
+### Shot 2 — Make it compile minimally
+```kotlin
+class RemoteMediaDataSource()
+```
+
+---
+
+### Shot 3 — Fix MockK setup (tooling GREEN)
+```kotlin
+@get:Rule
+val mockkRule = MockKRule(testSubject = this)
+
+@MockK
+lateinit var sut: RemoteMediaDataSource
+
+@Test
+fun `on sut creation does not have side effects`() {
+    verify { sut wasNot called }
+}
+```
+
+---
+
+### Shot 4 — Introduce behavior (non-compiling RED)
+```kotlin
+@Test
+fun `load should be callable`() {
+    sut.load()
+}
+```
+
+---
+
+### Shot 5 — Make it compile
+```kotlin
+class RemoteMediaDataSource {
+    fun load() {}
+}
+```
+
+---
+
+### Shot 6 — Temporary GREEN (scaffolding)
+```kotlin
+@Test
+fun `verify load should be called once`() {
+    every { sut.load() } just runs
+
+    sut.load()
+
+    verify(exactly = 1) { sut.load() }
+}
+```
+
+---
+
+### Shot 7 — New behavior introduces return type
+```kotlin
+@Test
+fun `load returns remote media`() {
+    every { sut.load() } returns fakeRemoteMediaList
+
+    val result = sut.load()
+
+    assertEquals(fakeRemoteMediaList, result)
+}
+```
+
+Earlier scaffolding tests may now break or be deleted.
+
+---
+
+### Shot 8 — REFACTOR: introduce service boundary + coroutines
+```kotlin
+interface RemoteMediaService {
+    suspend fun load(): List<RemoteMedia>
+}
+
+class RemoteMediaDataSource(
+    private val remote: RemoteMediaService
+) {
+    suspend fun load(): List<RemoteMedia> = remote.load()
+}
+```
+
+---
+
+### Shot 9 — Introduce Either + domain mapping
+```kotlin
+interface RemoteMediaService {
+    suspend fun load(): Either<AppError, List<RemoteMedia>>
+}
+
+class RemoteMediaDataSource(
+    private val remote: RemoteMediaService
+) {
+    suspend fun load(): Either<AppError, List<Media>> = tryCatch {
+        val remoteMedia = remote.load().getOrElse { throw it }
+        remoteMedia.map { it.toDomain() }
+    }
+
+    private fun RemoteMedia.toDomain(): Media = Media(
+        id = id,
+        title = title,
+        posterURL = posterURL
+    )
+}
+
+sealed class AppError : Throwable()
+```
+
+---
+
+### Iteration completion rule
+
+Each iteration must end with:
+- all tests GREEN
+- cleaner or equal design
+
+Never stop mid-iteration.
+
+---
+
+### Packaging rule
+
+Move code to final modules/packages **only after**:
+- happy path is covered
+- error path is covered
+- optional edge cases are covered
+
+Late moves are cheap. Early moves create churn.
+
+---
+
+### Final heuristic
+
+> If you cannot explain why a test exists, delete it.
+
+TDD is a **design process**, not a testing exercise.
+
+---
+
+## 7. Testing Strategy
+
+### 7.1 Approach
+- Follow TDD workflow from section 6 for all behavioral changes.
 - Choose test type based on scope: unit for isolation, integration for flows, Compose UI for rendering/interaction, E2E for happy paths.
+- Coverage targets: see Quick Reference table below.
 
-### 6.2 Unit Tests
+### 7.2 Unit Tests
 - ViewModels: verify state reducers, side-effects, navigation triggers.
 - Repositories: assert contracts with data sources and error propagation.
 - Data sources: validate mapping and persistence behaviors.
@@ -286,20 +689,20 @@ Key patterns:
 - `coEvery`/`every` for setup; `coVerify`/`verify` for assertions.
 - GIVEN-WHEN-THEN structure; use `runTest` for suspend code.
 
-### 6.3 Integration Tests
+### 7.3 Integration Tests
 - Real implementations + spies from `testFixtures`; avoid MockK inside the flow.
 - Good for ViewModel + Use Case + Repository stacks and persistence.
 
-### 6.4 Compose UI Tests (`src/androidTest`)
+### 7.4 Compose UI Tests (`src/androidTest`)
 - Test Composables directly; pass `uiState` and callbacks.
 - Use semantic matchers (`onNodeWithText`, `onNodeWithContentDescription`).
 
-### 6.5 Test Doubles
+### 7.5 Test Doubles
 - **Unit**: mocks only (`@MockK`).
 - **Integration**: spies/fakes from `testFixtures`.
 - **Compose UI**: mock ViewModel, real Composables.
 
-### 6.6 Quick Reference
+### 7.6 Quick Reference
 
 | Test Type | Location | Framework | Pattern | Coverage |
 |-----------|----------|-----------|---------|----------|
@@ -312,9 +715,9 @@ Key patterns:
 
 ---
 
-## 7. Build & Tooling
+## 8. Build & Tooling
 
-### 7.1 Convention Plugins
+### 8.1 Convention Plugins
 
 | Plugin                           | Apply Method                      | Purpose                                     |
 |----------------------------------|-----------------------------------|---------------------------------------------|
@@ -327,7 +730,7 @@ Key patterns:
 
 Apply via `alias(libs.plugins.*)` inside module `*.gradle.kts` files.
 
-### 7.2 Build Commands
+### 8.2 Build Commands
 
 ```bash
 ./gradlew build                    # Build entire project (debug)
@@ -337,7 +740,7 @@ Apply via `alias(libs.plugins.*)` inside module `*.gradle.kts` files.
 ./gradlew :app:assembleDebug       # Debug APK
 ```
 
-### 7.3 Testing Commands
+### 8.3 Testing Commands
 
 ```bash
 ./gradlew test                         # All unit tests
@@ -348,7 +751,7 @@ Apply via `alias(libs.plugins.*)` inside module `*.gradle.kts` files.
 ./gradlew test --info                  # Unit tests with extra info
 ```
 
-### 7.4 Gradle Sync & Validation
+### 8.4 Gradle Sync & Validation
 
 ```bash
 ./gradlew sync
@@ -356,7 +759,7 @@ Apply via `alias(libs.plugins.*)` inside module `*.gradle.kts` files.
 ./gradlew wrapper --gradle-version=<version>
 ```
 
-### 7.5 Cleaning
+### 8.5 Cleaning
 
 ```bash
 ./gradlew clean
@@ -364,7 +767,7 @@ Apply via `alias(libs.plugins.*)` inside module `*.gradle.kts` files.
 ./gradlew :feature:auth:auth_ui:clean
 ```
 
-### 7.6 Linting & Analysis (if configured)
+### 8.6 Linting & Analysis (if configured)
 
 ```bash
 ./gradlew lint
@@ -373,9 +776,9 @@ Apply via `alias(libs.plugins.*)` inside module `*.gradle.kts` files.
 
 ---
 
-## 8. Implementation Patterns
+## 9. Implementation Patterns
 
-### 8.1 Use Cases
+### 9.1 Use Cases
 
 **Fun Interface (with DI)**
 ```kotlin
@@ -392,66 +795,58 @@ class ValidateMovie : IsMovieValid {
 }
 ```
 
-### 8.2 Layer Responsibilities
-- Prefer a Repository when coordinating multiple data sources or shared state.
-- Skip Repository when a single data source suffices; let the data source implement the use case.
+### 9.2 Layer Responsibilities
 - Repositories and DataSources stay concrete (no `Impl` suffix); interfaces live in domain.
 - A repository may implement multiple use case interfaces if it owns the operations.
 
-### 8.3 Error Handling with Arrow
+### 9.3 Error Handling with Arrow
 - Model errors with the shared `AppError` type (`feature/core/core_domain/entities/AppError.kt`), which wraps an `AppErrorCode` enum (`SERVER`, `NOT_FOUND`, `BAD_REQUEST`, `LOCAL_ERROR`).
 - Use `Either<AppError, Success>` from use cases; map/propagate explicitly.
 
-### 8.4 Dependency Injection with Hilt
+### 9.4 Dependency Injection with Hilt
 - Declare modules with `@Module` + `@InstallIn`; use `@Binds` for interfaces and `@Provides` for factories.
 - ViewModels annotated with `@HiltViewModel` and injected constructor params.
 
-### 8.5 StateFlow for UI State
+### 9.5 StateFlow for UI State
 - Expose immutable `StateFlow` from ViewModels; keep mutable state private.
 
-### 8.6 Type-Safe Navigation
+### 9.6 Type-Safe Navigation
 - Use `@Serializable` routes with `kotlinx.serialization` and Compose navigation.
 
-### 8.7 Room Setup (Framework Layer)
+### 9.7 Room Setup (Framework Layer)
 - Entities annotated with `@Entity`; DAOs with `@Dao` and typed queries.
 - Databases extend `RoomDatabase`; expose DAOs.
 
-### 8.8 Firebase & Analytics
+### 9.8 Firebase & Analytics
 - Firebase (Analytics, Crashlytics, Performance, FCM) configured via `google-services.json` and Google Services plugin in `app`.
 
 ---
 
-## 9. Practices & Guidance
+## 10. Practices & Guidance
 
-### 9.1 Before Making Changes
+### 10.1 Before Making Changes
 - Identify layer/module impact; domain stays Android-free.
 - Follow convention plugins; avoid manual dependency drift.
-- Review relevant tests; extend or add before coding behavioral logic (ViewModels, use cases with implementation, repositories, data sources); follow Red-Green-Refactor for behavior changes.
-- Skip tests for pure structures (entities, interfaces, DI config, constants).
+- Follow TDD workflow defined in section 6 for behavioral changes.
 
-### 9.2 Adding Dependencies
+### 10.2 Adding Dependencies
 - Add version + alias in `gradle/libs.versions.toml`.
 - If shared by module type, add to convention plugin; otherwise, declare in that module.
 - Never hardcode versions in module Gradle files.
 
-### 9.3 Creating Modules
+### 10.3 Creating Modules
 - Layout: `feature/{name}/{name}_domain`, `{name}_framework`, `{name}_ui`.
 - Register in `settings.gradle.kts` with exact names.
 - Apply correct convention plugin per layer.
 
-### 9.4 Testing Guidelines (quick)
-- Unit: mocks only; isolate component.
-- Integration: real impl + spies; avoid mocks.
-- Compose UI: mock ViewModel; real Composables.
-
-### 9.5 Code Review Checklist
+### 10.4 Code Review Checklist
 - No Android deps in domain.
 - Error handling via `Either<Error, Success>`.
 - Dependencies declared via version catalog.
 - Compose state hoisted; navigation type-safe.
 - No hardcoded strings; resources used.
 
-### 9.6 Debugging Tips
+### 10.5 Debugging Tips
 - Gradle sync issues → `./gradlew sync` or IDE cache invalidation.
 - KSP errors → check `@Inject`/`@Provides` correctness.
 - Navigation issues → verify `@Serializable` and route definitions.
@@ -459,7 +854,7 @@ class ValidateMovie : IsMovieValid {
 
 ---
 
-## 10. Glossary
+## 11. Glossary
 
 | Term          | Definition                                                    |
 |---------------|---------------------------------------------------------------|
@@ -479,7 +874,7 @@ class ValidateMovie : IsMovieValid {
 
 ---
 
-## 11. Quick Links
+## 12. Quick Links
 
 - Kotlin Docs: https://kotlinlang.org/docs/
 - Jetpack Compose: https://developer.android.com/develop/ui/compose
@@ -492,6 +887,6 @@ class ValidateMovie : IsMovieValid {
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: December 29, 2025  
+**Document Version**: 2.0  
+**Last Updated**: January 5, 2026  
 **Maintained By**: David Luna
