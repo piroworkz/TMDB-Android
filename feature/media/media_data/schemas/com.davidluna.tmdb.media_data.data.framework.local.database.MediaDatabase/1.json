@@ -1,0 +1,424 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "0434b8a015f0dd03f0c2fc875cbb3227",
+    "entities": [
+      {
+        "tableName": "RemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lastPage` INTEGER NOT NULL, `category` TEXT NOT NULL, `reachedEndOfPagination` INTEGER NOT NULL, `savedOnTimeMillis` INTEGER NOT NULL, PRIMARY KEY(`category`))",
+        "fields": [
+          {
+            "fieldPath": "lastPage",
+            "columnName": "lastPage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reachedEndOfPagination",
+            "columnName": "reachedEndOfPagination",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "savedOnTimeMillis",
+            "columnName": "savedOnTimeMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "category"
+          ]
+        }
+      },
+      {
+        "tableName": "RoomCast",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`character` TEXT NOT NULL, `castId` INTEGER NOT NULL, `mediaId` INTEGER NOT NULL, `name` TEXT NOT NULL, `profilePath` TEXT NOT NULL, PRIMARY KEY(`castId`, `mediaId`), FOREIGN KEY(`mediaId`) REFERENCES `RoomMediaDetails`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "character",
+            "columnName": "character",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "castId",
+            "columnName": "castId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaId",
+            "columnName": "mediaId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "profilePath",
+            "columnName": "profilePath",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "castId",
+            "mediaId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_RoomCast_mediaId",
+            "unique": false,
+            "columnNames": [
+              "mediaId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_RoomCast_mediaId` ON `${TABLE_NAME}` (`mediaId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "RoomMediaDetails",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mediaId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "RoomCrew",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`adult` INTEGER NOT NULL, `creditId` TEXT NOT NULL, `department` TEXT NOT NULL, `gender` INTEGER NOT NULL, `id` INTEGER NOT NULL, `job` TEXT NOT NULL, `knownForDepartment` TEXT NOT NULL, `name` TEXT NOT NULL, `originalName` TEXT NOT NULL, `popularity` REAL NOT NULL, `profilePath` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "adult",
+            "columnName": "adult",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creditId",
+            "columnName": "creditId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "department",
+            "columnName": "department",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "job",
+            "columnName": "job",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "knownForDepartment",
+            "columnName": "knownForDepartment",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originalName",
+            "columnName": "originalName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "popularity",
+            "columnName": "popularity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "profilePath",
+            "columnName": "profilePath",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "RoomGenre",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "RoomImage",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`filePath` TEXT NOT NULL, `mediaId` INTEGER NOT NULL, PRIMARY KEY(`filePath`, `mediaId`), FOREIGN KEY(`mediaId`) REFERENCES `RoomMediaDetails`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "filePath",
+            "columnName": "filePath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaId",
+            "columnName": "mediaId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "filePath",
+            "mediaId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_RoomImage_mediaId",
+            "unique": false,
+            "columnNames": [
+              "mediaId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_RoomImage_mediaId` ON `${TABLE_NAME}` (`mediaId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "RoomMediaDetails",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mediaId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "RoomMedia",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`category` TEXT NOT NULL, `id` INTEGER NOT NULL, `posterPath` TEXT NOT NULL, `title` TEXT NOT NULL, PRIMARY KEY(`id`, `category`))",
+        "fields": [
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "posterPath",
+            "columnName": "posterPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id",
+            "category"
+          ]
+        }
+      },
+      {
+        "tableName": "RoomMediaDetails",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `releaseDate` TEXT NOT NULL, `runtime` INTEGER NOT NULL, `posterPath` TEXT NOT NULL, `backdropPath` TEXT NOT NULL, `overview` TEXT NOT NULL, `tagline` TEXT NOT NULL, `hasVideo` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `genres` TEXT NOT NULL, `savedOnTimeMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "releaseDate",
+            "columnName": "releaseDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runtime",
+            "columnName": "runtime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "posterPath",
+            "columnName": "posterPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "backdropPath",
+            "columnName": "backdropPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "overview",
+            "columnName": "overview",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tagline",
+            "columnName": "tagline",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasVideo",
+            "columnName": "hasVideo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "voteAverage",
+            "columnName": "voteAverage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "genres",
+            "columnName": "genres",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "savedOnTimeMillis",
+            "columnName": "savedOnTimeMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "RoomVideo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `key` TEXT NOT NULL, `mediaId` INTEGER NOT NULL, `savedTimeMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "key",
+            "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaId",
+            "columnName": "mediaId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "savedTimeMillis",
+            "columnName": "savedTimeMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0434b8a015f0dd03f0c2fc875cbb3227')"
+    ]
+  }
+}
