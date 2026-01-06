@@ -15,7 +15,6 @@ import com.davidluna.tmdb.media_framework.data.repositories.CatalogVideosReposit
 import com.davidluna.tmdb.media_framework.fakes.fakeVideos
 import com.davidluna.tmdb.media_ui.view.utils.UiState
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -54,7 +53,7 @@ class VideoPlayerIntegrationTest {
             val expected = UiState.Success(data = fakeVideos)
             val sut = buildSUT()
 
-            sut.mediaVideos.onEach { println("<-- $it") }.test {
+            sut.mediaVideos.test {
                 skipItems(1)
                 val actual = awaitItem()
                 assertEquals(expected, actual)
@@ -70,7 +69,7 @@ class VideoPlayerIntegrationTest {
             val sut = buildSUT()
 
             (mediaVideosDao as MediaVideosDaoSpy).setError(exception)
-            sut.mediaVideos.onEach { println("<-- $it") }.test {
+            sut.mediaVideos.test {
                 skipItems(1)
                 val actual = awaitItem()
 

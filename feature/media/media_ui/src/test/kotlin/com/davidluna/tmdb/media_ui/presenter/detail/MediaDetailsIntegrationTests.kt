@@ -20,7 +20,6 @@ import com.davidluna.tmdb.media_ui.view.utils.UiState
 import com.davidluna.tmdb.test_shared.reader.Reader
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -59,7 +58,7 @@ class MediaDetailsIntegrationTests {
             val expected = UiState.Success(data = fakeMediaDetails)
             val sut = buildSUT()
 
-            sut.mediaDetails.onEach { println("<-- $it") }.test {
+            sut.mediaDetails.test {
                 skipItems(1)
                 val actual = awaitItem()
                 assertEquals(expected, actual)
@@ -75,7 +74,7 @@ class MediaDetailsIntegrationTests {
             val sut = buildSUT()
 
             (mediaDetailsDao as MediaDetailsDaoSpy).setError(exception)
-            sut.mediaDetails.onEach { println("<-- $it") }.test {
+            sut.mediaDetails.test {
                 skipItems(1)
                 val actual = awaitItem()
 
@@ -92,7 +91,7 @@ class MediaDetailsIntegrationTests {
             val sut = buildSUT()
 
             (remoteMediaService as RemoteMediaServiceSpy).throwError(true)
-            sut.mediaDetails.onEach { println("<-- $it") }.test {
+            sut.mediaDetails.test {
                 skipItems(1)
                 val actual = awaitItem()
 
