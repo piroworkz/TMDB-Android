@@ -6,9 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.davidluna.tmdb.auth_domain.entities.LoginMethod
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.PASSWORD
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.USERNAME
-import com.davidluna.tmdb.auth_domain.usecases.CloseSession
-import com.davidluna.tmdb.auth_domain.usecases.ValidateInput
 import com.davidluna.tmdb.auth_domain.usecases.OpenSession
+import com.davidluna.tmdb.auth_domain.usecases.ValidateInput
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.GuestButtonClicked
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.LoginButtonClicked
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetPassword
@@ -27,7 +26,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val closeSession: CloseSession,
     private val ioDispatcher: CoroutineDispatcher,
     private val openSession: OpenSession,
     private val validateInput: ValidateInput,
@@ -62,16 +60,10 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun login(username: String, password: String): Unit = launchOnIO {
-        if (validateLoginForm() && endSession()) {
+        if (validateLoginForm(username, password)) {
             val result = openSession.open(LoginMethod.AuthCredentials(username, password))
             _state.update { s -> s.copy(appError = result, isLoggedIn = result == null) }
         }
-    }
-
-    private suspend fun endSession(): Boolean {
-        val result = closeSession.close()
-        _state.update { s -> s.copy(appError = result) }
-        return result == null
     }
 
     private fun setPassword(password: String?) {
@@ -94,11 +86,13 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun validateLoginForm(): Boolean {
-        val usernameError = validateInput(_state.value.username, USERNAME)
-        val passwordError = validateInput(_state.value.password, PASSWORD)
+    private fun validateLoginForm(username: String, password: String): Boolean {
+        val usernameError = validateInput(username, USERNAME)
+        val passwordError = validateInput(password, PASSWORD)
         _state.update {
             it.copy(
+                username = username,
+                password = password,
                 usernameError = usernameError?.message,
                 passwordError = passwordError?.message
             )

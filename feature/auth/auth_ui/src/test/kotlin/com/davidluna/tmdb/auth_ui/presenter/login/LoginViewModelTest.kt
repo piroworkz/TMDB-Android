@@ -1,31 +1,21 @@
 package com.davidluna.tmdb.auth_ui.presenter.login
 
 import app.cash.turbine.test
-import arrow.core.left
-import arrow.core.right
-import com.davidluna.tmdb.auth_domain.entities.TextInputError.Required
+import com.davidluna.tmdb.auth_domain.entities.LoginMethod
+import com.davidluna.tmdb.auth_domain.entities.TextInputError
 import com.davidluna.tmdb.auth_domain.usecases.OpenSession
-import com.davidluna.tmdb.auth_domain.usecases.GetTextInputError
+import com.davidluna.tmdb.auth_domain.usecases.ValidateInput
 import com.davidluna.tmdb.auth_ui.fakes.fakeAppError
-import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.GuestButtonClicked
-import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.LoginButtonClicked
-import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetPassword
-import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetUsername
-import com.davidluna.tmdb.auth_domain.usecases.CloseSession
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.called
 import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 
@@ -38,239 +28,257 @@ class LoginViewModelTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var closeSession: CloseSession
-
-    @MockK
-    private lateinit var authenticateWithoutCredentials: AuthenticateWithoutCredentials
-
-    @MockK
     private lateinit var openSession: OpenSession
 
     @MockK
-    private lateinit var getTextInputError: GetTextInputError
-
-    private val initialState = LoginViewModel.State()
+    private lateinit var validateInput: ValidateInput
 
     @Test
-    fun `GIVEN ViewModel WHEN is created THEN verify no side effects`() {
+    fun `GIVEN sut WHEN is created THEN verify no side effects`() {
         buildSUT()
 
-        verify { closeSession wasNot called }
-        verify { authenticateWithoutCredentials wasNot called }
         verify { openSession wasNot called }
-        verify { getTextInputError wasNot called }
+        verify { validateInput wasNot called }
     }
 
     @Test
-    fun `GIVEN ViewModel initialized WHEN getState is called THEN initial state is correct`() {
-        val sut = buildSUT()
-
-        val actual = sut.state.value
-
-        assertEquals(initialState, actual)
-    }
-
-    @Test
-    fun `GIVEN appError is set WHEN ResetAppError event is dispatched THEN appError is cleared`() =
+    fun `GIVEN valid password WHEN onEvent SetPassword THEN delivers password state update`(): Unit =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            val password = "password"
+            val expected = LoginViewModel.State().copy(password = password)
 
-            coEvery { closeSession.invoke() } returns fakeAppError.left()
-            every { getTextInputError.invoke(any(), any()) } returns null
-
-            sut.onEvent(LoginButtonClicked("username", "password"))
-
-            sut.state.test {
-                val initialValue = awaitItem().appError
-                val onFailure = awaitItem().appError
-                sut.onEvent(LoginEvent.ResetAppError)
-                val actual = awaitItem().appError
-
-                assertNull(initialValue)
-                assertNotNull(onFailure)
-                assertNull(actual)
-                cancelAndConsumeRemainingEvents()
-            }
-        }
-
-    @Test
-    fun `GIVEN guest login succeeds WHEN GuestButtonClicked event is dispatched THEN isLoggedIn is true`() =
-        coroutineTestRule.scope.runTest {
-            val sut = buildSUT()
-            val expected = initialState.copy(isLoggedIn = true)
-
-            coEvery { authenticateWithoutCredentials.invoke() } returns Unit.right()
-
-            sut.onEvent(GuestButtonClicked)
+            coEvery { validateInput(any(), any()) } returns null
 
             sut.state.test {
                 awaitItem()
+                sut.onEvent(LoginEvent.SetPassword(password))
                 val actual = awaitItem()
-
                 assertEquals(expected, actual)
-                cancelAndConsumeRemainingEvents()
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
-    fun `GIVEN guest login fails WHEN GuestButtonClicked event is dispatched THEN appError is set`() =
+    fun `GIVEN invalid password WHEN onEvent SetPassword THEN delivers passwordError state update`(): Unit =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            val invalidPassword = "***"
+            val expected = TextInputError.InvalidLength(8)
 
-            coEvery { authenticateWithoutCredentials() } returns fakeAppError.left()
-            sut.onEvent(GuestButtonClicked)
+            coEvery { validateInput(any(), any()) } returns expected
 
             sut.state.test {
-                skipItems(1)
-                val actual = awaitItem().appError
-
-                assertNotNull(actual)
-                cancelAndConsumeRemainingEvents()
-            }
-
-        }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `GIVEN invalid username or password WHEN LoginButtonClicked THEN login is not attempted`() =
-        coroutineTestRule.scope.runTest {
-            val sut = buildSUT()
-            every {
-                getTextInputError(
-                    any(), any()
-                )
-            } returns null andThen Required
-
-            sut.onEvent(LoginButtonClicked("username", ""))
-            advanceUntilIdle()
-
-            coVerify(exactly = 0) { closeSession() }
-            coVerify(exactly = 0) { openSession.invoke(any()) }
-        }
-
-    @Test
-    fun `GIVEN valid credentials AND closeSession fails WHEN LoginButtonClicked THEN appError is set`() =
-        coroutineTestRule.scope.runTest {
-            val sut = buildSUT()
-
-            coEvery { closeSession.invoke() } returns fakeAppError.left()
-            every { getTextInputError.invoke(any(), any()) } returns null
-
-            sut.onEvent(LoginButtonClicked("username", "password"))
-
-            sut.state.test {
-                val initialValue = awaitItem().appError
-                val actual = awaitItem().appError
-
-                assertNull(initialValue)
-                assertNotNull(actual)
-                cancelAndConsumeRemainingEvents()
+                awaitItem()
+                sut.onEvent(LoginEvent.SetPassword(invalidPassword))
+                val actual = awaitItem().passwordError
+                assertEquals(expected.message, actual)
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
-    fun `GIVEN valid credentials AND loginUser fails WHEN LoginButtonClicked THEN appError is set`() =
+    fun `GIVEN empty password WHEN onEvent SetPassword THEN delivers passwordError state update`(): Unit =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            val emptyPassword = String()
+            val expected = TextInputError.Required
 
-            coEvery { openSession.invoke(any()) } returns fakeAppError.left()
-            coEvery { closeSession.invoke() } returns true.right()
-            every { getTextInputError.invoke(any(), any()) } returns null
-
-            sut.onEvent(LoginButtonClicked("username", "password"))
+            coEvery { validateInput(any(), any()) } returns expected
 
             sut.state.test {
-                val initialValue = awaitItem().appError
-                val actual = awaitItem().appError
-
-                assertNull(initialValue)
-                assertNotNull(actual)
-                cancelAndConsumeRemainingEvents()
+                awaitItem()
+                sut.onEvent(LoginEvent.SetPassword(emptyPassword))
+                val actual = awaitItem().passwordError
+                assertEquals(expected.message, actual)
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
-    fun `GIVEN valid password WHEN SetPassword event is dispatched THEN password is updated and passwordError is cleared`() =
+    fun `GIVEN null password WHEN onEvent SetPassword THEN delivers passwordError state update`(): Unit =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
-            val expected = initialState.copy(password = "validPassword")
+            val nullPassword: String? = null
+            val expected = TextInputError.Required
 
-            every { getTextInputError(any(), any()) } returns Required andThen null
-            sut.onEvent(SetPassword("invalidPassword"))
+            coEvery { validateInput(any(), any()) } returns expected
 
             sut.state.test {
-                skipItems(1)
-                val invalidPasswordError = awaitItem()
-                sut.onEvent(SetPassword("validPassword"))
+                awaitItem()
+                sut.onEvent(LoginEvent.SetPassword(nullPassword))
+                val actual = awaitItem().passwordError
+                assertEquals(expected.message, actual)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+
+    @Test
+    fun `GIVEN valid username WHEN onEvent SetUsername THEN delivers username state update`(): Unit =
+        coroutineTestRule.scope.runTest {
+            val sut = buildSUT()
+            val username = "username@mail.com"
+            val expected = LoginViewModel.State().copy(username = username)
+
+            coEvery { validateInput(any(), any()) } returns null
+
+            sut.state.test {
+                awaitItem()
+                sut.onEvent(LoginEvent.SetUsername(username))
                 val actual = awaitItem()
-
-                assertEquals(Required.message, invalidPasswordError.passwordError)
                 assertEquals(expected, actual)
-                cancelAndConsumeRemainingEvents()
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
-    fun `GIVEN invalid password WHEN SetPassword is dispatched THEN password is updated and passwordError is set`() =
+    fun `GIVEN invalid username WHEN onEvent SetUsername THEN delivers usernameError state update`(): Unit =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            val invalidUsername = "***"
+            val expected = TextInputError.InvalidEmail
 
-            every { getTextInputError(any(), any()) } returns Required andThen null
-            sut.onEvent(SetPassword("invalidPassword"))
+            coEvery { validateInput(any(), any()) } returns expected
 
             sut.state.test {
-                skipItems(1)
-                val actual = awaitItem()
-
-                assertEquals(Required.message, actual.passwordError)
-                cancelAndConsumeRemainingEvents()
+                awaitItem()
+                sut.onEvent(LoginEvent.SetUsername(invalidUsername))
+                val actual = awaitItem().usernameError
+                assertEquals(expected.message, actual)
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
-    fun `GIVEN valid username WHEN SetUsername is dispatched THEN username is updated and usernameError is cleared`() =
+    fun `GIVEN empty username WHEN onEvent SetUsername THEN delivers usernameError state update`(): Unit =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
-            val expected = initialState.copy(username = "validUsername")
+            val emptyUsername = String()
+            val expected = TextInputError.Required
 
-            every { getTextInputError(any(), any()) } returns Required andThen null
-            sut.onEvent(SetUsername("invalidUsername"))
+            coEvery { validateInput(any(), any()) } returns expected
 
             sut.state.test {
-                skipItems(1)
-                val invalidUsernameError = awaitItem()
-                sut.onEvent(SetUsername("validUsername"))
-                val actual = awaitItem()
-
-                assertEquals(Required.message, invalidUsernameError.usernameError)
-                assertEquals(expected, actual)
-                cancelAndConsumeRemainingEvents()
+                awaitItem()
+                sut.onEvent(LoginEvent.SetUsername(emptyUsername))
+                val actual = awaitItem().usernameError
+                assertEquals(expected.message, actual)
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
-    fun `GIVEN invalid username WHEN SetUsername is dispatched THEN username is updated and usernameError is set`() =
+    fun `GIVEN null username WHEN onEvent SetUsername THEN delivers usernameError state update`(): Unit =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            val nullUsername: String? = null
+            val expected = TextInputError.Required
 
-            every { getTextInputError(any(), any()) } returns Required andThen null
-            sut.onEvent(SetUsername("invalidUsername"))
+            coEvery { validateInput(any(), any()) } returns expected
 
             sut.state.test {
-                skipItems(1)
-                val actual = awaitItem()
+                awaitItem()
+                sut.onEvent(LoginEvent.SetUsername(nullUsername))
+                val actual = awaitItem().usernameError
+                assertEquals(expected.message, actual)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
 
-                assertEquals(Required.message, actual.usernameError)
-                cancelAndConsumeRemainingEvents()
+    @Test
+    fun `GIVEN valid credentials WHEN LoginButtonClicked event AND open succeeds THEN delivers isLoggedIn state update`(): Unit =
+        coroutineTestRule.scope.runTest {
+            val sut = buildSUT()
+            val loginMethod = LoginMethod.AuthCredentials("username@mail.com", "password")
+
+            coEvery { validateInput(any(), any()) } returns null
+            coEvery { openSession.open(loginMethod) } returns null
+
+            sut.onEvent(LoginEvent.LoginButtonClicked(loginMethod.username, loginMethod.password))
+            sut.state.test {
+                awaitItem()
+                val actual = awaitItem().isLoggedIn
+                assertTrue(actual)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `GIVEN valid credentials WHEN LoginButtonClicked event AND open fails THEN delivers appError state update`(): Unit =
+        coroutineTestRule.scope.runTest {
+            val sut = buildSUT()
+            val loginMethod = LoginMethod.AuthCredentials("username@mail.com", "password")
+
+            coEvery { validateInput(any(), any()) } returns null
+            coEvery { openSession.open(loginMethod) } returns fakeAppError
+
+            sut.onEvent(LoginEvent.LoginButtonClicked(loginMethod.username, loginMethod.password))
+            sut.state.test {
+                awaitItem()
+                val actual = awaitItem().appError
+                assertEquals(fakeAppError, actual)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `GIVEN LoginMethod AsGuest WHEN GuestButtonClicked event AND open succeeds THEN delivers isLoggedIn state update`(): Unit =
+        coroutineTestRule.scope.runTest {
+            val sut = buildSUT()
+            val loginMethod = LoginMethod.AsGuest
+
+            coEvery { openSession.open(loginMethod) } returns null
+            sut.onEvent(LoginEvent.GuestButtonClicked)
+
+            sut.state.test {
+                awaitItem()
+                val actual = awaitItem().isLoggedIn
+                assertTrue(actual)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `GIVEN LoginMethod AsGuest WHEN GuestButtonClicked event AND open fails THEN delivers appError state update`(): Unit =
+        coroutineTestRule.scope.runTest {
+            val sut = buildSUT()
+            val loginMethod = LoginMethod.AsGuest
+
+            coEvery { openSession.open(loginMethod) } returns fakeAppError
+            sut.onEvent(LoginEvent.GuestButtonClicked)
+
+            sut.state.test {
+                awaitItem()
+                val actual = awaitItem().appError
+                assertEquals(fakeAppError, actual)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `GIVEN AppError state not null WHEN ResetAppError event THEN delivers appError state update`(): Unit =
+        coroutineTestRule.scope.runTest {
+            val sut = buildSUT()
+            val loginMethod = LoginMethod.AsGuest
+
+            coEvery { openSession.open(loginMethod) } returns fakeAppError
+            sut.onEvent(LoginEvent.GuestButtonClicked)
+
+            sut.state.test {
+                awaitItem()
+                awaitItem()
+                sut.onEvent(LoginEvent.ResetAppError)
+                val actual = awaitItem().appError
+                assertNull(actual)
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     private fun buildSUT(): LoginViewModel = LoginViewModel(
-        closeSession = closeSession,
         ioDispatcher = coroutineTestRule.dispatcher,
-        loginGuest = authenticateWithoutCredentials,
         openSession = openSession,
-        validateInput = getTextInputError
+        validateInput = validateInput
     )
 
 }
