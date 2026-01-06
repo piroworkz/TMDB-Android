@@ -17,7 +17,9 @@ import com.davidluna.tmdb.convention.libs.libs
 import com.davidluna.tmdb.convention.libs.retrofit
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.withType
 
 @Suppress("unused")
 class FrameworkModuleConventionPlugin : Plugin<Project> {
@@ -25,6 +27,7 @@ class FrameworkModuleConventionPlugin : Plugin<Project> {
         frameworkPluginManager
         androidLibrary
         dependencies()
+        dynamicAgentLoading()
     }
 
     private fun Project.dependencies() {
@@ -40,6 +43,12 @@ class FrameworkModuleConventionPlugin : Plugin<Project> {
             unitTestingBundle
             androidHiltTestingBundle
         }
+    }
+}
+
+fun Project.dynamicAgentLoading() {
+    tasks.withType<Test>().configureEach {
+        jvmArgs("-XX:+EnableDynamicAgentLoading")
     }
 }
 

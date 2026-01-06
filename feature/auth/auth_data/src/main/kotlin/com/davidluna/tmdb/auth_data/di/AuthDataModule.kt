@@ -6,7 +6,7 @@ import com.davidluna.tmdb.auth_data.repositories.AccountDetailsRepository
 import com.davidluna.tmdb.auth_data.repositories.AccountRepository
 import com.davidluna.tmdb.auth_data.repositories.AuthenticationRepository
 import com.davidluna.tmdb.auth_domain.usecases.CloseSession
-import com.davidluna.tmdb.auth_domain.usecases.GetTextInputError
+import com.davidluna.tmdb.auth_domain.usecases.ValidateInput
 import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
 import com.davidluna.tmdb.auth_domain.usecases.ObserveUserAccount
 import com.davidluna.tmdb.auth_domain.usecases.OpenSession
@@ -42,5 +42,5 @@ abstract class AuthDataModule {
     abstract fun bindQueryParametersSnapshot(source: QueryParametersSnapshot): ParametersSnapshot
 
     @Binds
-    abstract fun bindTextInputValidator(source: TextInputValidator): GetTextInputError
+    abstract fun bindTextInputValidator(source: TextInputValidator): ValidateInput
 }

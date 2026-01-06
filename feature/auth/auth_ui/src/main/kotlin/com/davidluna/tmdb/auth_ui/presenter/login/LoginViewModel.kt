@@ -7,7 +7,7 @@ import com.davidluna.tmdb.auth_domain.entities.LoginMethod
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.PASSWORD
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.USERNAME
 import com.davidluna.tmdb.auth_domain.usecases.CloseSession
-import com.davidluna.tmdb.auth_domain.usecases.GetTextInputError
+import com.davidluna.tmdb.auth_domain.usecases.ValidateInput
 import com.davidluna.tmdb.auth_domain.usecases.OpenSession
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.GuestButtonClicked
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.LoginButtonClicked
@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
     private val closeSession: CloseSession,
     private val ioDispatcher: CoroutineDispatcher,
     private val openSession: OpenSession,
-    private val validateInput: GetTextInputError,
+    private val validateInput: ValidateInput,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(State())
