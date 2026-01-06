@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import arrow.core.Either
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.media_domain.entities.Catalog
-import com.davidluna.tmdb.core_domain.entities.tryCatch
+import com.davidluna.tmdb.core_domain.entities.tryCatchSuspend
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +25,7 @@ class SelectedCatalogDataSource @Inject constructor(
             ?: Catalog.MOVIE_NOW_PLAYING
     }
 
-    override suspend fun invoke(endpoint: Catalog): Either<AppError, Boolean> = tryCatch {
+    override suspend fun invoke(endpoint: Catalog): Either<AppError, Boolean> = tryCatchSuspend {
         datastore.edit { preferences -> preferences[key] = endpoint.name }.contains(key)
     }
 }

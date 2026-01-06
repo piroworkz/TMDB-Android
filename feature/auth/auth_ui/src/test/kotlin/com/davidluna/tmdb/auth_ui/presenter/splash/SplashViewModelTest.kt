@@ -1,7 +1,7 @@
 package com.davidluna.tmdb.auth_ui.presenter.splash
 
 import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
-import com.davidluna.tmdb.auth_domain.usecases.IsGuestSessionValid
+import com.davidluna.tmdb.auth_domain.usecases.ValidateSession
 import com.davidluna.tmdb.auth_ui.fakes.fakeSession
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.every
@@ -25,7 +25,7 @@ class SplashViewModelTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var isGuestSessionValid: IsGuestSessionValid
+    private lateinit var validateSession: ValidateSession
 
     @MockK
     private lateinit var observeSession: ObserveSession
@@ -56,7 +56,7 @@ class SplashViewModelTest {
         coroutineTestRule.scope.runTest {
             val guestSession = fakeSession.copy(expiresAt = "guest_session_id", isGuest = true)
             every { observeSession() } returns flowOf(guestSession)
-            every { isGuestSessionValid(any()) } returns true
+            every { validateSession(any()) } returns true
             val sut = buildSUT()
 
             sut.checkSessionStatus()
@@ -72,7 +72,7 @@ class SplashViewModelTest {
         coroutineTestRule.scope.runTest {
             val guestSession = fakeSession.copy(expiresAt = "guest_session_id", isGuest = true)
             every { observeSession() } returns flowOf(guestSession)
-            every { isGuestSessionValid(any()) } returns false
+            every { validateSession(any()) } returns false
             val sut = buildSUT()
 
             sut.checkSessionStatus()
@@ -98,7 +98,7 @@ class SplashViewModelTest {
 
     private fun buildSUT() = SplashViewModel(
         ioDispatcher = coroutineTestRule.dispatcher,
-        isGuestSessionValid = isGuestSessionValid,
+        validateSession = validateSession,
         observeSession = observeSession
     )
 }

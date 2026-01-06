@@ -29,7 +29,7 @@ include(
     ":app",
     ":feature:auth:auth_ui",
     ":feature:auth:auth_domain",
-    ":feature:auth:auth_framework",
+    ":feature:auth:auth_data",
     ":feature:media:media_ui",
     ":feature:media:media_domain",
     ":feature:media:media_framework",

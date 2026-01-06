@@ -4,8 +4,7 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import com.davidluna.tmdb.auth_domain.entities.TextInputError.Required
-import com.davidluna.tmdb.auth_domain.usecases.LoginAsGuest
-import com.davidluna.tmdb.auth_domain.usecases.LoginWithCredentials
+import com.davidluna.tmdb.auth_domain.usecases.OpenSession
 import com.davidluna.tmdb.auth_domain.usecases.GetTextInputError
 import com.davidluna.tmdb.auth_ui.fakes.fakeAppError
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.GuestButtonClicked
@@ -42,10 +41,10 @@ class LoginViewModelTest {
     private lateinit var closeSession: CloseSession
 
     @MockK
-    private lateinit var loginAsGuest: LoginAsGuest
+    private lateinit var authenticateWithoutCredentials: AuthenticateWithoutCredentials
 
     @MockK
-    private lateinit var loginWithCredentials: LoginWithCredentials
+    private lateinit var openSession: OpenSession
 
     @MockK
     private lateinit var getTextInputError: GetTextInputError
@@ -57,8 +56,8 @@ class LoginViewModelTest {
         buildSUT()
 
         verify { closeSession wasNot called }
-        verify { loginAsGuest wasNot called }
-        verify { loginWithCredentials wasNot called }
+        verify { authenticateWithoutCredentials wasNot called }
+        verify { openSession wasNot called }
         verify { getTextInputError wasNot called }
     }
 
@@ -100,7 +99,7 @@ class LoginViewModelTest {
             val sut = buildSUT()
             val expected = initialState.copy(isLoggedIn = true)
 
-            coEvery { loginAsGuest.invoke() } returns Unit.right()
+            coEvery { authenticateWithoutCredentials.invoke() } returns Unit.right()
 
             sut.onEvent(GuestButtonClicked)
 
@@ -118,7 +117,7 @@ class LoginViewModelTest {
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
 
-            coEvery { loginAsGuest() } returns fakeAppError.left()
+            coEvery { authenticateWithoutCredentials() } returns fakeAppError.left()
             sut.onEvent(GuestButtonClicked)
 
             sut.state.test {
@@ -146,7 +145,7 @@ class LoginViewModelTest {
             advanceUntilIdle()
 
             coVerify(exactly = 0) { closeSession() }
-            coVerify(exactly = 0) { loginWithCredentials.invoke(any()) }
+            coVerify(exactly = 0) { openSession.invoke(any()) }
         }
 
     @Test
@@ -174,7 +173,7 @@ class LoginViewModelTest {
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
 
-            coEvery { loginWithCredentials.invoke(any()) } returns fakeAppError.left()
+            coEvery { openSession.invoke(any()) } returns fakeAppError.left()
             coEvery { closeSession.invoke() } returns true.right()
             every { getTextInputError.invoke(any(), any()) } returns null
 
@@ -269,8 +268,8 @@ class LoginViewModelTest {
     private fun buildSUT(): LoginViewModel = LoginViewModel(
         closeSession = closeSession,
         ioDispatcher = coroutineTestRule.dispatcher,
-        loginGuest = loginAsGuest,
-        loginUser = loginWithCredentials,
+        loginGuest = authenticateWithoutCredentials,
+        openSession = openSession,
         validateInput = getTextInputError
     )
 

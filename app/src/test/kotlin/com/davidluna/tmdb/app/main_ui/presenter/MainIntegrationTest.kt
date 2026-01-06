@@ -8,13 +8,9 @@ import com.davidluna.tmdb.app.main_ui.fakes.fakeUserAccount
 import com.davidluna.tmdb.app.main_ui.presenter.MainEvent.OnCloseSession
 import com.davidluna.tmdb.app.main_ui.presenter.MainEvent.ResetAppError
 import com.davidluna.tmdb.auth_domain.entities.UserAccount
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.AccountDao
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.AccountDaoSpy
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDao
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDaoSpy
-import com.davidluna.tmdb.auth_framework.data.local.database.entities.RoomUserAccount
-import com.davidluna.tmdb.auth_framework.data.sources.SessionCloser
-import com.davidluna.tmdb.auth_framework.data.sources.AccountStore
+import com.davidluna.tmdb.auth_data.data.local.database.dao.AccountDaoSpy
+import com.davidluna.tmdb.auth_data.data.local.database.dao.SessionDaoSpy
+import com.davidluna.tmdb.auth_data.repositories.AccountRepository
 import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.MediaType.TV_SHOW
@@ -42,8 +38,8 @@ class MainIntegrationTest {
     @get:Rule(order = 2)
     val coroutineTestRule = CoroutineTestRule()
 
-    private lateinit var accountDao: AccountDao
-    private lateinit var sessionDao: SessionDao
+    private lateinit var accountDao: com.davidluna.tmdb.auth_data.framework.local.database.dao.AccountDao
+    private lateinit var sessionDao: com.davidluna.tmdb.auth_data.framework.local.database.dao.SessionDao
     private lateinit var selectedCatalogDataSource: UpdateSelectedEndpoint
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -215,7 +211,7 @@ class MainIntegrationTest {
         selectedCatalogDataSource = buildSelectedCatalogDataSource()
 
         return MainViewModel(
-            observeUserAccount = AccountStore(accountDao),
+            observeUserAccount = AccountRepository(accountDao),
             closeSession = SessionCloser(accountDao, sessionDao),
             ioDispatcher = coroutineTestRule.dispatcher,
             updateMediaCatalogUseCase = selectedCatalogDataSource
@@ -232,8 +228,8 @@ class MainIntegrationTest {
             scope = coroutineTestRule.scope,
         ) { File(tmp, "test.preferences_pb") }
 
-    private fun UserAccount.toEntity(): RoomUserAccount {
-        return RoomUserAccount(
+    private fun UserAccount.toEntity(): com.davidluna.tmdb.auth_data.framework.local.database.entities.RoomUserAccount {
+        return _root_ide_package_.com.davidluna.tmdb.auth_data.framework.local.database.entities.RoomUserAccount(
             userId = userId,
             name = name,
             username = username,

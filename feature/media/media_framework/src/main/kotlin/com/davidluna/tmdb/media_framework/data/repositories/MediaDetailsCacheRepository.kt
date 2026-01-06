@@ -3,7 +3,7 @@ package com.davidluna.tmdb.media_framework.data.repositories
 import arrow.core.Either
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.AppErrorCode
-import com.davidluna.tmdb.core_domain.entities.tryCatch
+import com.davidluna.tmdb.core_domain.entities.tryCatchSuspend
 import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import com.davidluna.tmdb.core_framework.data.remote.model.buildModel
 import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
@@ -47,7 +47,7 @@ class MediaDetailsCacheRepository @Inject constructor(
 ) : GetMediaDetails {
 
     override suspend fun invoke(catalog: Catalog, mediaId: Int): Either<AppError, MediaDetails> =
-        tryCatch {
+        tryCatchSuspend {
             val endpoint = catalog.toEndpointPath(forId = mediaId)
             val localDetails: RoomMediaDetailsRelations? = local.getFullDetail(mediaId)
             val isCacheExpired = isCacheExpired(localDetails?.details?.savedOnTimeMillis)

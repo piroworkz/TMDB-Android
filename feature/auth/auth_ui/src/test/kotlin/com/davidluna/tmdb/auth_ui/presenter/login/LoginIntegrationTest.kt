@@ -2,19 +2,16 @@ package com.davidluna.tmdb.auth_ui.presenter.login
 
 import app.cash.turbine.test
 import com.davidluna.tmdb.auth_domain.entities.TextInputError
-import com.davidluna.tmdb.auth_framework.data.local.TextInputValidator
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.AccountDao
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.AccountDaoSpy
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDao
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDaoSpy
-import com.davidluna.tmdb.auth_framework.data.remote.RemoteAuthenticationService
-import com.davidluna.tmdb.auth_framework.data.remote.RemoteAuthenticationServiceSpy
-import com.davidluna.tmdb.auth_framework.data.remote.UserAccountService
-import com.davidluna.tmdb.auth_framework.data.remote.UserAccountServiceSpy
-import com.davidluna.tmdb.auth_framework.data.sources.SessionCloser
-import com.davidluna.tmdb.auth_framework.data.sources.GuestSessionRepository
-import com.davidluna.tmdb.auth_framework.data.sources.AuthenticationRepository
-import com.davidluna.tmdb.auth_framework.data.sources.UserAccountFetcher
+import com.davidluna.tmdb.auth_data.data.local.TextInputValidator
+import com.davidluna.tmdb.auth_data.data.local.database.dao.AccountDao
+import com.davidluna.tmdb.auth_data.data.local.database.dao.AccountDaoSpy
+import com.davidluna.tmdb.auth_data.data.local.database.dao.SessionDao
+import com.davidluna.tmdb.auth_data.data.local.database.dao.SessionDaoSpy
+import com.davidluna.tmdb.auth_data.data.remote.AuthenticationApi
+import com.davidluna.tmdb.auth_data.data.remote.RemoteAuthenticationApiSpy
+import com.davidluna.tmdb.auth_data.data.remote.UserAccountApi
+import com.davidluna.tmdb.auth_data.data.remote.UserAccountApiSpy
+import com.davidluna.tmdb.auth_data.repositories.AuthenticationRepository
 import com.davidluna.tmdb.auth_ui.fakes.fakePassword
 import com.davidluna.tmdb.auth_ui.fakes.fakeRemoteError
 import com.davidluna.tmdb.auth_ui.fakes.fakeUsername
@@ -39,9 +36,9 @@ class LoginIntegrationTest {
     val coroutineTestRule = CoroutineTestRule()
 
     private lateinit var accountDao: AccountDao
-    private lateinit var remoteAuthenticationService: RemoteAuthenticationService
+    private lateinit var authenticationApi: AuthenticationApi
     private lateinit var sessionDao: SessionDao
-    private lateinit var userAccountService: UserAccountService
+    private lateinit var userAccountApi: UserAccountApi
     private val initialState = LoginViewModel.State()
 
     @Test
@@ -66,7 +63,7 @@ class LoginIntegrationTest {
             val expected = fakeRemoteError.toAppError()
             val sut = buildSUT()
 
-            (remoteAuthenticationService as RemoteAuthenticationServiceSpy).throwError(true)
+            (this@LoginIntegrationTest.authenticationApi as RemoteAuthenticationApiSpy).throwError(true)
             sut.onEvent(LoginEvent.GuestButtonClicked)
 
             sut.state.onEach { println("<-- $it") }.test {
@@ -146,7 +143,7 @@ class LoginIntegrationTest {
             val expected = fakeRemoteError
             val sut = buildSUT()
 
-            (remoteAuthenticationService as RemoteAuthenticationServiceSpy).throwError(true)
+            (this@LoginIntegrationTest.authenticationApi as RemoteAuthenticationApiSpy).throwError(true)
             sut.onEvent(SetUsername(fakeUsername))
             sut.onEvent(SetPassword(fakePassword))
             sut.onEvent(LoginEvent.LoginButtonClicked(fakeUsername, fakePassword))
@@ -166,7 +163,7 @@ class LoginIntegrationTest {
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
 
-            (remoteAuthenticationService as RemoteAuthenticationServiceSpy).throwError(true)
+            (this@LoginIntegrationTest.authenticationApi as RemoteAuthenticationApiSpy).throwError(true)
             sut.onEvent(LoginEvent.GuestButtonClicked)
             sut.state.onEach { println("<-- $it") }.test {
                 awaitItem()
@@ -182,31 +179,31 @@ class LoginIntegrationTest {
 
     private fun buildSUT(): LoginViewModel {
         accountDao = AccountDaoSpy()
-        remoteAuthenticationService = RemoteAuthenticationServiceSpy()
+        this@LoginIntegrationTest.authenticationApi = RemoteAuthenticationApiSpy()
         sessionDao = SessionDaoSpy()
-        userAccountService = UserAccountServiceSpy()
+        userAccountApi = UserAccountApiSpy()
         val closeSessionUseCase = SessionCloser(
             accountDao = accountDao,
             sessionDao = sessionDao
         )
         val fetchUserAccountUseCase = UserAccountFetcher(
-            remote = userAccountService,
+            remote = userAccountApi,
             local = accountDao
         )
         val loginAsGuest = GuestSessionRepository(
-            remote = remoteAuthenticationService,
+            remote = this@LoginIntegrationTest.authenticationApi,
             local = sessionDao
         )
         val loginUser = AuthenticationRepository(
-            remote = remoteAuthenticationService,
+            authAPI = this@LoginIntegrationTest.authenticationApi,
             fetchUserAccount = fetchUserAccountUseCase,
-            local = sessionDao
+            sessionDao = sessionDao
         )
         return LoginViewModel(
             closeSession = closeSessionUseCase,
             ioDispatcher = coroutineTestRule.dispatcher,
             loginGuest = loginAsGuest,
-            loginUser = loginUser,
+            openSession = loginUser,
             validateInput = TextInputValidator()
         )
     }

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
-import com.davidluna.tmdb.auth_domain.usecases.IsGuestSessionValid
+import com.davidluna.tmdb.auth_domain.usecases.ValidateSession
 import com.davidluna.tmdb.auth_ui.view.splash.holder.CurrentScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
-    private val isGuestSessionValid: IsGuestSessionValid,
+    private val validateSession: ValidateSession,
     private val observeSession: ObserveSession,
 ) : ViewModel() {
 
@@ -40,10 +40,10 @@ class SplashViewModel @Inject constructor(
 
     fun checkSessionStatus() {
         viewModelScope.launch(ioDispatcher) {
-            val session = observeSession().first()
+            val session = observeSession.session.first()
             val isSessionValid: Boolean = when {
                 session == null -> false
-                session.isGuest -> isGuestSessionValid(session.expiresAt)
+                session.isGuest -> validateSession.isValid()
                 else -> true
             }
             isLoggedIn.value = isSessionValid

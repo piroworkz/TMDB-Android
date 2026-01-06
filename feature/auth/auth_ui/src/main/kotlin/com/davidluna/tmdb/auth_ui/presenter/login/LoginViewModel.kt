@@ -3,13 +3,12 @@ package com.davidluna.tmdb.auth_ui.presenter.login
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.davidluna.tmdb.auth_domain.entities.LoginRequest
+import com.davidluna.tmdb.auth_domain.entities.LoginMethod
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.PASSWORD
 import com.davidluna.tmdb.auth_domain.entities.TextInputType.USERNAME
 import com.davidluna.tmdb.auth_domain.usecases.CloseSession
 import com.davidluna.tmdb.auth_domain.usecases.GetTextInputError
-import com.davidluna.tmdb.auth_domain.usecases.LoginAsGuest
-import com.davidluna.tmdb.auth_domain.usecases.LoginWithCredentials
+import com.davidluna.tmdb.auth_domain.usecases.OpenSession
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.GuestButtonClicked
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.LoginButtonClicked
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetPassword
@@ -30,8 +29,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val closeSession: CloseSession,
     private val ioDispatcher: CoroutineDispatcher,
-    private val loginGuest: LoginAsGuest,
-    private val loginUser: LoginWithCredentials,
+    private val openSession: OpenSession,
     private val validateInput: GetTextInputError,
 ) : ViewModel() {
 
@@ -63,21 +61,17 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private suspend fun endSession(): Boolean = closeSession().fold(
-        ifLeft = {
-            _state.update { s -> s.copy(appError = it.toAppError()) }
-            false
-        },
-        ifRight = { true }
-    )
-
-    private fun login(username: String, password: String) = launchOnIO {
+    private fun login(username: String, password: String): Unit = launchOnIO {
         if (validateLoginForm() && endSession()) {
-            loginUser(LoginRequest(username, password)).fold(
-                ifLeft = { appError -> _state.update { s -> s.copy(appError = appError) } },
-                ifRight = { _ -> _state.update { s -> s.copy(isLoggedIn = true) } }
-            )
+            val result = openSession.open(LoginMethod.AuthCredentials(username, password))
+            _state.update { s -> s.copy(appError = result, isLoggedIn = result == null) }
         }
+    }
+
+    private suspend fun endSession(): Boolean {
+        val result = closeSession.close()
+        _state.update { s -> s.copy(appError = result) }
+        return result == null
     }
 
     private fun setPassword(password: String?) {
@@ -113,10 +107,8 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun guestLogin() = launchOnIO {
-        loginGuest().fold(
-            ifLeft = { appError -> _state.update { it.copy(appError = appError) } },
-            ifRight = { _ -> _state.update { it.copy(isLoggedIn = true) } }
-        )
+        val result = openSession.open(LoginMethod.AsGuest)
+        _state.update { it.copy(appError = result, isLoggedIn = result == null) }
     }
 
     private fun launchOnIO(action: suspend CoroutineScope.() -> Unit) {

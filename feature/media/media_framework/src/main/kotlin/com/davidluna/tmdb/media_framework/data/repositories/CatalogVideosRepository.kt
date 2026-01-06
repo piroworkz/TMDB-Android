@@ -3,7 +3,7 @@ package com.davidluna.tmdb.media_framework.data.repositories
 import arrow.core.Either
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.media_domain.entities.Catalog
-import com.davidluna.tmdb.core_domain.entities.tryCatch
+import com.davidluna.tmdb.core_domain.entities.tryCatchSuspend
 import com.davidluna.tmdb.media_framework.data.remote.model.toEndpointPath
 import com.davidluna.tmdb.media_domain.entities.details.Video
 import com.davidluna.tmdb.media_domain.usecases.GetCatalogVideos
@@ -24,7 +24,7 @@ class CatalogVideosRepository @Inject constructor(
     override suspend operator fun invoke(
         catalog: Catalog,
         mediaId: Int,
-    ): Either<AppError, List<Video>> = tryCatch {
+    ): Either<AppError, List<Video>> = tryCatchSuspend {
         val localVideos = local.getVideo(mediaId)
         val isCacheExpired = isCacheExpired(localVideos.firstOrNull()?.savedTimeMillis)
         if (localVideos.isNotEmpty() && !isCacheExpired) {

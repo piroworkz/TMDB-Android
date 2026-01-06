@@ -16,13 +16,6 @@ val fakeGuestSession = Session(
     expiresAt = "2025-08-10 23:03:47 UTC"
 )
 
-//Guest session
-//{
-//    "success": true,
-//    "guest_session_id": "1d77cf20ff3bf21ead146217af8e6b58",
-//    "expires_at": "2025-08-10 23:03:47 UTC"
-//}
-
 val fakeException = Exception("fake exception")
 
 val fakeAppError = fakeException.toAppError()

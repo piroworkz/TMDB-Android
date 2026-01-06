@@ -43,7 +43,7 @@ class MainViewModel @Inject constructor(
             initialValue = State()
         )
 
-    val userAccount: StateFlow<UserAccount?> = observeUserAccount()
+    val userAccount: StateFlow<UserAccount?> = observeUserAccount.userAccount
         .catch { e -> _state.update { it.copy(appError = e.toAppError()) } }
         .stateIn(
             scope = viewModelScope,
@@ -86,10 +86,8 @@ class MainViewModel @Inject constructor(
 
     private fun endSession() {
         viewModelScope.launch(ioDispatcher) {
-            closeSession().fold(
-                ifLeft = { e -> _state.update { it.copy(appError = e) } },
-                ifRight = { s -> _state.update { it.copy(isSessionClosed = s) } }
-            )
+            val result = closeSession.close()
+            _state.update { it.copy(appError = result, isSessionClosed = result == null) }
         }
     }
 }

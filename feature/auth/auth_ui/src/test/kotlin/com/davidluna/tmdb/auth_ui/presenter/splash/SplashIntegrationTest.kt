@@ -1,11 +1,9 @@
 package com.davidluna.tmdb.auth_ui.presenter.splash
 
 import com.davidluna.tmdb.auth_domain.entities.Session
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDao
-import com.davidluna.tmdb.auth_framework.data.local.database.dao.SessionDaoSpy
-import com.davidluna.tmdb.auth_framework.data.local.database.entities.RoomSession
-import com.davidluna.tmdb.auth_framework.data.sources.GuestSessionExpirationValidator
-import com.davidluna.tmdb.auth_framework.data.sources.SessionStore
+import com.davidluna.tmdb.auth_data.data.local.database.dao.SessionDao
+import com.davidluna.tmdb.auth_data.data.local.database.dao.SessionDaoSpy
+import com.davidluna.tmdb.auth_data.data.local.database.entities.RoomSession
 import com.davidluna.tmdb.auth_ui.fakes.fakeGuestSession
 import com.davidluna.tmdb.auth_ui.fakes.fakeSession
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
@@ -83,7 +81,7 @@ class SplashIntegrationTest {
 
         return SplashViewModel(
             ioDispatcher = coroutineTestRule.dispatcher,
-            isGuestSessionValid = isGuestSessionValid,
+            validateSession = isGuestSessionValid,
             observeSession = getSessionUseCase
         )
     }
