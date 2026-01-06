@@ -14,13 +14,15 @@ android {
     }
 }
 dependencies {
-    implementation(projects.feature.core.coreDomain)
-    implementation(projects.feature.core.coreFramework)
     implementation(projects.feature.auth.authDomain)
-    testImplementation(projects.testShared)
-    testFixturesImplementation(projects.testShared)
-    testFixturesImplementation(projects.feature.core.coreFramework)
+    implementation(projects.feature.core.coreDomain)
+    implementation(projects.feature.core.coreData)
     testFixturesImplementation(libs.arrowCore)
     testFixturesImplementation(libs.coroutinesTest)
     testFixturesImplementation(libs.kotlinStdLib)
+    testFixturesImplementation(projects.feature.auth.authDomain)
+    testFixturesImplementation(projects.feature.core.coreDomain)
+    testFixturesImplementation(projects.feature.core.coreData)
+    testFixturesImplementation(projects.testShared)
+    testImplementation(projects.testShared)
 }

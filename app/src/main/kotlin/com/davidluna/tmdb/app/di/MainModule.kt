@@ -1,8 +1,8 @@
 package com.davidluna.tmdb.app.di
 
-import com.davidluna.tmdb.core_framework.data.remote.call_adapter.NetworkCallAdapterFactory
-import com.davidluna.tmdb.core_framework.data.remote.interceptors.TmdbInterceptor
-import com.davidluna.tmdb.core_framework.di.qualifiers.BaseUrl
+import com.davidluna.tmdb.core_data.framework.remote.call_adapter.NetworkCallAdapterFactory
+import com.davidluna.tmdb.core_data.framework.remote.interceptors.TmdbInterceptor
+import com.davidluna.tmdb.core_data.di.qualifiers.BaseUrl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -24,7 +24,7 @@ object MainModule {
     fun provideClient(
         interceptor: TmdbInterceptor
     ): OkHttpClient = HttpLoggingInterceptor().run {
-        level = HttpLoggingInterceptor.Level.NONE
+        level = HttpLoggingInterceptor.Level.BASIC
         OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .addInterceptor(this)

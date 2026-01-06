@@ -11,7 +11,7 @@ import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
 import com.davidluna.tmdb.auth_domain.usecases.ObserveUserAccount
 import com.davidluna.tmdb.auth_domain.usecases.OpenSession
 import com.davidluna.tmdb.auth_domain.usecases.ValidateSession
-import com.davidluna.tmdb.core_framework.data.remote.interceptors.ParametersSnapshot
+import com.davidluna.tmdb.core_data.framework.remote.interceptors.ParametersSnapshot
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -14,7 +14,7 @@ dependencies {
     implementation(projects.feature.core.coreUi)
     implementation(projects.feature.auth.authDomain)
     testImplementation(projects.feature.auth.authData)
-    testImplementation(projects.feature.core.coreFramework)
+    testImplementation(projects.feature.core.coreData)
     testImplementation(projects.testShared)
     testImplementation(testFixtures(projects.feature.auth.authData))
 }

@@ -1,10 +1,9 @@
 package com.davidluna.tmdb.auth_data.framework.local
 
 import com.davidluna.tmdb.auth_data.framework.local.database.dao.SessionDao
-import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
 import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
-import com.davidluna.tmdb.core_framework.data.remote.interceptors.ParametersSnapshot
-import com.davidluna.tmdb.core_framework.data.remote.interceptors.ParametersSnapshot.Keys
+import com.davidluna.tmdb.core_data.framework.remote.interceptors.ParametersSnapshot
+import com.davidluna.tmdb.core_data.framework.remote.interceptors.ParametersSnapshot.Keys
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

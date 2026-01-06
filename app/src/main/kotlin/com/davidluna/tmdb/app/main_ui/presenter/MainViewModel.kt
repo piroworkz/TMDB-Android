@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(
     observeUserAccount: ObserveUserAccount,
     private val closeSession: CloseSession,
     private val ioDispatcher: CoroutineDispatcher,
-    private val updateMediaCatalogUseCase: UpdateSelectedEndpoint,
+    private val updateSelectedEndpoint: UpdateSelectedEndpoint,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(State())
@@ -62,21 +62,14 @@ class MainViewModel @Inject constructor(
     fun onEvent(event: MainEvent) = when (event) {
         OnCloseSession -> endSession()
         is UpdateBottomNavItems -> updateBottomNavItems(event.bottomNavItems)
-        is OnCatalogSelected -> updateSelectedCatalog(event.endpoint)
+        is OnCatalogSelected -> selectCatalog(event.endpoint)
         ResetAppError -> _state.update { it.copy(appError = null) }
     }
 
-    private fun updateSelectedCatalog(endpoint: Catalog) {
+    private fun selectCatalog(catalog: Catalog) {
         viewModelScope.launch(ioDispatcher) {
-            updateMediaCatalogUseCase(endpoint)
-                .fold(
-                    ifLeft = { e -> _state.update { it.copy(appError = e) } },
-                    ifRight = { success ->
-                        if (success) {
-                            _state.update { it.copy(selectedCatalog = endpoint) }
-                        }
-                    }
-                )
+            val result = updateSelectedEndpoint.update(catalog)
+            _state.update { it.copy(appError = result, selectedCatalog = catalog) }
         }
     }
 

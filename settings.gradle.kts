@@ -32,10 +32,10 @@ include(
     ":feature:auth:auth_data",
     ":feature:media:media_ui",
     ":feature:media:media_domain",
-    ":feature:media:media_framework",
+    ":feature:media:media_data",
     ":feature:core:core_ui",
     ":feature:core:core_domain",
-    ":feature:core:core_framework",
+    ":feature:core:core_data",
     ":test_shared"
 )
 

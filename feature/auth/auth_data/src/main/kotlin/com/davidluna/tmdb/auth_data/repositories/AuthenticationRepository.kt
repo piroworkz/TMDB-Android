@@ -18,7 +18,7 @@ import com.davidluna.tmdb.auth_domain.usecases.OpenSession
 import com.davidluna.tmdb.auth_domain.usecases.ValidateSession
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.tryCatchSuspend
-import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
+import com.davidluna.tmdb.core_data.framework.remote.model.toAppError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

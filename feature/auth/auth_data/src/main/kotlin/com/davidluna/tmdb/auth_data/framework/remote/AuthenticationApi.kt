@@ -6,7 +6,7 @@ import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteLoginRequest
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteSessionIdResponse
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteTokenResponse
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteValidateTokenWithLoginRequest
-import com.davidluna.tmdb.core_framework.data.remote.model.RemoteError
+import com.davidluna.tmdb.core_data.framework.remote.model.RemoteError
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

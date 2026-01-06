@@ -5,7 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import com.davidluna.tmdb.auth_data.framework.remote.UserAccountApi
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteUserAccountDetail
-import com.davidluna.tmdb.core_framework.data.remote.model.RemoteError
+import com.davidluna.tmdb.core_data.framework.remote.model.RemoteError
 import com.davidluna.tmdb.test_shared.reader.Reader
 
 class UserAccountApiSpy : UserAccountApi {

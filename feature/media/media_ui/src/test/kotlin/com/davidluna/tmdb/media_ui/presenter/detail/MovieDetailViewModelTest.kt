@@ -6,8 +6,8 @@ import arrow.core.right
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.usecases.GetMediaDetails
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
-import com.davidluna.tmdb.media_framework.fakes.fakeAppError
-import com.davidluna.tmdb.media_framework.fakes.fakeMediaDetails
+import com.davidluna.tmdb.media_data.fakes.fakeAppError
+import com.davidluna.tmdb.media_data.fakes.fakeMediaDetails
 import com.davidluna.tmdb.media_ui.view.utils.UiState
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.coEvery

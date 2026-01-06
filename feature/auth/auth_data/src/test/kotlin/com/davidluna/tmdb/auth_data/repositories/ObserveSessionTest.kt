@@ -2,8 +2,8 @@ package com.davidluna.tmdb.auth_data.repositories
 
 import androidx.sqlite.SQLiteException
 import app.cash.turbine.test
-import com.davidluna.tmdb.auth_data.fakes.fakeDomainSession
-import com.davidluna.tmdb.auth_data.fakes.fakeRoomSession
+import com.davidluna.tmdb.auth_data.data.fakeDomainSession
+import com.davidluna.tmdb.auth_data.data.fakeRoomSession
 import com.davidluna.tmdb.auth_data.framework.local.database.dao.SessionDao
 import com.davidluna.tmdb.auth_data.framework.remote.AuthenticationApi
 import com.davidluna.tmdb.auth_domain.usecases.ObserveSession

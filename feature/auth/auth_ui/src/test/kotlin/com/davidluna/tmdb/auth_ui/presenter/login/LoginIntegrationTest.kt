@@ -3,7 +3,7 @@ package com.davidluna.tmdb.auth_ui.presenter.login
 import app.cash.turbine.test
 import com.davidluna.tmdb.auth_data.data.local.database.dao.AccountDaoSpy
 import com.davidluna.tmdb.auth_data.data.local.database.dao.SessionDaoSpy
-import com.davidluna.tmdb.auth_data.data.remote.RemoteAuthenticationApiSpy
+import com.davidluna.tmdb.auth_data.data.remote.AuthenticationApiSpy
 import com.davidluna.tmdb.auth_data.data.remote.UserAccountApiSpy
 import com.davidluna.tmdb.auth_data.framework.local.TextInputValidator
 import com.davidluna.tmdb.auth_data.repositories.AccountRepository
@@ -30,7 +30,7 @@ class LoginIntegrationTest {
     private lateinit var openSession: OpenSession
     private lateinit var validateInput: ValidateInput
 
-    private lateinit var authAPI: RemoteAuthenticationApiSpy
+    private lateinit var authAPI: AuthenticationApiSpy
     private lateinit var sessionDao: SessionDaoSpy
     private lateinit var userAccountApi: UserAccountApiSpy
     private lateinit var accountDao: AccountDaoSpy
@@ -114,7 +114,7 @@ class LoginIntegrationTest {
         }
 
     private fun buildSut(): LoginViewModel {
-        authAPI = RemoteAuthenticationApiSpy()
+        authAPI = AuthenticationApiSpy()
         sessionDao = SessionDaoSpy()
         userAccountApi = UserAccountApiSpy()
         accountDao = AccountDaoSpy()

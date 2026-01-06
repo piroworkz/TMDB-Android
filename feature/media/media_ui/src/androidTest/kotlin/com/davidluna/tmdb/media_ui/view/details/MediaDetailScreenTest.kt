@@ -13,7 +13,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
 import com.davidluna.tmdb.media_domain.entities.details.MediaDetails
-import com.davidluna.tmdb.media_framework.fakes.fakeMediaDetails
+import com.davidluna.tmdb.media_data.fakes.fakeMediaDetails
 import junit.framework.TestCase.assertTrue
 import org.junit.Rule
 import org.junit.Test

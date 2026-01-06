@@ -14,7 +14,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.AppErrorCode
 import com.davidluna.tmdb.media_domain.entities.Media
-import com.davidluna.tmdb.media_framework.fakes.buildFakeMediaList
+import com.davidluna.tmdb.media_data.fakes.buildFakeMediaList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule

@@ -16,9 +16,9 @@ dependencies {
     implementation(libs.pagingRuntime)
     implementation(libs.pagingCompose)
     testImplementation(projects.testShared)
-    testImplementation(projects.feature.core.coreFramework)
-    testImplementation(testFixtures(projects.feature.media.mediaFramework))
-    androidTestImplementation(testFixtures(projects.feature.media.mediaFramework))
+    testImplementation(projects.feature.core.coreData)
+    testImplementation(testFixtures(projects.feature.media.mediaData))
+    androidTestImplementation(testFixtures(projects.feature.media.mediaData))
     testImplementation(libs.coreDatastore)
     testImplementation(libs.pagingTesting)
 }

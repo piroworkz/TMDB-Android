@@ -1,15 +1,13 @@
 package com.davidluna.tmdb.app.main_ui.presenter
 
 import app.cash.turbine.test
-import arrow.core.left
-import arrow.core.right
 import com.davidluna.tmdb.app.main_ui.fakes.fakeAppError
 import com.davidluna.tmdb.app.main_ui.fakes.fakeUserAccount
-import com.davidluna.tmdb.media_domain.entities.Catalog
-import com.davidluna.tmdb.media_domain.entities.MediaType
-import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.auth_domain.usecases.CloseSession
 import com.davidluna.tmdb.auth_domain.usecases.ObserveUserAccount
+import com.davidluna.tmdb.core_domain.entities.toAppError
+import com.davidluna.tmdb.media_domain.entities.Catalog
+import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
 import com.davidluna.tmdb.media_ui.view.utils.bottomBarItems
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
@@ -35,7 +33,7 @@ class MainViewModelTest {
     val coroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var getUserAccount: ObserveUserAccount
+    private lateinit var observeUserAccount: ObserveUserAccount
 
     @MockK
     private lateinit var closeSession: CloseSession
@@ -48,7 +46,7 @@ class MainViewModelTest {
     @Test
     fun `GIVEN initial state WHEN MainViewModel is created THEN state should be the initial one`() =
         coroutineTestRule.scope.runTest {
-            every { getUserAccount.invoke() } returns flowOf(null)
+            every { observeUserAccount.userAccount } returns flowOf(null)
             val sut = buildSUT()
 
             sut.state.test {
@@ -61,7 +59,7 @@ class MainViewModelTest {
     @Test
     fun `GIVEN no user account WHEN userAccount is observed THEN initial value should be null`() =
         coroutineTestRule.scope.runTest {
-            every { getUserAccount.invoke() } returns flowOf(null)
+            every { observeUserAccount.userAccount } returns flowOf(null)
             val sut = buildSUT()
 
             sut.userAccount.test {
@@ -76,7 +74,7 @@ class MainViewModelTest {
         coroutineTestRule.scope.runTest {
             val expected = fakeUserAccount
 
-            every { getUserAccount.invoke() } returns flowOf(expected)
+            every { observeUserAccount.userAccount } returns flowOf(expected)
             val sut = buildSUT()
 
             sut.userAccount.test {
@@ -96,7 +94,7 @@ class MainViewModelTest {
                 appError = exception.toAppError()
             )
 
-            every { getUserAccount.invoke() } returns flow { throw exception }
+            every { observeUserAccount.userAccount } returns flow { throw exception }
             val sut = buildSUT()
 
             val userAccountJob = launch { sut.userAccount.collect {} }
@@ -118,8 +116,8 @@ class MainViewModelTest {
         coroutineTestRule.scope.runTest {
             val expected = initialState.copy(isSessionClosed = true)
 
-            every { getUserAccount.invoke() } returns flowOf(null)
-            coEvery { closeSession.invoke() } returns true.right()
+            every { observeUserAccount.userAccount } returns flowOf(null)
+            coEvery { closeSession.close() } returns null
             val sut = buildSUT()
             sut.onEvent(MainEvent.OnCloseSession)
 
@@ -137,8 +135,8 @@ class MainViewModelTest {
         coroutineTestRule.scope.runTest {
             val expected = initialState
 
-            every { getUserAccount.invoke() } returns flowOf(null)
-            coEvery { closeSession.invoke() } returns false.right()
+            every { observeUserAccount.userAccount } returns flowOf(null)
+            coEvery { closeSession.close() } returns fakeAppError
             val sut = buildSUT()
             sut.onEvent(MainEvent.OnCloseSession)
 
@@ -155,8 +153,8 @@ class MainViewModelTest {
         coroutineTestRule.scope.runTest {
             val expected = initialState.copy(appError = fakeAppError)
 
-            every { getUserAccount.invoke() } returns flowOf(null)
-            coEvery { closeSession.invoke() } returns fakeAppError.left()
+            every { observeUserAccount.userAccount } returns flowOf(null)
+            coEvery { closeSession.close() } returns fakeAppError
             val sut = buildSUT()
             sut.onEvent(MainEvent.OnCloseSession)
 
@@ -175,7 +173,7 @@ class MainViewModelTest {
             val bottomNavItems = MediaType.TV_SHOW.bottomBarItems()
             val expected = initialState.copy(bottomNavItems = bottomNavItems)
 
-            every { getUserAccount.invoke() } returns flowOf(null)
+            every { observeUserAccount.userAccount } returns flowOf(null)
             val sut = buildSUT()
             sut.onEvent(MainEvent.UpdateBottomNavItems(bottomNavItems))
 
@@ -194,8 +192,8 @@ class MainViewModelTest {
             val selectedCatalog = Catalog.MOVIE_POPULAR
             val expected = initialState.copy(selectedCatalog = selectedCatalog)
 
-            every { getUserAccount.invoke() } returns flowOf(null)
-            coEvery { updateMediaCatalogUseCase.invoke(any()) } returns true.right()
+            every { observeUserAccount.userAccount } returns flowOf(null)
+            coEvery { updateMediaCatalogUseCase.update(any()) } returns null
 
             val sut = buildSUT()
             sut.onEvent(MainEvent.OnCatalogSelected(selectedCatalog))
@@ -212,11 +210,13 @@ class MainViewModelTest {
     @Test
     fun `GIVEN OnCatalogSelected event WHEN updateMediaCatalogUseCase returns an error THEN _state should be updated with AppError and selectedCatalog should remain unchanged`() =
         coroutineTestRule.scope.runTest {
-            val selectedCatalog = Catalog.MOVIE_POPULAR
-            val expected = initialState.copy(appError = fakeAppError)
 
-            every { getUserAccount.invoke() } returns flowOf(null)
-            coEvery { updateMediaCatalogUseCase.invoke(any()) } returns fakeAppError.left()
+            val selectedCatalog = Catalog.MOVIE_POPULAR
+            val expected =
+                initialState.copy(appError = fakeAppError, selectedCatalog = selectedCatalog)
+
+            every { observeUserAccount.userAccount } returns flowOf(null)
+            coEvery { updateMediaCatalogUseCase.update(any()) } returns fakeAppError
 
             val sut = buildSUT()
             sut.onEvent(MainEvent.OnCatalogSelected(selectedCatalog))
@@ -224,18 +224,17 @@ class MainViewModelTest {
             sut.state.test {
                 skipItems(1)
                 val actual = awaitItem()
-
                 assertEquals(expected, actual)
                 assertEquals(expected.selectedCatalog, actual.selectedCatalog)
-                cancel()
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
     fun `GIVEN _state appError is not null WHEN ResetAppError event THEN _state should be updated with appError = null`() =
         coroutineTestRule.scope.runTest {
-            every { getUserAccount.invoke() } returns flowOf(null)
-            coEvery { closeSession.invoke() } returns fakeAppError.left()
+            every { observeUserAccount.userAccount } returns flowOf(null)
+            coEvery { closeSession.close() } returns fakeAppError
 
             val sut = buildSUT()
             sut.onEvent(MainEvent.OnCloseSession)
@@ -251,9 +250,9 @@ class MainViewModelTest {
         }
 
     private fun buildSUT() = MainViewModel(
-        observeUserAccount = getUserAccount,
+        observeUserAccount = observeUserAccount,
         closeSession = closeSession,
         ioDispatcher = coroutineTestRule.dispatcher,
-        updateMediaCatalogUseCase = updateMediaCatalogUseCase
+        updateSelectedEndpoint = updateMediaCatalogUseCase
     )
 }

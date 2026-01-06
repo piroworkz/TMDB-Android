@@ -14,6 +14,11 @@ class SessionDaoSpy : SessionDao {
     private val shouldThrowException = AtomicBoolean(false)
     private var error: Throwable? = null
 
+    fun shouldThrowException(error: Throwable?) {
+        shouldThrowException.set(error != null)
+        this.error = error
+    }
+
     override suspend fun insertSession(session: RoomSession): Long {
         tryThrow()
         inMemoryDataBase.update { session }
@@ -32,11 +37,6 @@ class SessionDaoSpy : SessionDao {
         tryThrow()
         inMemoryDataBase.update { null }
         return 1
-    }
-
-    fun shouldThrowException(error: Throwable?) {
-        shouldThrowException.set(error != null)
-        this.error = error
     }
 
     private fun tryThrow() {

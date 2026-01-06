@@ -4,18 +4,18 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import app.cash.turbine.test
+import com.davidluna.tmdb.core_data.framework.remote.model.RemoteError
+import com.davidluna.tmdb.core_data.framework.remote.model.toAppError
 import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
-import com.davidluna.tmdb.core_framework.data.remote.model.RemoteError
-import com.davidluna.tmdb.core_framework.data.remote.model.toAppError
-import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDetailsDao
-import com.davidluna.tmdb.media_framework.data.local.database.dao.MediaDetailsDaoSpy
-import com.davidluna.tmdb.media_framework.data.local.storage.SelectedCatalogDataSource
-import com.davidluna.tmdb.media_framework.data.paging.CachePolicyValidator
-import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaService
-import com.davidluna.tmdb.media_framework.data.remote.services.RemoteMediaServiceSpy
-import com.davidluna.tmdb.media_framework.data.repositories.MediaDetailsCacheRepository
-import com.davidluna.tmdb.media_framework.fakes.fakeMediaDetails
+import com.davidluna.tmdb.media_data.data.framework.local.database.dao.MediaDetailsDao
+import com.davidluna.tmdb.media_data.data.framework.local.storage.SelectedCatalogDataSource
+import com.davidluna.tmdb.media_data.data.framework.paging.CachePolicyValidator
+import com.davidluna.tmdb.media_data.data.framework.remote.services.RemoteMediaService
+import com.davidluna.tmdb.media_data.data.local.database.dao.MediaDetailsDaoSpy
+import com.davidluna.tmdb.media_data.data.remote.services.RemoteMediaServiceSpy
+import com.davidluna.tmdb.media_data.data.repositories.MediaDetailsCacheRepository
+import com.davidluna.tmdb.media_data.fakes.fakeMediaDetails
 import com.davidluna.tmdb.media_ui.view.utils.UiState
 import com.davidluna.tmdb.test_shared.reader.Reader
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
@@ -127,8 +127,6 @@ class MediaDetailsIntegrationTests {
         ) { File(tmp, "test.preferences_pb") }
 
     private fun provideFakeGetCountryCodeUseCase(): ObserveCountryCode {
-        return object : ObserveCountryCode {
-            override fun invoke() = flowOf("US")
-        }
+        return ObserveCountryCode { flowOf("US") }
     }
 }

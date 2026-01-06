@@ -840,7 +840,7 @@ For E2E tests, MockWebServer is used with a custom rule. See `app/src/androidTes
    
    dependencies {
        implementation(projects.feature.newfeature.newfeatureDomain)
-       implementation(projects.feature.core.coreFramework)
+       implementation(projects.feature.core.coreData)
    }
    ```
 

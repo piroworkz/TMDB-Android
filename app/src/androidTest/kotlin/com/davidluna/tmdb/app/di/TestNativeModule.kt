@@ -2,8 +2,8 @@ package com.davidluna.tmdb.app.di
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.davidluna.tmdb.core_framework.di.qualifiers.ApiKey
-import com.davidluna.tmdb.core_framework.di.qualifiers.BaseUrl
+import com.davidluna.tmdb.core_data.di.qualifiers.ApiKey
+import com.davidluna.tmdb.core_data.di.qualifiers.BaseUrl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
