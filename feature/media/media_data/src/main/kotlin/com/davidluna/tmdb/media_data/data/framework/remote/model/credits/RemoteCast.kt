@@ -1,4 +1,4 @@
-package com.davidluna.tmdb.media_framework.data.remote.model.credits
+package com.davidluna.tmdb.media_data.data.framework.remote.model.credits
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
