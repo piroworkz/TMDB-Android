@@ -1,14 +1,11 @@
 package com.davidluna.tmdb.convention.plugins
 
+import com.davidluna.tmdb.convention.bundles.kotlinLibsDependencies
 import com.davidluna.tmdb.convention.constants.Constants
 import com.davidluna.tmdb.convention.helpers.alias
-import com.davidluna.tmdb.convention.helpers.implementation
 import com.davidluna.tmdb.convention.helpers.java
-import com.davidluna.tmdb.convention.libs.arrowCore
-import com.davidluna.tmdb.convention.libs.javaxInject
-import com.davidluna.tmdb.convention.libs.kotlinCoroutinesCore
-import com.davidluna.tmdb.convention.libs.kotlinJvm
-import com.davidluna.tmdb.convention.libs.libs
+import com.davidluna.tmdb.convention.helpers.kotlinJvm
+import com.davidluna.tmdb.convention.helpers.libs
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -51,9 +48,7 @@ class KotlinModuleConventionPlugin : Plugin<Project> {
 
     private fun Project.setupDependencies() {
         dependencies {
-            implementation(libs.kotlinCoroutinesCore)
-            implementation(libs.arrowCore)
-            implementation(libs.javaxInject)
+            kotlinLibsDependencies()
         }
     }
 }

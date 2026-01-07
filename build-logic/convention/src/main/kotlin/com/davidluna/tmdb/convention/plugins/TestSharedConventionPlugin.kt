@@ -2,14 +2,14 @@ package com.davidluna.tmdb.convention.plugins
 
 import com.davidluna.tmdb.convention.extensions.common.setJavaVersions
 import com.davidluna.tmdb.convention.helpers.alias
+import com.davidluna.tmdb.convention.helpers.coroutinesTest
 import com.davidluna.tmdb.convention.helpers.implementation
-import com.davidluna.tmdb.convention.libs.coroutinesTest
-import com.davidluna.tmdb.convention.libs.junit
-import com.davidluna.tmdb.convention.libs.kotlinJvm
-import com.davidluna.tmdb.convention.libs.kotlinSerialization
-import com.davidluna.tmdb.convention.libs.kotlinxSerializationJson
-import com.davidluna.tmdb.convention.libs.libs
-import com.davidluna.tmdb.convention.libs.mockk
+import com.davidluna.tmdb.convention.helpers.junit
+import com.davidluna.tmdb.convention.helpers.kotlinJvm
+import com.davidluna.tmdb.convention.helpers.kotlinSerialization
+import com.davidluna.tmdb.convention.helpers.kotlinxSerializationJson
+import com.davidluna.tmdb.convention.helpers.libs
+import com.davidluna.tmdb.convention.helpers.mockk
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies

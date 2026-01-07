@@ -1,19 +1,19 @@
 package com.davidluna.tmdb.convention.plugins
 
 import androidx.room.gradle.RoomExtension
+import com.davidluna.tmdb.convention.bundles.dataHttpClientDependencies
+import com.davidluna.tmdb.convention.bundles.koinAndroidDependencies
+import com.davidluna.tmdb.convention.bundles.kotlinLibsDependencies
+import com.davidluna.tmdb.convention.bundles.roomDependencies
 import com.davidluna.tmdb.convention.bundles.unitTestingBundle
 import com.davidluna.tmdb.convention.extensions.android_library.androidLibrary
 import com.davidluna.tmdb.convention.extensions.common.roomPluginManger
-import com.davidluna.tmdb.convention.extensions.libs.arrowCore
-import com.davidluna.tmdb.convention.extensions.libs.kotlinCoroutinesCore
-import com.davidluna.tmdb.convention.extensions.libs.kotlinxSerializationJson
-import com.davidluna.tmdb.convention.extensions.libs.libs
-import com.davidluna.tmdb.convention.extensions.libs.retrofit
-import com.davidluna.tmdb.convention.extensions.libs.roomCompiler
-import com.davidluna.tmdb.convention.extensions.libs.roomKtx
-import com.davidluna.tmdb.convention.extensions.libs.roomRuntime
 import com.davidluna.tmdb.convention.helpers.implementation
 import com.davidluna.tmdb.convention.helpers.ksp
+import com.davidluna.tmdb.convention.helpers.libs
+import com.davidluna.tmdb.convention.helpers.roomCompiler
+import com.davidluna.tmdb.convention.helpers.roomKtx
+import com.davidluna.tmdb.convention.helpers.roomRuntime
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -35,13 +35,10 @@ class RoomModuleConvention : Plugin<Project> {
 
     private fun Project.dependencies() {
         dependencies {
-            implementation(libs.roomRuntime)
-            implementation(libs.roomKtx)
-            ksp(libs.roomCompiler)
-            implementation(libs.retrofit)
-            implementation(libs.arrowCore)
-            implementation(libs.kotlinxSerializationJson)
-            implementation(libs.kotlinCoroutinesCore)
+            dataHttpClientDependencies()
+            koinAndroidDependencies()
+            kotlinLibsDependencies()
+            roomDependencies()
             unitTestingBundle
         }
     }

@@ -1,21 +1,21 @@
 package com.davidluna.tmdb.convention.bundles
 
+import com.davidluna.tmdb.convention.helpers.androidRunner
+import com.davidluna.tmdb.convention.helpers.androidTestCore
 import com.davidluna.tmdb.convention.helpers.androidTestImplementation
+import com.davidluna.tmdb.convention.helpers.androidTestRules
+import com.davidluna.tmdb.convention.helpers.composeBom
+import com.davidluna.tmdb.convention.helpers.coroutinesTest
 import com.davidluna.tmdb.convention.helpers.debugImplementation
+import com.davidluna.tmdb.convention.helpers.hiltCompiler
+import com.davidluna.tmdb.convention.helpers.hiltTest
 import com.davidluna.tmdb.convention.helpers.kspAndroidTest
-import com.davidluna.tmdb.convention.libs.androidRunner
-import com.davidluna.tmdb.convention.libs.androidTestCore
-import com.davidluna.tmdb.convention.libs.androidTestRules
-import com.davidluna.tmdb.convention.libs.composeBom
-import com.davidluna.tmdb.convention.libs.coroutinesTest
-import com.davidluna.tmdb.convention.libs.hiltCompiler
-import com.davidluna.tmdb.convention.libs.hiltTest
-import com.davidluna.tmdb.convention.libs.libs
-import com.davidluna.tmdb.convention.libs.mockWebServer
-import com.davidluna.tmdb.convention.libs.navigationTesting
-import com.davidluna.tmdb.convention.libs.playServicesLocation
-import com.davidluna.tmdb.convention.libs.uiTestJunit4
-import com.davidluna.tmdb.convention.libs.uiTestManifest
+import com.davidluna.tmdb.convention.helpers.libs
+import com.davidluna.tmdb.convention.helpers.mockWebServer
+import com.davidluna.tmdb.convention.helpers.navigationTesting
+import com.davidluna.tmdb.convention.helpers.playServicesLocation
+import com.davidluna.tmdb.convention.helpers.uiTestJunit4
+import com.davidluna.tmdb.convention.helpers.uiTestManifest
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 

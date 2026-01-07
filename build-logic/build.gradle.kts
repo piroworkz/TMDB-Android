@@ -1,4 +1,4 @@
-plugins {
-    alias(libs.plugins.kotlinJvm) apply false
-    alias(libs.plugins.ksp) apply false
-}
+//plugins {
+//    alias(libs.plugins.kotlinJvm) apply false
+//    alias(libs.plugins.ksp) apply false
+//}

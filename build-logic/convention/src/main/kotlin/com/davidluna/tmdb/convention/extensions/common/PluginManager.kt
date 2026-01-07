@@ -1,48 +1,38 @@
 package com.davidluna.tmdb.convention.extensions.common
 
 import com.davidluna.tmdb.convention.helpers.alias
-import com.davidluna.tmdb.convention.libs.androidApplication
-import com.davidluna.tmdb.convention.libs.androidLibrary
-import com.davidluna.tmdb.convention.libs.composeCompiler
-import com.davidluna.tmdb.convention.libs.googleServices
-import com.davidluna.tmdb.convention.libs.hiltPlugin
-import com.davidluna.tmdb.convention.libs.kotlinAndroid
-import com.davidluna.tmdb.convention.libs.kotlinSerialization
-import com.davidluna.tmdb.convention.libs.ksp
-import com.davidluna.tmdb.convention.libs.libs
-import com.davidluna.tmdb.convention.libs.roomPlugin
+import com.davidluna.tmdb.convention.helpers.androidApplication
+import com.davidluna.tmdb.convention.helpers.androidLibrary
+import com.davidluna.tmdb.convention.helpers.composeCompiler
+import com.davidluna.tmdb.convention.helpers.googleServices
+import com.davidluna.tmdb.convention.helpers.kotlinAndroid
+import com.davidluna.tmdb.convention.helpers.kotlinSerialization
+import com.davidluna.tmdb.convention.helpers.ksp
+import com.davidluna.tmdb.convention.helpers.libs
+import com.davidluna.tmdb.convention.helpers.roomPlugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.PluginManager
 
-private val Project.baseAndroidLibraryPluginManager: PluginManager
+internal val Project.applicationPluginManager: PluginManager
     get() = pluginManager.apply {
+        alias(libs.ksp)
+        alias(libs.androidApplication)
+        alias(libs.kotlinAndroid)
+        alias(libs.composeCompiler)
+        alias(libs.googleServices)
+    }
+
+val Project.frameworkPluginManager: PluginManager
+    get() = pluginManager.apply {
+        alias(libs.ksp)
         alias(libs.androidLibrary)
         alias(libs.kotlinAndroid)
-    }
-
-private val Project.hiltPluginManager: PluginManager
-    get() = pluginManager.apply {
-        alias(libs.hiltPlugin)
-        alias(libs.ksp)
-    }
-
-internal val Project.frameworkPluginManager: PluginManager
-    get() = baseAndroidLibraryPluginManager.apply {
-        hiltPluginManager
         alias(libs.kotlinSerialization)
     }
 
 internal val Project.uiPluginManager: PluginManager
     get() = frameworkPluginManager.apply {
         alias(libs.composeCompiler)
-    }
-
-internal val Project.applicationPluginManager: PluginManager
-    get() = hiltPluginManager.apply {
-        alias(libs.androidApplication)
-        alias(libs.kotlinAndroid)
-        alias(libs.composeCompiler)
-        alias(libs.googleServices)
     }
 
 internal val Project.roomPluginManger: PluginManager

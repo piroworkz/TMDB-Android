@@ -1,17 +1,17 @@
 package com.davidluna.tmdb.convention.bundles
 
+import com.davidluna.tmdb.convention.helpers.composeAnimation
+import com.davidluna.tmdb.convention.helpers.composeBom
+import com.davidluna.tmdb.convention.helpers.composeMaterial3
+import com.davidluna.tmdb.convention.helpers.composeNavigation
+import com.davidluna.tmdb.convention.helpers.composeUi
+import com.davidluna.tmdb.convention.helpers.composeUiGraphics
+import com.davidluna.tmdb.convention.helpers.composeUiTooling
+import com.davidluna.tmdb.convention.helpers.composeUiToolingPreview
 import com.davidluna.tmdb.convention.helpers.debugImplementation
+import com.davidluna.tmdb.convention.helpers.iconsExtended
 import com.davidluna.tmdb.convention.helpers.implementation
-import com.davidluna.tmdb.convention.libs.composeAnimation
-import com.davidluna.tmdb.convention.libs.composeBom
-import com.davidluna.tmdb.convention.libs.composeMaterial3
-import com.davidluna.tmdb.convention.libs.composeNavigation
-import com.davidluna.tmdb.convention.libs.composeUi
-import com.davidluna.tmdb.convention.libs.composeUiGraphics
-import com.davidluna.tmdb.convention.libs.composeUiTooling
-import com.davidluna.tmdb.convention.libs.composeUiToolingPreview
-import com.davidluna.tmdb.convention.libs.iconsExtended
-import com.davidluna.tmdb.convention.libs.libs
+import com.davidluna.tmdb.convention.helpers.libs
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
