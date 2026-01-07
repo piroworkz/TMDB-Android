@@ -1,6 +1,5 @@
 plugins {
     `kotlin-dsl`
-//    alias(libs.plugins.ksp)
 }
 
 group = "com.davidluna.tmdb"
@@ -9,7 +8,6 @@ dependencies {
     compileOnly(libs.androidGradlePlugin)
     compileOnly(libs.kotlinGradlePlugin)
     compileOnly(libs.roomGradlePlugin)
-//    ksp(libs.piroworkzVersionsCatalog)
 }
 
 tasks {
@@ -23,11 +21,6 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-
-//ksp {
-//    arg("libsPath", "${rootDir.parentFile}/gradle/libs.versions.toml")
-//    arg("packageName", "com.davidluna.tmdb.convention.helpers.libs")
-//}
 
 gradlePlugin {
 
