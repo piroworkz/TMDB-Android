@@ -1,22 +1,19 @@
 package com.davidluna.tmdb.convention.plugins
 
 import androidx.room.gradle.RoomExtension
-import com.davidluna.tmdb.convention.bundles.androidHiltTestingBundle
 import com.davidluna.tmdb.convention.bundles.unitTestingBundle
 import com.davidluna.tmdb.convention.extensions.android_library.androidLibrary
 import com.davidluna.tmdb.convention.extensions.common.roomPluginManger
+import com.davidluna.tmdb.convention.extensions.libs.arrowCore
+import com.davidluna.tmdb.convention.extensions.libs.kotlinCoroutinesCore
+import com.davidluna.tmdb.convention.extensions.libs.kotlinxSerializationJson
+import com.davidluna.tmdb.convention.extensions.libs.libs
+import com.davidluna.tmdb.convention.extensions.libs.retrofit
+import com.davidluna.tmdb.convention.extensions.libs.roomCompiler
+import com.davidluna.tmdb.convention.extensions.libs.roomKtx
+import com.davidluna.tmdb.convention.extensions.libs.roomRuntime
 import com.davidluna.tmdb.convention.helpers.implementation
 import com.davidluna.tmdb.convention.helpers.ksp
-import com.davidluna.tmdb.convention.libs.arrowCore
-import com.davidluna.tmdb.convention.libs.hiltAndroid
-import com.davidluna.tmdb.convention.libs.hiltCompiler
-import com.davidluna.tmdb.convention.libs.kotlinCoroutinesCore
-import com.davidluna.tmdb.convention.libs.kotlinxSerializationJson
-import com.davidluna.tmdb.convention.libs.libs
-import com.davidluna.tmdb.convention.libs.retrofit
-import com.davidluna.tmdb.convention.libs.roomCompiler
-import com.davidluna.tmdb.convention.libs.roomKtx
-import com.davidluna.tmdb.convention.libs.roomRuntime
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -45,10 +42,7 @@ class RoomModuleConvention : Plugin<Project> {
             implementation(libs.arrowCore)
             implementation(libs.kotlinxSerializationJson)
             implementation(libs.kotlinCoroutinesCore)
-            implementation(libs.hiltAndroid)
-            ksp(libs.hiltCompiler)
             unitTestingBundle
-            androidHiltTestingBundle
         }
     }
 

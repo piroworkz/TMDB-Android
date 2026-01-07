@@ -1,11 +1,11 @@
 package com.davidluna.tmdb.media_data.di
 
-import com.davidluna.tmdb.media_data.data.framework.local.storage.SelectedCatalogDataSource
-import com.davidluna.tmdb.media_data.data.framework.paging.CachePolicyValidator
-import com.davidluna.tmdb.media_data.data.framework.paging.IsCacheExpired
-import com.davidluna.tmdb.media_data.data.repositories.CatalogVideosRepository
-import com.davidluna.tmdb.media_data.data.repositories.MediaCatalogRepository
-import com.davidluna.tmdb.media_data.data.repositories.MediaDetailsCacheRepository
+import com.davidluna.tmdb.media_data.framework.local.storage.SelectedCatalogDataSource
+import com.davidluna.tmdb.media_data.framework.paging.CachePolicyValidator
+import com.davidluna.tmdb.media_data.framework.paging.IsCacheExpired
+import com.davidluna.tmdb.media_data.repositories.CatalogVideosRepository
+import com.davidluna.tmdb.media_data.repositories.MediaCatalogRepository
+import com.davidluna.tmdb.media_data.repositories.MediaDetailsCacheRepository
 import com.davidluna.tmdb.media_domain.usecases.GetCatalogVideos
 import com.davidluna.tmdb.media_domain.usecases.GetMediaDetails
 import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase

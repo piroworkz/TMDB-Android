@@ -1,6 +1,6 @@
 package com.davidluna.tmdb.media_data.di
 
-import com.davidluna.tmdb.media_data.data.framework.local.database.MediaDatabase
+import com.davidluna.tmdb.media_data.framework.local.database.MediaDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -77,7 +77,7 @@ class MediaScreenTest {
         appError: AppError? = null,
         navigateTo: (Any) -> Unit = {},
     ) {
-        val fakeMedia = buildFakeMediaList()
+        val fakeMedia = fakeMediaList
 
         composeTestRule.setContent {
             val pagerLazyPagingItems = fakeLazyPagingItems(fakeMedia).collectAsLazyPagingItems()

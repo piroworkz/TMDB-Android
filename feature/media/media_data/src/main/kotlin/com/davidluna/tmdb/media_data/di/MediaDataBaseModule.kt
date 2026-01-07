@@ -2,7 +2,7 @@ package com.davidluna.tmdb.media_data.di
 
 import android.app.Application
 import androidx.room.Room
-import com.davidluna.tmdb.media_data.data.framework.local.database.MediaDatabase
+import com.davidluna.tmdb.media_data.framework.local.database.MediaDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

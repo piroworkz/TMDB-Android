@@ -17,8 +17,8 @@ import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.davidluna.tmdb.app.rules.MockWebServerRule
-import com.davidluna.tmdb.media_data.data.framework.remote.model.RemoteMedia
-import com.davidluna.tmdb.media_data.data.framework.remote.model.RemoteResults
+import com.davidluna.tmdb.media_data.framework.remote.model.RemoteMedia
+import com.davidluna.tmdb.media_data.framework.remote.model.RemoteResults
 import com.davidluna.tmdb.test_shared.reader.Reader
 import com.davidluna.tmdb.test_shared.reader.Reader.UPCOMING_MOVIES
 import dagger.hilt.android.testing.HiltAndroidRule

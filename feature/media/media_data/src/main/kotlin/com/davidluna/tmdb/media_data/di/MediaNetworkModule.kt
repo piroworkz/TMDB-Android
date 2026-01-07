@@ -1,6 +1,6 @@
 package com.davidluna.tmdb.media_data.di
 
-import com.davidluna.tmdb.media_data.data.framework.remote.services.RemoteMediaService
+import com.davidluna.tmdb.media_data.framework.remote.services.RemoteMediaService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

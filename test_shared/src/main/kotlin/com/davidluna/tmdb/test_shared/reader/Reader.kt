@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package com.davidluna.tmdb.test_shared.reader
 
 import kotlinx.serialization.json.Json

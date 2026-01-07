@@ -47,7 +47,7 @@ class MediaCatalogIntegrationTest {
     @Test
     fun `GIVEN pagerPagingDataFlow WHEN subscriber is added and refresh is called THEN emits paging data`() =
         coroutineTestRule.scope.runTest {
-            val expected = buildFakeMediaList()
+            val expected = fakeMediaList
             val sut = buildSUT()
 
             val actual: @JvmSuppressWildcards List<Media> =
@@ -59,7 +59,7 @@ class MediaCatalogIntegrationTest {
     @Test
     fun `GIVEN pagerPagingDataFlow WHEN refresh is called twice THEN result is idempotent`() =
         coroutineTestRule.scope.runTest {
-            val expected = buildFakeMediaList()
+            val expected = fakeMediaList
             val sut = buildSUT()
 
             val actual = sut.pagerPagingDataFlow.asSnapshot {
@@ -86,7 +86,7 @@ class MediaCatalogIntegrationTest {
     @Test
     fun `GIVEN gridPagingDataFlow WHEN subscriber is added  and refresh is called THEN emits paging data`() =
         coroutineTestRule.scope.runTest {
-            val expected = buildFakeMediaList()
+            val expected = fakeMediaList
             val sut = buildSUT()
 
             val actual: @JvmSuppressWildcards List<Media> =
@@ -98,7 +98,7 @@ class MediaCatalogIntegrationTest {
     @Test
     fun `GIVEN gridPagingDataFlow WHEN refresh is called twice THEN result is idempotent`() =
         coroutineTestRule.scope.runTest {
-            val expected = buildFakeMediaList()
+            val expected = fakeMediaList
             val sut = buildSUT()
 
             val actual = sut.gridPagingDataFlow.asSnapshot {

@@ -1,6 +1,6 @@
 package com.davidluna.tmdb.media_data.di
 
-import com.davidluna.tmdb.media_data.data.framework.paging.MediaCatalogRemoteMediator
+import com.davidluna.tmdb.media_data.framework.paging.MediaCatalogRemoteMediator
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 
