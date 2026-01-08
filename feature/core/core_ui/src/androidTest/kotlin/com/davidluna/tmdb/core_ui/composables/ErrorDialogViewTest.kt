@@ -21,7 +21,7 @@ class ErrorDialogViewTest {
     @Test
     fun errorDialogView(): Unit = composeTestRule.run {
         setContent { ErrorDialogPreView() }
-        onRoot(true).printToLog("<-- ")
+        onRoot(true)
 
         val dialogTitleText = onNodeWithText("Something went wrong")
         val dialogMessageText = onNodeWithText("Invalid API key: You must be granted a valid key.")

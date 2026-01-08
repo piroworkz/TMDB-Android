@@ -4,10 +4,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.davidluna.tmdb.auth_domain.usecases.CloseSession
 import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
 import com.davidluna.tmdb.auth_domain.usecases.ValidateSession
 import com.davidluna.tmdb.auth_ui.view.splash.holder.CurrentScreen
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,13 +15,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class SplashViewModel @Inject constructor(
+class SplashViewModel(
+    private val closeSession: CloseSession,
     private val ioDispatcher: CoroutineDispatcher,
-    private val validateSession: ValidateSession,
     private val observeSession: ObserveSession,
+    private val validateSession: ValidateSession
 ) : ViewModel() {
 
     val isLoggedIn: MutableState<Boolean?> = mutableStateOf(null)

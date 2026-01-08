@@ -7,15 +7,14 @@ import com.davidluna.tmdb.auth_data.framework.remote.UserAccountApi
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteUserAccountDetail
 import com.davidluna.tmdb.auth_domain.entities.UserAccount
 import com.davidluna.tmdb.auth_domain.usecases.ObserveUserAccount
-import com.davidluna.tmdb.core_domain.entities.AppError
-import com.davidluna.tmdb.core_domain.entities.tryCatchSuspend
 import com.davidluna.tmdb.core_data.framework.remote.model.buildModel
 import com.davidluna.tmdb.core_data.framework.remote.model.toAppError
+import com.davidluna.tmdb.core_domain.entities.AppError
+import com.davidluna.tmdb.core_domain.entities.tryCatchSuspend
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class AccountRepository @Inject constructor(
+class AccountRepository(
     private val userAccountApi: UserAccountApi,
     private val accountDao: AccountDao
 ) : ObserveUserAccount, AccountDetailsRepository {

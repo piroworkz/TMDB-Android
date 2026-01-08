@@ -37,9 +37,8 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.format.FormatStyle
 import java.util.Locale
-import javax.inject.Inject
 
-class MediaDetailsCacheRepository @Inject constructor(
+class MediaDetailsCacheRepository(
     private val local: MediaDetailsDao,
     private val remote: RemoteMediaService,
     private val isCacheExpired: IsCacheExpired,

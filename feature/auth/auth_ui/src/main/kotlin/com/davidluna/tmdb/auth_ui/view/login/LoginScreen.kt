@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginViewModel
@@ -34,10 +33,11 @@ import com.davidluna.tmdb.core_ui.R
 import com.davidluna.tmdb.core_ui.composables.ErrorDialogView
 import com.davidluna.tmdb.core_ui.theme.TmdbTheme
 import com.davidluna.tmdb.core_ui.theme.dimens.Dimens
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
+    viewModel: LoginViewModel = koinViewModel(),
     navigate: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

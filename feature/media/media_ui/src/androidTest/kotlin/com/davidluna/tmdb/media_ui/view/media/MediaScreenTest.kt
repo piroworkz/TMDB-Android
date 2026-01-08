@@ -1,5 +1,6 @@
 package com.davidluna.tmdb.media_ui.view.media
 
+import android.annotation.SuppressLint
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescriptionExactly
@@ -8,13 +9,12 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.printToLog
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.AppErrorCode
+import com.davidluna.tmdb.media_data.fakes.fakeMediaList
 import com.davidluna.tmdb.media_domain.entities.Media
-import com.davidluna.tmdb.media_data.fakes.buildFakeMediaList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
@@ -25,11 +25,12 @@ class MediaScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    @SuppressLint("CheckResult")
     @Test
     fun showsTitlesAndMediaItems(): Unit = composeTestRule.run {
         setContentWithState()
 
-        onRoot(useUnmergedTree = true).printToLog("<--")
+        onRoot(useUnmergedTree = true)
         onNodeWithText("NOW PLAYING").assertExists().assertIsDisplayed()
         onNodeWithText("POPULAR").assertExists().assertIsDisplayed()
 
@@ -43,6 +44,7 @@ class MediaScreenTest {
             .assertCountEquals(3)
     }
 
+    @SuppressLint("CheckResult")
     @Test
     fun clickingMediaItem_triggersNavigation(): Unit = composeTestRule.run {
         var navigated = false
@@ -50,7 +52,7 @@ class MediaScreenTest {
             navigateTo = { navigated = true }
         )
 
-        onRoot(useUnmergedTree = true).printToLog("<-------")
+        onRoot(useUnmergedTree = true)
         onAllNodes(
             hasContentDescriptionExactly("CarouselImageView"),
             useUnmergedTree = true

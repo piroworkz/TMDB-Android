@@ -16,9 +16,9 @@ import com.davidluna.tmdb.auth_domain.usecases.CloseSession
 import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
 import com.davidluna.tmdb.auth_domain.usecases.OpenSession
 import com.davidluna.tmdb.auth_domain.usecases.ValidateSession
+import com.davidluna.tmdb.core_data.framework.remote.model.toAppError
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.tryCatchSuspend
-import com.davidluna.tmdb.core_data.framework.remote.model.toAppError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -26,9 +26,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import javax.inject.Inject
 
-class AuthenticationRepository @Inject constructor(
+class AuthenticationRepository(
     private val authAPI: AuthenticationApi,
     private val sessionDao: SessionDao,
     private val accountDetailsRepository: AccountDetailsRepository
@@ -63,7 +62,11 @@ class AuthenticationRepository @Inject constructor(
             val expiresAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.getDefault())
                 .apply { timeZone = TimeZone.getTimeZone("UTC") }
                 .parse(it) ?: Date()
-            Date().before(expiresAt)
+            val isNotExpired = Date().before(expiresAt)
+            if (isNotExpired.not()) {
+                close()
+            }
+            isNotExpired
         } ?: false
     }.getOrNull() == true
 

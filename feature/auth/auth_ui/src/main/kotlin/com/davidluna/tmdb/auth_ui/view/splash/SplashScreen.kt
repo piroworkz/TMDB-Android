@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.davidluna.tmdb.auth_ui.navigation.AuthNavigation
 import com.davidluna.tmdb.auth_ui.presenter.splash.SplashViewModel
@@ -40,11 +39,12 @@ import com.davidluna.tmdb.auth_ui.view.splash.holder.rememberSplashState
 import com.davidluna.tmdb.core_ui.R
 import com.davidluna.tmdb.core_ui.navigation.Destination
 import com.davidluna.tmdb.core_ui.theme.TmdbTheme
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SplashScreen(
-    viewModel: SplashViewModel = hiltViewModel(),
+    viewModel: SplashViewModel = koinViewModel(),
     navigateHome: () -> Unit,
     navigate: (Destination) -> Unit,
 ) {
@@ -141,7 +141,8 @@ fun SplashScreenPreview() {
 
     TmdbTheme {
         var currentScreen by remember { mutableStateOf(SPLASH) }
-        val animationState: SplashAnimationState = rememberSplashState { currentScreen = PERMISSIONS_PROMPT }
+        val animationState: SplashAnimationState =
+            rememberSplashState { currentScreen = PERMISSIONS_PROMPT }
         SharedTransitionLayout {
             AnimatedContent(
                 targetState = currentScreen,
@@ -157,8 +158,8 @@ fun SplashScreenPreview() {
                     PermissionsPromptScreen(
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedVisibilityScope = this@AnimatedContent,
-                        launchPermissionsPrompt = {  },
-                        onDismiss = {  }
+                        launchPermissionsPrompt = { },
+                        onDismiss = { }
                     )
 
                 }

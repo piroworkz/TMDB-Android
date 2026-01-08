@@ -5,7 +5,7 @@ import com.davidluna.tmdb.auth_data.data.local.database.dao.AccountDaoSpy
 import com.davidluna.tmdb.auth_data.data.local.database.dao.SessionDaoSpy
 import com.davidluna.tmdb.auth_data.data.remote.AuthenticationApiSpy
 import com.davidluna.tmdb.auth_data.data.remote.UserAccountApiSpy
-import com.davidluna.tmdb.auth_data.framework.local.TextInputValidator
+import com.davidluna.tmdb.auth_data.utils.TextInputValidator
 import com.davidluna.tmdb.auth_data.repositories.AccountRepository
 import com.davidluna.tmdb.auth_data.repositories.AuthenticationRepository
 import com.davidluna.tmdb.auth_domain.entities.LoginMethod

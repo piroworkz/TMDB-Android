@@ -8,7 +8,7 @@ import androidx.paging.RemoteMediator
 import androidx.paging.RemoteMediator.InitializeAction
 import androidx.paging.RemoteMediator.MediatorResult.Success
 import androidx.paging.testing.asSnapshot
-import com.davidluna.tmdb.media_data.di.MediaCatalogMediatorFactory
+import com.davidluna.tmdb.media_data.di.MediatorFactory
 import com.davidluna.tmdb.media_data.fakes.fakeCatalog
 import com.davidluna.tmdb.media_data.fakes.fakeRoomMediaList
 import com.davidluna.tmdb.media_data.framework.local.database.dao.MediaDao
@@ -44,7 +44,7 @@ class MediaCatalogRepositoryTest {
     private lateinit var mediaDao: MediaDao
 
     @MockK
-    private lateinit var mediatorFactory: MediaCatalogMediatorFactory
+    private lateinit var mediatorFactory: MediatorFactory
 
     @MockK
     private lateinit var remoteMediator: MediaCatalogRemoteMediator

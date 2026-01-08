@@ -15,7 +15,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -35,38 +34,41 @@ import com.davidluna.tmdb.media_ui.view.details.composables.MediaDetailsView
 import com.davidluna.tmdb.media_ui.view.media.composables.CarouselImageView
 import com.davidluna.tmdb.media_ui.view.media.composables.MediaPager
 import com.davidluna.tmdb.media_ui.view.utils.UiState
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MediaDetailScreen(
-    viewModel: MediaDetailsViewModel = hiltViewModel(),
+    mediaId: Int,
+    viewModel: MediaDetailsViewModel = koinViewModel { parametersOf(mediaId) },
     navigate: (Destination) -> Unit,
 ) {
     val uiState by viewModel.mediaDetails.collectAsStateWithLifecycle()
 
     Crossfade(targetState = uiState) {
-        when (val state = it) {
-            is UiState.Failure -> ErrorDialogView(appError = state.appError) { }
+        when (it) {
+            is UiState.Failure -> ErrorDialogView(appError = it.appError) {
+                navigate(MediaNavigation.Init)
+            }
+
             UiState.Loading -> LoadingIndicator()
-            is UiState.Success<MediaDetails> ->
-                MediaDetailScreen(
-                    backdropPath = state.data.backdropPath,
-                    castList = state.data.castList,
-                    genres = state.data.genres,
-                    images = state.data.images,
-                    overview = state.data.overview,
-                    releaseDate = state.data.releaseDate,
-                    tagline = state.data.tagline,
-                    score = state.data.score,
-                    voteAveragePercentage = state.data.voteAveragePercentage,
-                    playTrailer = {
-                        navigate(
-                            MediaNavigation.Video(
-                                mediaId = state.data.id,
-                                appBarTitle = state.data.title
-                            )
+            is UiState.Success<MediaDetails> -> MediaDetailScreen(
+                backdropPath = it.data.backdropPath,
+                castList = it.data.castList,
+                genres = it.data.genres,
+                images = it.data.images,
+                overview = it.data.overview,
+                releaseDate = it.data.releaseDate,
+                tagline = it.data.tagline,
+                score = it.data.score,
+                voteAveragePercentage = it.data.voteAveragePercentage,
+                playTrailer = {
+                    navigate(
+                        MediaNavigation.Video(
+                            mediaId = it.data.id, appBarTitle = it.data.title
                         )
-                    }
-                )
+                    )
+                })
         }
     }
 
@@ -86,13 +88,10 @@ fun MediaDetailScreen(
     playTrailer: () -> Unit,
 ) {
     AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(backdropPath)
-            .crossfade(500)
+        model = ImageRequest.Builder(LocalContext.current).data(backdropPath).crossfade(500)
             .build(),
         contentDescription = "",
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         alignment = Alignment.Center,
         contentScale = ContentScale.Crop,
         alpha = .3F
@@ -103,9 +102,7 @@ fun MediaDetailScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         MediaPager(
-            modifier = Modifier
-                .padding(vertical = Dimens.margins.large),
-            itemCount = images.size
+            modifier = Modifier.padding(vertical = Dimens.margins.large), itemCount = images.size
         ) {
             val media = images[it].filePath
             CarouselImageView(media, .66F)
@@ -126,8 +123,7 @@ fun MediaDetailScreen(
 }
 
 @Preview(
-    showSystemUi = true,
-    showBackground = true
+    showSystemUi = true, showBackground = true
 )
 @Composable
 private fun MediaDetailScreenPreview() {
@@ -142,7 +138,6 @@ private fun MediaDetailScreenPreview() {
             tagline = "",
             score = 0F,
             voteAveragePercentage = "0%",
-            playTrailer = {}
-        )
+            playTrailer = {})
     }
 }

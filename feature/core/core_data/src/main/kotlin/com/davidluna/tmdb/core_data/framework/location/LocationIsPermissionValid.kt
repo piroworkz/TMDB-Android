@@ -5,10 +5,8 @@ import android.app.Application
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.davidluna.tmdb.core_domain.usecases.IsPermissionValid
-import javax.inject.Inject
 
-class LocationIsPermissionValid @Inject constructor(private val application: Application) :
-    IsPermissionValid {
+class LocationIsPermissionValid(private val application: Application) : IsPermissionValid {
 
     override fun invoke(): Boolean {
         val fineLocation = ContextCompat.checkSelfPermission(

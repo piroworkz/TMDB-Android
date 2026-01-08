@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.architectCodersAndroidApplication)
 }
 
+
+
 dependencies {
     implementation(libs.core.splashscreen)
     implementation(projects.feature.core.coreUi)
@@ -16,6 +18,8 @@ dependencies {
     testImplementation(projects.testShared)
     testImplementation(testFixtures(projects.feature.auth.authData))
     testImplementation(libs.coreDatastore)
+    testImplementation(platform(libs.koinBom))
+    testImplementation(libs.koinTest)
     androidTestImplementation(libs.navigationTesting)
     androidTestImplementation(projects.testShared)
 }

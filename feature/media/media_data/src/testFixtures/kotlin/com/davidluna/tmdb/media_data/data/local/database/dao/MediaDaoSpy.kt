@@ -2,8 +2,8 @@ package com.davidluna.tmdb.media_data.data.local.database.dao
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.davidluna.tmdb.media_data.data.framework.local.database.dao.MediaDao
-import com.davidluna.tmdb.media_data.data.framework.local.database.entities.media.RoomMedia
+import com.davidluna.tmdb.media_data.framework.local.database.dao.MediaDao
+import com.davidluna.tmdb.media_data.framework.local.database.entities.media.RoomMedia
 
 class MediaDaoSpy : MediaDao {
 

@@ -11,9 +11,8 @@ import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class SelectedCatalogDataSource @Inject constructor(
+class SelectedCatalogDataSource(
     private val datastore: DataStore<Preferences>,
 ) : UpdateSelectedEndpoint, ObserveSelectedMediaCatalog {
 

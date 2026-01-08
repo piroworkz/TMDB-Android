@@ -4,13 +4,13 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.davidluna.tmdb.core_data.framework.remote.model.RemoteError
-import com.davidluna.tmdb.media_data.data.framework.remote.model.RemoteMedia
-import com.davidluna.tmdb.media_data.data.framework.remote.model.RemoteResults
-import com.davidluna.tmdb.media_data.data.framework.remote.model.credits.RemoteCredits
-import com.davidluna.tmdb.media_data.data.framework.remote.model.details.RemoteMediaDetail
-import com.davidluna.tmdb.media_data.data.framework.remote.model.images.RemoteImages
-import com.davidluna.tmdb.media_data.data.framework.remote.model.videos.RemoteVideos
-import com.davidluna.tmdb.media_data.data.framework.remote.services.RemoteMediaService
+import com.davidluna.tmdb.media_data.framework.remote.model.RemoteMedia
+import com.davidluna.tmdb.media_data.framework.remote.model.RemoteResults
+import com.davidluna.tmdb.media_data.framework.remote.model.credits.RemoteCredits
+import com.davidluna.tmdb.media_data.framework.remote.model.details.RemoteMediaDetail
+import com.davidluna.tmdb.media_data.framework.remote.model.images.RemoteImages
+import com.davidluna.tmdb.media_data.framework.remote.model.videos.RemoteVideos
+import com.davidluna.tmdb.media_data.framework.remote.services.RemoteMediaService
 import com.davidluna.tmdb.test_shared.reader.Reader
 
 class RemoteMediaServiceSpy : RemoteMediaService {

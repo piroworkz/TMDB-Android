@@ -1,7 +1,7 @@
 package com.davidluna.tmdb.media_data.data.local.database.dao
 
-import com.davidluna.tmdb.media_data.data.framework.local.database.dao.RemoteKeysDao
-import com.davidluna.tmdb.media_data.data.framework.local.database.entities.media.RemoteKeys
+import com.davidluna.tmdb.media_data.framework.local.database.dao.RemoteKeysDao
+import com.davidluna.tmdb.media_data.framework.local.database.entities.media.RemoteKeys
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 

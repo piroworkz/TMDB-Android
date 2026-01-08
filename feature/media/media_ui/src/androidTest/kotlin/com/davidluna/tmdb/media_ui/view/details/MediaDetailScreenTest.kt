@@ -11,9 +11,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.printToLog
-import com.davidluna.tmdb.media_domain.entities.details.MediaDetails
 import com.davidluna.tmdb.media_data.fakes.fakeMediaDetails
+import com.davidluna.tmdb.media_domain.entities.details.MediaDetails
 import junit.framework.TestCase.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -61,7 +60,7 @@ class MediaDetailScreenTest {
     fun whenCastListProvided_CastSectionExists(): Unit = composeTestRule.run {
         setContent(details)
 
-        onRoot(useUnmergedTree = true).printToLog("<--")
+        onRoot(useUnmergedTree = true)
 
         repeat(3) {
             val cast = details.castList[it]
@@ -83,13 +82,14 @@ class MediaDetailScreenTest {
             .assertCountEquals(4)
     }
 
+    @SuppressLint("CheckResult")
     @Test
     fun whenPlayTrailerClicked_invokesNavigate(): Unit = composeTestRule.run {
         var playedTrailer = false
         setContent(details.copy(hasVideo = true)) {
             playedTrailer = true
         }
-        onRoot(useUnmergedTree = true).printToLog("<-- ")
+        onRoot(useUnmergedTree = true)
         onNodeWithContentDescription("Outlined.PlayArrow")
             .performClick()
         assertTrue(playedTrailer)

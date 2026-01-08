@@ -1,17 +1,14 @@
 package com.davidluna.tmdb.auth_data.framework.local
 
 import com.davidluna.tmdb.auth_data.framework.local.database.dao.SessionDao
-import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import com.davidluna.tmdb.core_data.framework.remote.interceptors.ParametersSnapshot
 import com.davidluna.tmdb.core_data.framework.remote.interceptors.ParametersSnapshot.Keys
+import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class QueryParametersSnapshot @Inject constructor(
+class QueryParametersSnapshot(
     getCountryCode: ObserveCountryCode,
     sessionDao: SessionDao,
     scope: CoroutineScope,

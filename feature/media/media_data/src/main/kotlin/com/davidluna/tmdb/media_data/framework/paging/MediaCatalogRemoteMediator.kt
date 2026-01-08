@@ -17,15 +17,13 @@ import com.davidluna.tmdb.media_data.framework.local.database.entities.media.Roo
 import com.davidluna.tmdb.media_data.framework.remote.model.RemoteMedia
 import com.davidluna.tmdb.media_data.framework.remote.model.RemoteResults
 import com.davidluna.tmdb.media_data.framework.remote.services.RemoteMediaService
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import retrofit2.HttpException
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
-class MediaCatalogRemoteMediator @AssistedInject constructor(
-    @Assisted("path") private val path: String,
-    @Assisted("catalogName") private val catalogName: String,
+class MediaCatalogRemoteMediator(
+    private val path: String,
+    private val catalogName: String,
     private val mediaDao: MediaDao,
     private val mediaService: RemoteMediaService,
     private val remoteKeysDao: RemoteKeysDao,

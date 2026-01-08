@@ -13,9 +13,8 @@ import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.details.Video
 import com.davidluna.tmdb.media_domain.usecases.GetCatalogVideos
 import kotlinx.coroutines.coroutineScope
-import javax.inject.Inject
 
-class CatalogVideosRepository @Inject constructor(
+class CatalogVideosRepository(
     private val local: MediaVideosDao,
     private val remote: RemoteMediaService,
     private val isCacheExpired: IsCacheExpired,

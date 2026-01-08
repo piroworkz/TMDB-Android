@@ -19,10 +19,10 @@ import com.davidluna.tmdb.auth_domain.entities.UserAccount
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.AppErrorCode
 import com.davidluna.tmdb.core_domain.entities.toAppError
+import com.davidluna.tmdb.media_data.framework.local.storage.SelectedCatalogDataSource
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.MediaType.TV_SHOW
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
-import com.davidluna.tmdb.media_data.data.framework.local.storage.SelectedCatalogDataSource
 import com.davidluna.tmdb.media_ui.view.utils.bottomBarItems
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi

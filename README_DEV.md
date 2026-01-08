@@ -367,7 +367,7 @@ sealed interface LoginEvent {
 
 // ✅ GOOD: State as data class in ViewModel
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class LoginViewModel (
     private val loginUser: LoginWithCredentials,
     private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -453,7 +453,7 @@ fun AnotherBadScreen(email: String) {
 ```kotlin
 // ✅ ViewModel with Hilt (uses fun interface use cases)
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class LoginViewModel (
     private val loginUser: LoginWithCredentials,
     private val loginGuest: LoginAsGuest,
     private val validateInput: ValidateInputUseCase,
@@ -466,7 +466,7 @@ class LoginViewModel @Inject constructor(
 fun interface LoginWithCredentials : suspend (LoginRequest) -> Either<AppError, Unit>
 
 // ✅ Repository implements use case in framework
-class RegisteredUserAuthenticationRepository @Inject constructor(
+class RegisteredUserAuthenticationRepository (
     private val remote: RemoteAuthenticationService,
     private val local: SessionDao
 ) : LoginWithCredentials {
@@ -492,7 +492,7 @@ class BadViewModel {
 fun interface LoginWithCredentials : suspend (LoginRequest) -> Either<AppError, Unit>
 
 // Framework: Implementation
-class RegisteredUserAuthenticationRepository @Inject constructor(
+class RegisteredUserAuthenticationRepository (
     private val remote: RemoteAuthenticationService,
     private val local: SessionDao
 ) : LoginWithCredentials {
@@ -946,7 +946,7 @@ For E2E tests, MockWebServer is used with a custom rule. See `app/src/androidTes
 5. **Implement use case in framework** (`data/sources/ or data/repositories/`):
    ```kotlin
    // feature/media/media_framework/src/main/kotlin/com/davidluna/tmdb/media_framework/data/repositories/MovieDetailsRepository.kt
-   class MovieDetailsRepository @Inject constructor(
+   class MovieDetailsRepository (
        private val api: RemoteMediaService
    ) : GetMovieDetailsUseCase {
        override suspend fun invoke(id: Int): Either<AppError, MovieDetails> =
@@ -981,7 +981,7 @@ For E2E tests, MockWebServer is used with a custom rule. See `app/src/androidTes
 8. **Use in ViewModel**:
    ```kotlin
    @HiltViewModel
-   class MovieDetailViewModel @Inject constructor(
+   class MovieDetailViewModel (
        private val getMovieDetails: GetMovieDetailsUseCase,
        private val ioDispatcher: CoroutineDispatcher
    ) : ViewModel() {
@@ -1067,7 +1067,7 @@ For E2E tests, MockWebServer is used with a custom rule. See `app/src/androidTes
 
 6. **Implement use case in repository** (`data/sources/ or data/repositories/`):
    ```kotlin
-   class MovieRepository @Inject constructor(
+   class MovieRepository (
        private val movieDao: MovieDao
    ) : ObserveMoviesUseCase, GetMovieByIdUseCase {
        
@@ -1086,7 +1086,7 @@ For E2E tests, MockWebServer is used with a custom rule. See `app/src/androidTes
 7. **Use in ViewModel**:
    ```kotlin
    @HiltViewModel
-   class MoviesViewModel @Inject constructor(
+   class MoviesViewModel (
        private val observeMovies: ObserveMoviesUseCase,
        private val getMovie: GetMovieByIdUseCase
    ) : ViewModel() {

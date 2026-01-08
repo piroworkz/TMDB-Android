@@ -3,6 +3,7 @@ package com.davidluna.tmdb.app.main_ui
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.POST_NOTIFICATIONS
+import android.annotation.SuppressLint
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasAnyChild
 import androidx.compose.ui.test.hasContentDescription
@@ -13,7 +14,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.davidluna.tmdb.app.rules.MockWebServerRule
@@ -21,20 +21,13 @@ import com.davidluna.tmdb.media_data.framework.remote.model.RemoteMedia
 import com.davidluna.tmdb.media_data.framework.remote.model.RemoteResults
 import com.davidluna.tmdb.test_shared.reader.Reader
 import com.davidluna.tmdb.test_shared.reader.Reader.UPCOMING_MOVIES
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @OptIn(ExperimentalTestApi::class)
 @RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
 class TmdbAppEndToEndTest {
-
-    @get:Rule(order = 0)
-    val hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
     val mockWebServerRule = MockWebServerRule()
@@ -50,11 +43,7 @@ class TmdbAppEndToEndTest {
         Reader.fromJson<RemoteResults<RemoteMedia>>(UPCOMING_MOVIES).results
     private val firstMovie = upcomingMoviesResponse.first()
 
-    @Before
-    fun setup() {
-        hiltRule.inject()
-    }
-
+    @SuppressLint("CheckResult")
     @Test
     fun testLoginAndNavigateToMovieDetails(): Unit =
         composeTestRule.run {
@@ -72,7 +61,7 @@ class TmdbAppEndToEndTest {
 
             waitUntilAtLeastOneExists(hasText(firstMovie.title.orEmpty()))
 
-            onRoot(useUnmergedTree = true).printToLog("<-- CarouselImageView")
+            onRoot(useUnmergedTree = true)
             onNode(hasAnyChild(hasContentDescription("CarouselImageView") and hasText(firstMovie.title.orEmpty())))
                 .performClick()
 

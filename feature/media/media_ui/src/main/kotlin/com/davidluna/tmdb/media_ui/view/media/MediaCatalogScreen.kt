@@ -13,7 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -31,10 +30,11 @@ import com.davidluna.tmdb.media_ui.view.media.composables.FilmMaskImageView
 import com.davidluna.tmdb.media_ui.view.media.composables.MediaPager
 import com.davidluna.tmdb.media_ui.view.media.composables.MediaTitleView
 import com.davidluna.tmdb.media_ui.view.media.composables.ReelTitleView
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MediaCatalogScreen(
-    viewModel: MediaCatalogViewModel = hiltViewModel(),
+    viewModel: MediaCatalogViewModel = koinViewModel(),
     navigateTo: (Destination) -> Unit,
 ) {
     val pagerLazyPagingItems = viewModel.pagerPagingDataFlow.collectAsLazyPagingItems()

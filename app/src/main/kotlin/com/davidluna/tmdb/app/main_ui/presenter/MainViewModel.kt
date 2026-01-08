@@ -16,7 +16,6 @@ import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
 import com.davidluna.tmdb.media_ui.view.utils.bottomBarItems
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,10 +24,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class MainViewModel @Inject constructor(
+class MainViewModel(
     observeUserAccount: ObserveUserAccount,
     private val closeSession: CloseSession,
     private val ioDispatcher: CoroutineDispatcher,

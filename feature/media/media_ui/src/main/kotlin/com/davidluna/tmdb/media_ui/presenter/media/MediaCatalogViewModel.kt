@@ -13,7 +13,6 @@ import com.davidluna.tmdb.media_domain.entities.MediaType.MOVIE
 import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_ui.view.utils.title
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,13 +22,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
 typealias MediaIndex = Int
 typealias MediaOffset = Int
 
-@HiltViewModel
-class MediaCatalogViewModel @Inject constructor(
+class MediaCatalogViewModel (
     private val observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog,
     private val observeMediaCatalogUseCase: ObserveMediaCatalogUseCase,
 ) : ViewModel() {

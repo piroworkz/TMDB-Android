@@ -3,9 +3,8 @@ package com.davidluna.tmdb.core_data.framework.location
 import android.location.Geocoder
 import android.os.Build
 import com.davidluna.tmdb.core_data.framework.location.model.Coordinates
-import javax.inject.Inject
 
-class GeoCountryCodeResolver @Inject constructor(
+class GeoCountryCodeResolver(
     private val coder: Geocoder
 ) : CountryCodeResolver {
 

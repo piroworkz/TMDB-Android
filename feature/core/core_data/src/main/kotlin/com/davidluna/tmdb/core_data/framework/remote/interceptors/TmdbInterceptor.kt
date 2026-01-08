@@ -1,17 +1,14 @@
 package com.davidluna.tmdb.core_data.framework.remote.interceptors
 
+import com.davidluna.tmdb.core_data.di.NativeModule
 import com.davidluna.tmdb.core_data.framework.remote.interceptors.ParametersSnapshot.Keys
-import com.davidluna.tmdb.core_data.di.qualifiers.ApiKey
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class TmdbInterceptor @Inject constructor(
-    @param:ApiKey private val apiKey: String,
+class TmdbInterceptor(
+    private val apiKey: NativeModule.ApiKey,
     private val parametersSnapshot: ParametersSnapshot,
 ) : Interceptor {
 
@@ -21,19 +18,19 @@ class TmdbInterceptor @Inject constructor(
             val url = buildUrl(request, parametersSnapshot())
             val newRequest = buildRequest(request, url)
             chain.proceed(newRequest)
-        } catch (_: Exception) {
-            chain.proceed(request)
+        } catch (e: Exception) {
+            throw e
         }
     }
 
     private fun buildRequest(request: Request, url: HttpUrl) = request.newBuilder().apply {
-        addHeader(Keys.AUTHENTICATION, "Bearer $apiKey")
+        addHeader(Keys.AUTHENTICATION, "Bearer ${apiKey.value}")
         url(url)
     }.build()
 
     private fun buildUrl(request: Request, queryParameters: Map<String, String>) =
         request.url.newBuilder().apply {
-            addQueryParameter(Keys.API_KEY, apiKey)
+            addQueryParameter(Keys.API_KEY, apiKey.value)
 
             val isImagesRequest = request.url.encodedPath.contains("images")
 
@@ -42,9 +39,11 @@ class TmdbInterceptor @Inject constructor(
                     Keys.LANGUAGE -> if (!isImagesRequest) {
                         addQueryParameter(key, value)
                     }
+
                     Keys.INCLUDE_IMAGE_LANGUAGE -> if (isImagesRequest) {
                         addQueryParameter(key, value)
                     }
+
                     else -> addQueryParameter(key, value)
                 }
             }

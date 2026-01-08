@@ -14,7 +14,6 @@ import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetPassword
 import com.davidluna.tmdb.auth_ui.presenter.login.LoginEvent.SetUsername
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.toAppError
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,10 +21,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class LoginViewModel @Inject constructor(
+class LoginViewModel(
     private val ioDispatcher: CoroutineDispatcher,
     private val openSession: OpenSession,
     private val validateInput: ValidateInput,

@@ -5,22 +5,21 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.paging.testing.asSnapshot
 import app.cash.turbine.test
-import com.davidluna.tmdb.media_data.data.framework.local.database.dao.MediaDao
-import com.davidluna.tmdb.media_data.data.framework.local.database.dao.RemoteKeysDao
-import com.davidluna.tmdb.media_data.data.framework.local.storage.SelectedCatalogDataSource
-import com.davidluna.tmdb.media_data.data.framework.paging.CachePolicyValidator
-import com.davidluna.tmdb.media_data.data.framework.paging.IsCacheExpired
-import com.davidluna.tmdb.media_data.data.framework.remote.services.RemoteMediaService
 import com.davidluna.tmdb.media_data.data.local.database.dao.MediaDaoSpy
 import com.davidluna.tmdb.media_data.data.local.database.dao.RemoteKeysDaoSpy
 import com.davidluna.tmdb.media_data.data.remote.services.RemoteMediaServiceSpy
-import com.davidluna.tmdb.media_data.data.repositories.MediaCatalogRepository
 import com.davidluna.tmdb.media_data.di.MediaCatalogMediatorFactory
 import com.davidluna.tmdb.media_data.di.MediaCatalogMediatorFactorySpy
-import com.davidluna.tmdb.media_data.fakes.buildFakeMediaList
+import com.davidluna.tmdb.media_data.fakes.fakeMediaList
+import com.davidluna.tmdb.media_data.framework.local.database.dao.MediaDao
+import com.davidluna.tmdb.media_data.framework.local.database.dao.RemoteKeysDao
+import com.davidluna.tmdb.media_data.framework.local.storage.SelectedCatalogDataSource
+import com.davidluna.tmdb.media_data.framework.paging.CachePolicyValidator
+import com.davidluna.tmdb.media_data.framework.paging.IsCacheExpired
+import com.davidluna.tmdb.media_data.framework.remote.services.RemoteMediaService
+import com.davidluna.tmdb.media_data.repositories.MediaCatalogRepository
 import com.davidluna.tmdb.media_domain.entities.Media
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -130,7 +129,7 @@ class MediaCatalogIntegrationTest {
             sut.pagerPagingDataFlow.asSnapshot { refresh() }
             sut.gridPagingDataFlow.asSnapshot { refresh() }
 
-            sut.state.onEach { println("<-- state: $it") }.test {
+            sut.state.test {
                 val actual = awaitItem()
 
                 assertNotNull("pagerCatalogTitle is not null", actual.pagerCatalogTitle)
@@ -145,7 +144,7 @@ class MediaCatalogIntegrationTest {
             val expected = 1 to 2
             sut.updateLastKnownPosition(expected.first, expected.second)
 
-            sut.state.onEach { println("<-- state: $it") }.test {
+            sut.state.test {
                 skipItems(1)
                 val actual = awaitItem().lastKnownPosition
 

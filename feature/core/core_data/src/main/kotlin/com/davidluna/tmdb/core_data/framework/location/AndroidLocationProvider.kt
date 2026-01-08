@@ -3,9 +3,8 @@ package com.davidluna.tmdb.core_data.framework.location
 import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
-class AndroidLocationProvider @Inject constructor(
+class AndroidLocationProvider(
     private val resolver: CountryCodeResolver,
     private val getLocation: LocationService
 ) : ObserveCountryCode {

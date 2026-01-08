@@ -17,12 +17,10 @@ espresso-intents = "3.7.0"
 espressoCore = "3.7.0"
 firebase-bom = "34.7.0"
 googleServices = "4.4.4"
-hilt = "2.57.2"
-hiltNavigationCompose = "1.3.0"
-hiltWork = "1.2.0"
 javaxInject = "1"
 junit = "4.13.2"
 junitVersion = "1.3.0"
+koin-bom = "4.1.1"
 kotlin = "2.3.0"
 kotlin-converter = "1.0.0"
 kotlin-coroutines = "1.10.2"
@@ -41,8 +39,7 @@ retrofit = "3.0.0"
 room = "2.8.4"
 runtime = "1.10.0"
 turbine = "1.2.1"
-koin-bom = "4.1.1"
-
+firebaseMessagingKtx = "25.0.1"
 [libraries]
 activityKtx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityCompose" }
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -74,12 +71,7 @@ firebaseBom = { group = "com.google.firebase", name = "firebase-bom", version.re
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebaseMessaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebasePerformance = { group = "com.google.firebase", name = "firebase-perf" }
-hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hiltCompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-hiltTest = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
-javaxInject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinConverter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "kotlin-converter" }
 kotlinCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
@@ -113,10 +105,7 @@ uiTestManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 koinBom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koinAndroid = { module = "io.insert-koin:koin-android" }
 koinCompose = { module = "io.insert-koin:koin-androidx-compose" }
-koinCore = { module = "io.insert-koin:koin-core" }
-koinComposeNavigation = { module = "io.insert-koin:koin-androidx-compose-navigation" }
-koinAnnotations = { module = "io.insert-koin:koin-annotations" }
-koinKspCompiler = { module = "io.insert-koin:koin-ksp-compiler" }
+koinTest = { module = "io.insert-koin:koin-test" }
 
 [plugins]
 
@@ -124,7 +113,6 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
-hiltPlugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

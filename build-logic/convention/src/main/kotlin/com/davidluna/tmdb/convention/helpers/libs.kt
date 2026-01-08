@@ -83,18 +83,10 @@ internal val VersionCatalog.junit: Provider<MinimalExternalModuleDependency>
     get() = findLibrary("junit").get()
 internal val VersionCatalog.koinAndroid: Provider<MinimalExternalModuleDependency>
     get() = findLibrary("koinAndroid").get()
-internal val VersionCatalog.koinAnnotations: Provider<MinimalExternalModuleDependency>
-    get() = findLibrary("koinAnnotations").get()
 internal val VersionCatalog.koinBom: Provider<MinimalExternalModuleDependency>
     get() = findLibrary("koinBom").get()
 internal val VersionCatalog.koinCompose: Provider<MinimalExternalModuleDependency>
     get() = findLibrary("koinCompose").get()
-internal val VersionCatalog.koinComposeNavigation: Provider<MinimalExternalModuleDependency>
-    get() = findLibrary("koinComposeNavigation").get()
-internal val VersionCatalog.koinCore: Provider<MinimalExternalModuleDependency>
-    get() = findLibrary("koinCore").get()
-internal val VersionCatalog.koinKspCompiler: Provider<MinimalExternalModuleDependency>
-    get() = findLibrary("koinKspCompiler").get()
 internal val VersionCatalog.kotlinAndroid: Provider<PluginDependency>
     get() = findPlugin("kotlinAndroid").get()
 internal val VersionCatalog.kotlinConverter: Provider<MinimalExternalModuleDependency>

@@ -2,33 +2,11 @@ package com.davidluna.tmdb.app.di
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.davidluna.tmdb.core_data.di.qualifiers.ApiKey
-import com.davidluna.tmdb.core_data.di.qualifiers.BaseUrl
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.components.SingletonComponent
-import dagger.hilt.testing.TestInstallIn
-import javax.inject.Singleton
+import com.davidluna.tmdb.core_data.di.NativeModule
+import org.koin.dsl.module
 
-@TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [NativeModule::class]
-)
-@Module
-object TestNativeModule {
-
-
-    @Singleton
-    @Provides
-    @ApiKey
-    fun provideApiKey(): String = "my_fake_api_key"
-
-    @Singleton
-    @Provides
-    @BaseUrl
-    fun provideBaseUrl(): String = "http://localhost:8080/"
-
-    @Singleton
-    @Provides
-    fun provideApplicationContext(): Context = ApplicationProvider.getApplicationContext()
+val testNativeModule = module {
+    single<Context> { ApplicationProvider.getApplicationContext() }
+    single { NativeModule.ApiKey("my_fake_api_key") }
+    single { NativeModule.BaseUrl("http://localhost:8080/") }
 }

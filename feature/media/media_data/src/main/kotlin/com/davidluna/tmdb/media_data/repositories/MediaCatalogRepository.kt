@@ -16,9 +16,8 @@ import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class MediaCatalogRepository @Inject constructor(
+class MediaCatalogRepository(
     private val mediaDao: MediaDao,
     private val mediatorFactory: MediaCatalogMediatorFactory,
 ) : ObserveMediaCatalogUseCase {

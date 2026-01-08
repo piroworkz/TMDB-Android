@@ -9,24 +9,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.davidluna.tmdb.media_ui.view.utils.UiState
 import com.davidluna.tmdb.core_ui.composables.ErrorDialogView
 import com.davidluna.tmdb.core_ui.composables.LoadingIndicator
 import com.davidluna.tmdb.core_ui.theme.TmdbTheme
 import com.davidluna.tmdb.media_domain.entities.details.Video
 import com.davidluna.tmdb.media_ui.presenter.videos.VideoPlayerViewModel
+import com.davidluna.tmdb.media_ui.view.utils.UiState
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
-fun VideoPlayerScreen(viewModel: VideoPlayerViewModel = hiltViewModel()) {
+fun VideoPlayerScreen(
+    mediaId: Int,
+    viewModel: VideoPlayerViewModel = koinViewModel { parametersOf(mediaId) }
+) {
     val uiState by viewModel.mediaVideos.collectAsStateWithLifecycle()
 
     Crossfade(targetState = uiState) {
-        when (val state = it) {
-            is UiState.Failure -> ErrorDialogView(appError = state.appError) { }
+        when (it) {
+            is UiState.Failure -> ErrorDialogView(appError = it.appError) { }
             UiState.Loading -> LoadingIndicator()
-            is UiState.Success<List<Video>> -> VideoPlayerScreen(videos = state.data)
+            is UiState.Success<List<Video>> -> VideoPlayerScreen(videos = it.data)
         }
     }
 

@@ -3,7 +3,6 @@ package com.davidluna.tmdb.app.main_ui
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -17,12 +16,11 @@ import com.davidluna.tmdb.app.main_ui.view.Navigator
 import com.davidluna.tmdb.app.main_ui.view.composables.rememberNavigatorState
 import com.davidluna.tmdb.core_ui.composables.ErrorDialogView
 import com.davidluna.tmdb.core_ui.theme.TmdbTheme
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

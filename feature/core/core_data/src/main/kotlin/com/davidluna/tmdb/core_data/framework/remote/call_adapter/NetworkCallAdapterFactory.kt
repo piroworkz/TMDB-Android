@@ -7,9 +7,8 @@ import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
-import javax.inject.Inject
 
-class NetworkCallAdapterFactory @Inject constructor() : CallAdapter.Factory() {
+class NetworkCallAdapterFactory() : CallAdapter.Factory() {
     override fun get(
         returnType: Type,
         annotations: Array<out Annotation>,
@@ -33,7 +32,11 @@ class NetworkCallAdapterFactory @Inject constructor() : CallAdapter.Factory() {
         }
 
         val rightBody = getParameterUpperBound(1, responseType)
-        val errorConverter = retrofit.nextResponseBodyConverter<RemoteError>(null, RemoteError::class.java, annotations)
+        val errorConverter = retrofit.nextResponseBodyConverter<RemoteError>(
+            null,
+            RemoteError::class.java,
+            annotations
+        )
 
         return NetworkCallAdapter<Any>(rightBody, errorConverter)
 

@@ -1,5 +1,6 @@
 package com.davidluna.tmdb.auth_data.framework.local
 
+import com.davidluna.tmdb.auth_data.utils.TextInputValidator
 import com.davidluna.tmdb.auth_domain.entities.TextInputError
 import com.davidluna.tmdb.auth_domain.entities.TextInputType
 import org.junit.Assert

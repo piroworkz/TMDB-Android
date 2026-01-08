@@ -1,14 +1,13 @@
 package com.davidluna.tmdb.core_data.framework.location
 
 import android.annotation.SuppressLint
-import com.davidluna.tmdb.core_domain.usecases.IsPermissionValid
 import com.davidluna.tmdb.core_data.framework.location.model.Coordinates
+import com.davidluna.tmdb.core_domain.usecases.IsPermissionValid
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.suspendCancellableCoroutine
-import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class AndroidLocationService @Inject constructor(
+class AndroidLocationService(
     private val client: FusedLocationProviderClient,
     private val permissionsGranted: IsPermissionValid
 ) : LocationService {

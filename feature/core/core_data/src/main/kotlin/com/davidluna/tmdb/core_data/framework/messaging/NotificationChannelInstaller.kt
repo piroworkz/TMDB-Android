@@ -5,11 +5,8 @@ import android.app.NotificationManager
 import com.davidluna.tmdb.core_domain.entities.ChannelSpec
 import com.davidluna.tmdb.core_domain.usecases.InstallNotificationChannels
 import com.davidluna.tmdb.core_domain.usecases.NotificationChannelSetProvider
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class NotificationChannelInstaller @Inject constructor(
+class NotificationChannelInstaller(
     private val manager: NotificationManager,
     private val notificationChannelSetProvider: NotificationChannelSetProvider,
 ) : InstallNotificationChannels {
