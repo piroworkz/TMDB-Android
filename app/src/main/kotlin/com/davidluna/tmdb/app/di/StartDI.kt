@@ -21,13 +21,14 @@ import com.davidluna.tmdb.media_ui.di.mediaPresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 fun App.startDi() {
     startKoin {
         if (BuildConfig.DEBUG) {
-            androidLogger(org.koin.core.logger.Level.DEBUG)
+            androidLogger(Level.ERROR)
         }
         androidContext(this@startDi)
         modules(
