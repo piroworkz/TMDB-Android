@@ -1,7 +1,7 @@
 package com.davidluna.tmdb.app.di
 
 import com.davidluna.tmdb.auth_data.framework.local.QueryParametersSnapshot
-import com.davidluna.tmdb.core_data.di.NativeModule
+import com.davidluna.tmdb.core_data.di.BaseUrl
 import com.davidluna.tmdb.core_data.framework.remote.call_adapter.NetworkCallAdapterFactory
 import com.davidluna.tmdb.core_data.framework.remote.interceptors.ParametersSnapshot
 import com.davidluna.tmdb.core_data.framework.remote.interceptors.TmdbInterceptor
@@ -45,7 +45,7 @@ private fun provideJsonConverter(): Json = Json {
 
 
 private fun provideRetrofit(
-    baseUrl: NativeModule.BaseUrl,
+    baseUrl: BaseUrl,
     client: OkHttpClient,
     adapter: NetworkCallAdapterFactory,
     json: Json

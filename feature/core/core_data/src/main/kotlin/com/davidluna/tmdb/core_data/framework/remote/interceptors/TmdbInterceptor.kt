@@ -1,6 +1,6 @@
 package com.davidluna.tmdb.core_data.framework.remote.interceptors
 
-import com.davidluna.tmdb.core_data.di.NativeModule
+import com.davidluna.tmdb.core_data.di.ApiKey
 import com.davidluna.tmdb.core_data.framework.remote.interceptors.ParametersSnapshot.Keys
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
@@ -8,7 +8,7 @@ import okhttp3.Request
 import okhttp3.Response
 
 class TmdbInterceptor(
-    private val apiKey: NativeModule.ApiKey,
+    private val apiKey: ApiKey,
     private val parametersSnapshot: ParametersSnapshot,
 ) : Interceptor {
 

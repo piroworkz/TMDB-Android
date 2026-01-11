@@ -10,10 +10,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import com.davidluna.tmdb.core_domain.entities.NotificationDetails
-import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import kotlin.coroutines.EmptyCoroutineContext.get
 
 val dataNotificationsModule = module {
     singleOf(::provideNotificationManager)
@@ -22,21 +20,15 @@ val dataNotificationsModule = module {
     singleOf(::providesNotification)
 }
 
-interface PermissionStatus {
-    val value: Boolean
-}
-
-
 fun provideNotificationManager(application: Application): NotificationManager =
     application.getSystemService(NotificationManager::class.java)
 
-fun providePermissionStatus(application: Application): PermissionStatus = object : PermissionStatus {
-    override val value: Boolean
-        get() = Build.VERSION.SDK_INT >= 33 && checkSelfPermission(
-            application,
-            POST_NOTIFICATIONS
-        ) == PackageManager.PERMISSION_GRANTED
-}
+fun providePermissionStatus(application: Application): PermissionStatus = PermissionStatus(
+    Build.VERSION.SDK_INT >= 33 && checkSelfPermission(
+        application,
+        POST_NOTIFICATIONS
+    ) == PackageManager.PERMISSION_GRANTED
+)
 
 
 fun provideNotificationManagerCompat(application: Application): NotificationManagerCompat =
