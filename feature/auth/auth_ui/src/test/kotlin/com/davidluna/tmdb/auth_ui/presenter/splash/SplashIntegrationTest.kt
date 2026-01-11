@@ -94,7 +94,8 @@ class SplashIntegrationTest {
         return SplashViewModel(
             ioDispatcher = coroutineTestRule.dispatcher,
             validateSession = authenticationRepository,
-            observeSession = authenticationRepository
+            observeSession = authenticationRepository,
+            closeSession = authenticationRepository
         )
     }
 

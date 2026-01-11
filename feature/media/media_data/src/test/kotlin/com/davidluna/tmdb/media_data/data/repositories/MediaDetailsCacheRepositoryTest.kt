@@ -5,16 +5,17 @@ import arrow.core.right
 import com.davidluna.tmdb.core_data.framework.remote.model.toAppError
 import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
-import com.davidluna.tmdb.media_data.data.fakes.fakeCatalog
-import com.davidluna.tmdb.media_data.data.fakes.fakeMediaDetails
-import com.davidluna.tmdb.media_data.data.fakes.fakeRemoteCredits
-import com.davidluna.tmdb.media_data.data.fakes.fakeRemoteError
-import com.davidluna.tmdb.media_data.data.fakes.fakeRemoteImageResponse
-import com.davidluna.tmdb.media_data.data.fakes.fakeRemoteMediaDetail
-import com.davidluna.tmdb.media_data.data.fakes.fakeRoomMediaDetailsRelations
-import com.davidluna.tmdb.media_data.data.framework.local.database.dao.MediaDetailsDao
-import com.davidluna.tmdb.media_data.data.framework.paging.IsCacheExpired
-import com.davidluna.tmdb.media_data.data.framework.remote.services.RemoteMediaService
+import com.davidluna.tmdb.media_data.fakes.fakeCatalog
+import com.davidluna.tmdb.media_data.fakes.fakeMediaDetails
+import com.davidluna.tmdb.media_data.fakes.fakeRemoteCredits
+import com.davidluna.tmdb.media_data.fakes.fakeRemoteError
+import com.davidluna.tmdb.media_data.fakes.fakeRemoteImages
+import com.davidluna.tmdb.media_data.fakes.fakeRemoteMediaDetail
+import com.davidluna.tmdb.media_data.fakes.fakeRoomMediaDetailsRelations
+import com.davidluna.tmdb.media_data.framework.local.database.dao.MediaDetailsDao
+import com.davidluna.tmdb.media_data.framework.paging.IsCacheExpired
+import com.davidluna.tmdb.media_data.framework.remote.services.RemoteMediaService
+import com.davidluna.tmdb.media_data.repositories.MediaDetailsCacheRepository
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.called
 import io.mockk.coEvery
@@ -83,7 +84,7 @@ class MediaDetailsCacheRepositoryTest {
             every { observeCountryCode.invoke() } returns flowOf("US")
             coEvery { remote.getDetailById(any()) } returns fakeRemoteMediaDetail.right()
             coEvery { remote.getCreditsById(any()) } returns fakeRemoteCredits.right()
-            coEvery { remote.getImagesById(any()) } returns fakeRemoteImageResponse.right()
+            coEvery { remote.getImagesById(any()) } returns fakeRemoteImages.right()
             coEvery { local.cacheDetails(any(), any()) } returns fakeRoomMediaDetailsRelations
 
             val actual = sut.invoke(fakeCatalog, mediaId).getOrNull()
@@ -101,7 +102,7 @@ class MediaDetailsCacheRepositoryTest {
             every { observeCountryCode.invoke() } returns flowOf("US")
             coEvery { remote.getDetailById(any()) } returns fakeRemoteMediaDetail.right()
             coEvery { remote.getCreditsById(any()) } returns fakeRemoteCredits.right()
-            coEvery { remote.getImagesById(any()) } returns fakeRemoteImageResponse.right()
+            coEvery { remote.getImagesById(any()) } returns fakeRemoteImages.right()
             coEvery { local.cacheDetails(any(), any()) } returns fakeRoomMediaDetailsRelations
             val actual = sut.invoke(fakeCatalog, mediaId).getOrNull()
 
@@ -171,7 +172,7 @@ class MediaDetailsCacheRepositoryTest {
             every { observeCountryCode.invoke() } returns flowOf("US")
             coEvery { remote.getDetailById(any()) } returns fakeRemoteMediaDetail.right()
             coEvery { remote.getCreditsById(any()) } returns fakeRemoteCredits.right()
-            coEvery { remote.getImagesById(any()) } returns fakeRemoteImageResponse.right()
+            coEvery { remote.getImagesById(any()) } returns fakeRemoteImages.right()
             coEvery { local.cacheDetails(any(), any()) } throws exception
 
             val actual = sut.invoke(fakeCatalog, mediaId)

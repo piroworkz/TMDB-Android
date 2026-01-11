@@ -1,6 +1,7 @@
 package com.davidluna.tmdb.auth_ui.presenter.splash
 
 import app.cash.turbine.test
+import com.davidluna.tmdb.auth_domain.usecases.CloseSession
 import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
 import com.davidluna.tmdb.auth_domain.usecases.ValidateSession
 import com.davidluna.tmdb.auth_ui.fakes.fakeGuestSession
@@ -28,6 +29,9 @@ class SplashViewModelTest {
 
     @get:Rule(order = 2)
     val coroutineTestRule = CoroutineTestRule()
+
+    @MockK
+    private lateinit var closeSession: CloseSession
 
     @MockK
     private lateinit var validateSession: ValidateSession
@@ -100,6 +104,7 @@ class SplashViewModelTest {
     private fun buildSUT() = SplashViewModel(
         ioDispatcher = coroutineTestRule.dispatcher,
         validateSession = validateSession,
-        observeSession = observeSession
+        observeSession = observeSession,
+        closeSession = closeSession
     )
 }

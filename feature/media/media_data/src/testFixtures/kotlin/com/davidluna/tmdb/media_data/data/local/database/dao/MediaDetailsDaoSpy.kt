@@ -1,10 +1,10 @@
 package com.davidluna.tmdb.media_data.data.local.database.dao
 
-import com.davidluna.tmdb.media_data.data.framework.local.database.dao.MediaDetailsDao
-import com.davidluna.tmdb.media_data.data.framework.local.database.entities.credits.RoomCast
-import com.davidluna.tmdb.media_data.data.framework.local.database.entities.details.RoomMediaDetails
-import com.davidluna.tmdb.media_data.data.framework.local.database.entities.details.RoomMediaDetailsRelations
-import com.davidluna.tmdb.media_data.data.framework.local.database.entities.images.RoomImage
+import com.davidluna.tmdb.media_data.framework.local.database.dao.MediaDetailsDao
+import com.davidluna.tmdb.media_data.framework.local.database.entities.credits.RoomCast
+import com.davidluna.tmdb.media_data.framework.local.database.entities.details.RoomMediaDetails
+import com.davidluna.tmdb.media_data.framework.local.database.entities.details.RoomMediaDetailsRelations
+import com.davidluna.tmdb.media_data.framework.local.database.entities.images.RoomImage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 

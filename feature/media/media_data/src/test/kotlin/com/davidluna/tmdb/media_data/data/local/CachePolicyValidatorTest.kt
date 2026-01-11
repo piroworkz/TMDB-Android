@@ -1,21 +1,13 @@
 package com.davidluna.tmdb.media_data.data.local
 
-import com.davidluna.tmdb.media_data.data.framework.paging.CachePolicyValidator
-import com.davidluna.tmdb.media_data.data.framework.paging.IsCacheExpired
-import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
-import io.mockk.junit4.MockKRule
+import com.davidluna.tmdb.media_data.framework.paging.CachePolicyValidator
+import com.davidluna.tmdb.media_data.framework.paging.IsCacheExpired
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.days
 
 class CachePolicyValidatorTest {
-    @get:Rule(order = 1)
-    val mockkRule = MockKRule(this)
-
-    @get:Rule(order = 2)
-    val coroutineTestRule = CoroutineTestRule()
 
     private val sut: IsCacheExpired = CachePolicyValidator()
 

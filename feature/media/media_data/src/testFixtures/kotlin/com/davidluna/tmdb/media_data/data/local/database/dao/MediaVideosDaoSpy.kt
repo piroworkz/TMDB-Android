@@ -1,7 +1,7 @@
 package com.davidluna.tmdb.media_data.data.local.database.dao
 
-import com.davidluna.tmdb.media_data.data.framework.local.database.dao.MediaVideosDao
-import com.davidluna.tmdb.media_data.data.framework.local.database.entities.videos.RoomVideo
+import com.davidluna.tmdb.media_data.framework.local.database.dao.MediaVideosDao
+import com.davidluna.tmdb.media_data.framework.local.database.entities.videos.RoomVideo
 
 class MediaVideosDaoSpy : MediaVideosDao {
 

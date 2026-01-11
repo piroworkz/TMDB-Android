@@ -28,8 +28,8 @@ val fakeMediaList = fakeRemoteMediaList.map { it.toDomain() }
 val fakeVideos: List<Video> = fakeRemoteVideos.toDomain()
 val fakeImagesList = fakeRemoteImages.posters.map {
     Image(
-        filePath = it.filePath.orEmpty(),
-        mediaId = it.hashCode(),
+        filePath = it.filePath?.buildModel("w500").orEmpty(),
+        mediaId = fakeRemoteImages.id,
     )
 }
 
@@ -38,7 +38,7 @@ val fakeCast = fakeRemoteCredits.cast.map {
         castId = it.castId ?: -1,
         character = it.character.orEmpty(),
         name = it.name.orEmpty(),
-        profilePath = it.profilePath.orEmpty()
+        profilePath = it.profilePath?.buildModel().orEmpty()
     )
 }
 

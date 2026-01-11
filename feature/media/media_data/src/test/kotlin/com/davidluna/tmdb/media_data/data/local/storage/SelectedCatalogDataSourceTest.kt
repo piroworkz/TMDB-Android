@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import app.cash.turbine.test
-import com.davidluna.tmdb.media_data.data.framework.local.storage.SelectedCatalogDataSource
+import com.davidluna.tmdb.media_data.framework.local.storage.SelectedCatalogDataSource
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import junit.framework.TestCase.assertNull
