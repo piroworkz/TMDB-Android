@@ -67,6 +67,19 @@ When multiple sources exist, use the following authority order (highest to lowes
 
 ---
 
+## GitHub workflow (gh CLI required)
+- Any GitHub action MUST be performed using GitHub CLI (`gh`).
+  Examples of GitHub actions:
+    - listing/searching issues
+    - creating/updating issues
+    - creating/updating PRs
+    - adding labels/assignees/milestones
+    - commenting on issues/PRs
+    - reading PR checks/status
+- Do not use GitHub web UI instructions unless explicitly requested.
+- If `gh` is not available or authentication is missing, STOP and ask.
+
+
 ## Repo layout
 - Modules use a Clean Architecture split: `domain`, `data`, and `ui`.
 - Features live under `feature/{auth,media,core}` with modules like `auth_domain`, `auth_data`, `auth_ui`.
