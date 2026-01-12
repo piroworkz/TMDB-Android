@@ -1,20 +1,35 @@
-# AGENTS
+# AGENTS.md
 
 Project-specific guidance for automated changes in this repository.
 
-## General
+## About this repository workflow (Spec-driven + Codex)
+This repository follows a Spec-Driven Development workflow:
+- Specs define the user-facing behavior.
+- Plans define the technical approach (aligned with repo patterns).
+- Tasks define small actionable steps.
+- Implementation must follow strict TDD (see Constitution).
+
+This file defines **repo guardrails** (architecture/DI/dependencies/git rules).
+It is not a tutorial and must be followed by any automated changes.
+
+### Source priority
+When multiple sources exist, use the following authority order (highest to lowest):
+1) `AGENTS.md`
+2) `contexts/templates/constitution.md` (process / TDD rules)
+3) `contexts/PROJECT_CONTEXT.md` (operational manual, if present)
+4) Feature docs (`*_spec.md`, `*_plan.md`, `*_tasks.md`)
+5) Code (current implementation)
+   If sources conflict, STOP and ask.
+
+---
+
+## General practices
 - Prefer `rg` for search and `apply_patch` for small edits.
 - Keep edits ASCII unless a file already uses Unicode.
 - Avoid destructive git commands unless explicitly asked.
 - If something is unclear, search the repo first (code, tests, docs). If still unclear, ask.
 
-### Source priority
-When multiple sources exist, use the following authority order (highest to lowest):
-1) `AGENTS.md`
-2) `contexts/PROJECT_CONTEXT.md` (if present)
-3) Feature docs (`*_spec.md`, `*_plan.md`, `*_tasks.md`)
-4) Code (current implementation)
-   If sources conflict, STOP and ask.
+---
 
 ## Git workflow (branching, commits)
 
@@ -22,7 +37,6 @@ When multiple sources exist, use the following authority order (highest to lowes
 - Read-only tasks (review, analysis, summarization) MUST continue even if the working tree is dirty.
 - If the working tree is dirty, do NOT run git operations that modify history or working state
   (commit, merge, rebase, checkout/switch, stash, reset, push) unless explicitly asked.
-- Do not ask for confirmation to proceed with read-only tasks.
 
 ### What "updated" means
 - "Updated `master`" means: sync with `origin/master` using rebase (not merge):
@@ -41,7 +55,7 @@ When multiple sources exist, use the following authority order (highest to lowes
 - Never infer the feature branch from the currently checked out branch.
 - If the target feature branch is not explicitly provided, STOP and ask which `feature/<name>` branch to use.
 
-### PR & merge rules (strict)
+### PR rules (strict)
 - Never commit, merge, or push changes directly to `master`.
 - Do not open PRs targeting `master`.
     - PRs MUST target the current feature branch.
@@ -51,14 +65,18 @@ When multiple sources exist, use the following authority order (highest to lowes
 - Prefer small commits grouped by task.
 - Do not amend/rewrite history unless explicitly asked.
 
-## Repo Layout
+---
+
+## Repo layout
 - Modules use a Clean Architecture split: `domain`, `data`, and `ui`.
 - Features live under `feature/{auth,media,core}` with modules like `auth_domain`, `auth_data`, `auth_ui`.
 - Shared test utilities live in `test_shared`.
 - Some `data` modules expose shared test helpers via `testFixtures`.
 - Gradle convention plugins live in `build-logic/convention`.
 
-## Build & Configuration
+---
+
+## Build & configuration
 - Build files are named after their module (e.g., `feature/auth/auth_ui/auth_ui.gradle.kts`) via `setProjectBuildFileName` in `settings.gradle.kts`.
 - Dependencies and plugin aliases are centralized in `gradle/libs.versions.toml`.
 - Convention plugins used across modules:
@@ -69,6 +87,8 @@ When multiple sources exist, use the following authority order (highest to lowes
     - `tmdb.kotlin.module.plugin`
     - `tmdb.test.shared.plugin`
 - Sensitive config goes in `local.properties` (e.g., `TMDB_API_KEY`, signing fields). Never commit secrets.
+
+---
 
 ## Dependencies (strict rules)
 - No new dependencies without explicit approval.
@@ -81,6 +101,8 @@ When multiple sources exist, use the following authority order (highest to lowes
 - If an approved dependency is needed only in a single module, it MAY be added directly to that module
   (e.g., `implementation(libs.roomPaging)` in `media_data` only).
 
+---
+
 ## Architecture & DI
 - Domain modules define contracts only (interfaces, models); implementations live in `data` modules.
 - Use cases in `<feature>_domain` are contracts (interfaces) implemented by repositories in `<feature>_data`.
@@ -88,16 +110,11 @@ When multiple sources exist, use the following authority order (highest to lowes
 - Dependency rule: `ui` -> `domain` <- `data` (no `ui` -> `data` or `domain` -> anything).
 - Keep DI wiring consistent with existing patterns in the repo. Do not introduce a new DI approach.
 
+---
+
 ## Koin DI conventions
 - Koin is the only DI framework used in this repo. Do not introduce Hilt/Dagger or other DI.
-- DI modules MUST live in `di/` packages inside each module
-  (e.g., `feature/<name>/<name>_data/di`, `feature/<name>/<name>_ui/di`).
-- Prefer module-level DI wiring:
-    - `<feature>_data` provides data implementations (APIs, DAOs,).
-    - `<feature>_domain` exposes contracts/use cases (no implementations).
-    - `<feature>_ui` provides ViewModels and UI wiring.
-- ViewModels MUST be resolved via Koin and used from Compose via `koinViewModel()` (follow existing repo patterns).
-- Do not use global singletons or service locators (`object` instances) to replace DI.
+- DI modules MUST live in `di/` packages inside each module.
 
 ### Binding rules
 - Use `single` for shared components (Retrofit, Database, DAOs, repositories).
@@ -111,106 +128,58 @@ When multiple sources exist, use the following authority order (highest to lowes
 - Shared wrapper types MUST live in `core_data` under `com.davidluna.tmdb.core_data.di`
   (or a dedicated subpackage like `.values`).
 - Do not duplicate wrapper types across features/modules.
-- Inject wrapped types directly via Koin (type-safe). This pattern replaces Koin qualifiers.
-- Do not inject raw `String` configuration values.
 
-### Safety
-- Do not create multiple competing definitions for the same type without an explicit need.
-- If a definition becomes unreachable or ambiguous, stop and fix DI graph before proceeding.
+---
 
+## Canonical implementation patterns
 ## Architecture Reference
 ![CleanArch.jpg](CleanArch.jpg)
-
-## Implementation Patterns (Canonical)
-
-### Module responsibilities
-- `feature/<name>/<name>_domain`:
-    - Domain entities live in `entities/`
-    - Use cases live in `usecases/`
-    - Contracts only: interfaces + domain models. No Retrofit/Room/Android types.
-- `feature/<name>/<name>_data`:
-    - Framework edge code lives in `framework/` (Retrofit/Room/etc.)
-    - Repositories live in `repositories/` and orchestrate remote/local + mapping to domain
-    - DI wiring lives in `di/`
-    - Shared helpers live in `utils/`
-- `feature/<name>/<name>_ui`:
-    - DI wiring lives in `di/`
-    - Navigation routes/graphs live in `navigation/`
-    - Presentation logic (MVVM ViewModels) lives in `presenter/<screen>/`
-    - Compose UI lives in `view/<screen>/`
 
 ### Framework layer (inside `<name>_data/framework`)
 - Remote:
     - Retrofit interfaces use `*Api` naming (e.g., `AuthenticationApi`)
     - Remote DTOs use `Remote*` naming
 - Local (Room):
-    - DAOs use `*Dao` naming (e.g., `SessionDao`, `AccountDao`)
-    - Entities use `Room*` naming (e.g., `RoomSession`, `RoomUserAccount`)
+    - DAOs use `*Dao` naming
+    - Entities use `Room*` naming
 
 ### Mapping conventions
 - Mapping functions are repository implementation details and MUST be kept `private` inside repositories.
-- Mappers are simple 1:1 field mapping (+ nullability checks). Avoid adding business logic in mapping.
-- Prefer explicit mapping extensions with consistent names (even when `private`):
-    - `RemoteX.toLocalStorage(): RoomX`
-    - `RoomX.toDomain(): X`
-- Do not write direct tests for mappers. Compiler + higher-level tests are sufficient.
+- Mappers are simple 1:1 field mapping (+ nullability checks).
+- Do not write direct tests for mappers.
 - Repositories must not leak `Remote*` or `Room*` types outside `<name>_data`.
 
-### Repository collaboration rules (allowed)
-- A repository MAY depend on another repository if it preserves separation of concerns
-  (e.g., session/account responsibilities remain split but coordinated).
-- A repository MAY implement multiple use cases when it is the natural owner of that behavior.
-- Do not merge unrelated concerns just to reduce class count.
+---
 
-### UI layering rules (MVVM)
-- `presenter/` is the Presentation layer and uses MVVM:
-    - ViewModels live under `presenter/<screen>/`
-    - ViewModels own UI state, event handling, and call domain use cases
-- `view/` contains Compose UI only:
-    - render state
-    - forward UI events to the ViewModel
-    - no business logic, no data access, no use case orchestration in Composables
-- `navigation/` defines routes and wiring between screens.
-- UI MUST depend only on `<name>_domain` (never on `<name>_data`).
-
-### Prohibited patterns
-- Do not reference `Retrofit`, `@GET/@POST`, `RoomDatabase`, `@Dao`, `@Entity` outside `<name>_data`.
-- Do not reference `Remote*` or `Room*` types outside `<name>_data`.
-- Do not create direct data access from UI (no DAOs/APIs in UI).
-- No repositories/DAOs/APIs in `view/` or `navigation/`.
-- No calling use cases directly from Composables (must go through ViewModel).
-
-## Testing Expectations (Mandatory)
+## Testing expectations (Mandatory)
 - Follow TDD for any behavior change:
     1) Write/adjust a failing test first (red)
     2) Make the minimal change to pass (green)
     3) Refactor only after green
 - Prefer fast unit tests at `domain`/`data` boundaries. Use UI/instrumented tests only when necessary.
-- When fixing bugs, add a regression test that fails before the fix and passes after.
-- Do not disable or delete tests to make builds pass. If a test is flaky, report it and propose a fix.
 
-## Definition of Done
-A change is considered done only if:
-- The code compiles and tests pass for affected modules.
-- Architecture rules are preserved (`ui` does not depend on `data`; domain has no implementations).
-- No new dependency is added without explicit approval.
-- Public APIs (interfaces/models) are not changed unless required by the Spec/Task.
+---
 
 ## Verification
 - Default verification is unit tests only (`./gradlew test`) unless the Spec/Task explicitly requires instrumented tests.
-- Instrumented tests (e.g., `connectedDebugAndroidTest`) are heavy: ask for confirmation before running them unless explicitly requested.
-- Always run the smallest relevant Gradle task(s) that validate the change.
-- Use Gradle tasks when needed, for example:
+- Instrumented tests are heavy: ask for confirmation before running them unless explicitly requested.
+- If changes touch `build-logic/convention`, run:
     - `./gradlew test`
-    - `./gradlew :feature:auth:auth_ui:connectedDebugAndroidTest`
-    - `./gradlew :app:connectedDebugAndroidTest`
-- If a change impacts multiple modules, run module-level unit tests for each impacted module plus `./gradlew test`.
-- If changes touch `build-logic/convention` or Gradle convention plugins, run:
-    - `./gradlew test`
-    - `./gradlew :build-logic:convention:build` (or the closest available build/check task for that module)
-    - If the task name is uncertain, STOP and inspect available Gradle tasks first.
+    - `./gradlew :build-logic:convention:build` (or closest available task)
 
-## Change Safety Rules
-- Implement only what is required by the current Spec/Task.
-- Avoid refactoring unrelated code. Prefer surgical changes.
-- Keep APIs stable: avoid renaming public types/functions unless necessary.
+---
+
+## Important design decisions
+- Domain use cases are contracts only (interfaces).
+- Repositories are singletons and implement one or more domain contracts when appropriate.
+- Mapping helpers are private repository details and not unit-tested directly.
+- Avoid string-based Koin qualifiers. Use type-safe wrapper classes.
+- Dependencies are centralized via `libs.versions.toml` and convention plugins.
+
+---
+
+## Governance
+- This file defines repo guardrails and supersedes conflicting practices.
+- For process/TDD rules: see `contexts/templates/constitution.md`.
+- For operational setup and commands: see `contexts/PROJECT_CONTEXT.md`.
+  If docs conflict, STOP and ask.
