@@ -5,10 +5,10 @@ A modern, modular Android application built with Kotlin and Jetpack Compose, fol
 ## 🎯 Project Overview
 
 **TMDB-Android** is a feature-rich Android application that showcases best practices in modern Android development:
-- **Modular Architecture**: Each feature is split into `domain`, `framework`, and `ui` layers
+- **Modular Architecture**: Each feature is split into `domain`, `data`, and `ui` layers
 - **Jetpack Compose**: Modern declarative UI framework
 - **Kotlin Coroutines**: Asynchronous operations and reactive data flows
-- **Dependency Injection with Hilt**: Centralized dependency management
+- **Dependency Injection with Koin**: Lightweight, Kotlin-first dependency injection
 - **Clean Architecture**: Separation of concerns with clear layer boundaries
 - **Comprehensive Testing**: Unit tests, integration tests, and instrumented UI tests
 
@@ -20,15 +20,15 @@ TMDB-Android/
 ├── feature/                       # Feature modules
 │   ├── auth/                     # Authentication feature
 │   │   ├── auth_domain/          # Business logic & entities
-│   │   ├── auth_framework/       # Data sources & repositories
+│   │   ├── auth_data/            # Remote (API) & Local (Room/DataStore) data sources
 │   │   └── auth_ui/              # Compose UI & ViewModels
 │   ├── media/                    # Media (movies/shows) feature
 │   │   ├── media_domain/
-│   │   ├── media_framework/
+│   │   ├── media_data/
 │   │   └── media_ui/
 │   └── core/                     # Shared core functionality
 │       ├── core_domain/          # Shared domain models
-│       ├── core_framework/       # Shared infrastructure
+│       ├── core_data/            # Shared infrastructure (networking, database)
 │       └── core_ui/              # Shared UI components
 ├── build-logic/                  # Custom Gradle convention plugins
 ├── test_shared/                  # Shared testing utilities
@@ -39,9 +39,11 @@ TMDB-Android/
 
 The project follows a **modular, layered Clean Architecture**:
 
-- **Domain Layer**: Pure Kotlin/business logic, use cases, and entities (no Android dependencies)
-- **Framework Layer**: Data sources, repositories, network calls, database, and DI configuration
-- **UI Layer**: Jetpack Compose components, ViewModels, and navigation
+- **Domain Layer**: Pure Kotlin/business logic, use cases (contracts/interfaces), and entities (no Android dependencies)
+- **Data Layer**: Remote data sources (Retrofit APIs), local data sources (Room, DataStore), repositories (implement use case contracts), and DI configuration
+- **UI Layer**: Jetpack Compose components, ViewModels (wired via Koin), and navigation
+
+**Dependency rule**: `ui` → `domain` ← `data` (no `ui` → `data` or `domain` → anything)
 
 ### S.O.L.I.D. Principles
 
@@ -60,7 +62,7 @@ The project follows a **modular, layered Clean Architecture**:
 - **Image Loading**: Coil for efficient image caching and loading
 - **Modular Design**: Features can be developed independently
 - **Comprehensive Testing**: Unit tests, integration tests, and instrumented UI tests
-- **Dependency Injection**: Hilt for automatic DI container management
+- **Dependency Injection**: Koin for lightweight, Kotlin-first DI
 - **Firebase Integration**: Analytics, Crashlytics, Cloud Messaging, and Performance Monitoring
 
 ## 🎁 Benefits of This Approach
@@ -76,7 +78,7 @@ The project follows a **modular, layered Clean Architecture**:
 
 ### Prerequisites
 
-- **Android Studio**: 2025.2.2 (Otter Feature Drop) or later
+- **Android Studio**: Ladybug Feature Drop (2024.2.2) or later
 - **JDK**: 17 (configured for this project)
 - **Gradle**: Configured in `gradle-wrapper` (no manual installation needed)
 
@@ -116,18 +118,17 @@ KEY_PASSWORD=your_key_password
 ### Core Dependencies (Key Libraries)
 
 **Android & Jetpack**
-- `androidx.activity:activity-compose` (1.12.1) - Activity integration with Compose
-- `androidx.compose.*` (2025.12.00) - Jetpack Compose BOM
+- `androidx.activity:activity-compose` (1.12.2) - Activity integration with Compose
+- `androidx.compose.*` (2025.12.01) - Jetpack Compose BOM
 - `androidx.compose.material3:material3` - Material Design 3 components
 - `androidx.navigation:navigation-compose` (2.9.6) - Navigation for Compose
 - `androidx.room:room-*` (2.8.4) - Local database with Room ORM
 - `androidx.datastore:datastore-preferences-core` (1.2.0) - Data storage
 - `androidx.paging:paging-compose` (3.3.6) - Pagination support
 - `androidx.core:core-splashscreen` (1.2.0) - Splash screen support
-- `androidx.hilt:hilt-navigation-compose` (1.3.0) - Hilt + Compose integration
 
 **Kotlin & Coroutines**
-- `org.jetbrains.kotlin:kotlin-stdlib` (2.2.21) - Kotlin standard library
+- `org.jetbrains.kotlin:kotlin-stdlib` (2.3.0) - Kotlin standard library
 - `org.jetbrains.kotlinx:kotlinx-coroutines-*` (1.10.2) - Coroutines for async operations
 - `org.jetbrains.kotlinx:kotlinx-serialization-json` (1.9.0) - JSON serialization
 - `org.jetbrains.kotlinx:kotlinx-datetime` (0.7.1) - Date/time handling
@@ -142,9 +143,9 @@ KEY_PASSWORD=your_key_password
 - `io.coil-kt:coil-compose` (2.7.0) - Image loading library for Compose
 
 **Dependency Injection**
-- `com.google.dagger:hilt-android` (2.57.2) - Hilt dependency injection framework
-- `com.google.dagger:hilt-compiler` (2.57.2) - Hilt compiler
-- `javax.inject:javax.inject` (1) - Injection annotations
+- `io.insert-koin:koin-bom` (4.1.1) - Koin BOM (Bill of Materials)
+- `io.insert-koin:koin-android` - Koin Android support
+- `io.insert-koin:koin-androidx-compose` - Koin Compose integration
 
 **Firebase**
 - `com.google.firebase:firebase-bom` (34.7.0) - Firebase platform
@@ -154,7 +155,7 @@ KEY_PASSWORD=your_key_password
 - `com.google.firebase:firebase-perf` - Performance monitoring
 
 **Other Libraries**
-- `io.arrow-kt:arrow-core` (2.2.0) - Functional programming utilities
+- `io.arrow-kt:arrow-core` (2.2.1.1) - Functional programming utilities
 - `com.google.android.gms:play-services-location` (21.3.0) - Location services
 
 ### Testing Dependencies
@@ -164,6 +165,7 @@ KEY_PASSWORD=your_key_password
 - `io.mockk:mockk` (1.14.7) - Mocking library
 - `app.cash.turbine:turbine` (1.2.1) - Flow testing utilities
 - `org.jetbrains.kotlinx:kotlinx-coroutines-test` (1.10.2) - Coroutines testing
+- `io.insert-koin:koin-test` - Koin testing support
 
 **Instrumented Testing**
 - `androidx.compose.ui:ui-test-junit4` - Compose testing
@@ -172,18 +174,18 @@ KEY_PASSWORD=your_key_password
 - `androidx.test.espresso:espresso-core` (3.7.0) - Espresso testing
 - `androidx.test.espresso:espresso-intents` (3.7.0) - Intent testing
 - `com.squareup.okhttp3:mockwebserver` (5.3.2) - Mock HTTP server
-- `com.google.dagger:hilt-android-testing` (2.57.2) - Hilt testing support
 - `androidx.navigation:navigation-testing` (2.9.6) - Navigation testing
 
 ### Build Plugins
 
 - `com.android.application` (8.13.2) - Android app plugin
-- `org.jetbrains.kotlin.android` (2.2.21) - Kotlin Android plugin
-- `org.jetbrains.kotlin.jvm` (2.2.21) - Kotlin JVM plugin
+- `org.jetbrains.kotlin.android` (2.3.0) - Kotlin Android plugin
+- `org.jetbrains.kotlin.jvm` (2.3.0) - Kotlin JVM plugin
 - `com.google.gms.google-services` (4.4.4) - Google Services plugin
 - Custom convention plugins via `build-logic/convention`
 
 For the complete, authoritative list of versions and dependencies, see **`gradle/libs.versions.toml`**.
+
 ## 🔨 Build & Testing
 
 ### Build Commands
@@ -223,14 +225,17 @@ The project uses:
 ### Directory Structure for Build Logic
 
 Custom Gradle convention plugins are located in `build-logic/convention/`:
+- `tmdb.android.application` - Applies Android application configuration
 - `tmdb.ui.module.plugin` - Applies UI module configuration (Compose, Material3, testing)
-- `tmdb.framework.module.plugin` - Applies framework module configuration (networking, persistence, DI)
+- `tmdb.framework.module.plugin` - Applies data module configuration (networking, Room, Koin)
+- `tmdb.room.module.plugin` - Applies Room database configuration
 - `tmdb.kotlin.module.plugin` - Applies common Kotlin JVM settings
+- `tmdb.test.shared.plugin` - Applies shared test utilities configuration
 
 ## 🤝 Contribution
 
 - Follow the project's coding conventions and architecture
-- Create features following the modular pattern (domain/framework/ui split)
+- Create features following the modular pattern (domain/data/ui split)
 - Add unit and instrumented tests for new features
 - Keep dependencies versions synchronized in `gradle/libs.versions.toml`
 - Open issues or pull requests on GitHub
@@ -241,11 +246,11 @@ Custom Gradle convention plugins are located in `build-logic/convention/`:
 
 ## 👥 Credits
 
-- **Architecture Pattern**: Clean Architecture + MVVM with Hilt DI
+- **Architecture Pattern**: Clean Architecture + MVVM with Koin DI
 - **UI Framework**: Jetpack Compose + Material Design 3
 - **Build System**: Gradle with custom convention plugins
 - See repository for full acknowledgements
 
 ---
 
-**Last Updated**: December 17, 2025
+**Last Updated**: January 11, 2026
