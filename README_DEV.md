@@ -1,6 +1,14 @@
-# TMDB-Android — Developer Guide
+# TMDB-Android — Developer Guide (README_DEV)
 
-A comprehensive guide for developers working on the **TMDB-Android** project. This document covers architecture details, development conventions, setup instructions, and common workflows.
+This document is **for humans**.
+It provides extended explanations, examples, and troubleshooting.
+
+For automated changes / AI agents, the authoritative documents are:
+- `AGENTS.md`
+- `constitution.md`
+- `PROJECT_CONTEXT.md`
+
+---
 
 **Last Updated**: January 11, 2026
 

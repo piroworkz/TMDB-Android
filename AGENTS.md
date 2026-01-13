@@ -1,198 +1,190 @@
 # AGENTS.md
 
-Project-specific guidance for automated changes in this repository.
-
-## About this repository workflow (Spec-driven + Codex)
-This repository follows a Spec-Driven Development workflow:
-- Specs define the user-facing behavior.
-- Plans define the technical approach (aligned with repo patterns).
-- Tasks define small actionable steps.
-- Implementation must follow strict TDD (see Constitution).
-
-This file defines **repo guardrails** (architecture/DI/dependencies/git rules).
-It is not a tutorial and must be followed by any automated changes.
-
-### Source priority
-When multiple sources exist, use the following authority order (highest to lowest):
-1) `AGENTS.md`
-2) `contexts/templates/constitution.md` (process / TDD rules)
-3) `contexts/PROJECT_CONTEXT.md` (operational manual, if present)
-4) Feature docs (`*_spec.md`, `*_plan.md`, `*_tasks.md`)
-5) Code (current implementation)
-   If sources conflict, STOP and ask.
+Project-specific guidance for AI agents working on this repository.
 
 ---
 
-## General practices
-- Prefer `rg` for search and `apply_patch` for small edits.
-- Keep edits ASCII unless a file already uses Unicode.
-- Avoid destructive git commands unless explicitly asked.
-- If something is unclear, search the repo first (code, tests, docs). If still unclear, ask.
+## 1. Project Overview
+
+Android app consuming TMDB API, built with Clean Architecture, Kotlin, Jetpack Compose, and Koin DI.
+
+### Tech Stack
+| Layer | Technology |
+|-------|------------|
+| Language | Kotlin |
+| UI | Jetpack Compose |
+| DI | Koin (no Hilt/Dagger) |
+| Build | Gradle + convention plugins |
+| Architecture | Clean Architecture (domain/data/ui) |
+
+### Repo Layout
+```
+feature/{auth,media,core}/   → feature modules (*_domain, *_data, *_ui)
+build-logic/convention/      → Gradle convention plugins
+test_shared/                 → shared test utilities
+context/                     → specs, plans, tasks, constitution
+```
+
+### Workflow (Spec-Driven + TDD)
+- **Specs** define user-facing behavior
+- **Plans** define technical approach (aligned with repo patterns)
+- **Tasks** define small actionable steps
+- **Implementation** follows strict TDD (see Constitution)
+
+### Source Priority (highest → lowest)
+1. `AGENTS.md` (this file)
+2. `context/constitution.md` (process/TDD rules)
+3. `context/PROJECT_CONTEXT.md` (ops cheat sheet)
+4. Feature docs (`*_spec.md`, `*_plan.md`, `*_tasks.md`)
+5. Code (current implementation)
+6. *Optional*: `TDD_COOKBOOK.md` (examples, on demand only)
+
+> If sources conflict, **STOP and ask**.
 
 ---
 
-## Git workflow (branching, commits)
+## 2. Build and Test Commands
 
-### Working tree policy
-- Read-only tasks (review, analysis, summarization) MUST continue even if the working tree is dirty.
-- If the working tree is dirty, do NOT run git operations that modify history or working state
-  (commit, merge, rebase, checkout/switch, stash, reset, push) unless explicitly asked.
+```bash
+# Unit tests (default verification)
+./gradlew test
 
-### What "updated" means
-- "Updated `master`" means: sync with `origin/master` using rebase (not merge):
-    - `git fetch origin`
-    - `git checkout master`
-    - `git pull --rebase origin master`
-- If rebase would rewrite local history or create conflicts, STOP and ask how to proceed.
+# Build convention plugins (if build-logic/ changes)
+./gradlew :build-logic:convention:build
 
-### Branching rules
-- Base branches:
-    - New features MUST branch from an updated `master`:
-        - `feature/<name>`
-    - Issues MUST branch from the current updated feature branch:
-        - `issue/<issue-title-normalized>`
-- "Current feature branch" means the feature branch explicitly mentioned in the request or issue context.
-- Never infer the feature branch from the currently checked out branch.
-- If the target feature branch is not explicitly provided, STOP and ask which `feature/<name>` branch to use.
+# Full build
+./gradlew build
+```
 
-### PR rules (strict)
-- Never commit, merge, or push changes directly to `master`.
-- Do not open PRs targeting `master`.
-    - PRs MUST target the current feature branch.
-- Only inform when the PR is ready for review.
-
-### Commit rules
-- Prefer small commits grouped by task.
-- Do not amend/rewrite history unless explicitly asked.
+### Verification Rules
+- Default: unit tests only (`./gradlew test`)
+- Instrumented tests: **ask for confirmation** before running (they are heavy)
+- If changes touch `build-logic/convention`: run both test and convention build
 
 ---
 
-## GitHub workflow (gh CLI required)
-- Any GitHub action MUST be performed using GitHub CLI (`gh`).
-  Examples of GitHub actions:
-    - listing/searching issues
-    - creating/updating issues
-    - creating/updating PRs
-    - adding labels/assignees/milestones
-    - commenting on issues/PRs
-    - reading PR checks/status
-- Do not use GitHub web UI instructions unless explicitly requested.
-- If `gh` is not available or authentication is missing, STOP and ask.
+## 3. Code Style Guidelines
 
+### General Practices
+- Prefer `rg` for search and `apply_patch` for small edits
+- Keep edits ASCII unless file already uses Unicode
+- Avoid destructive git commands unless explicitly asked
+- If unclear, search the repo first; if still unclear, ask
 
-## Repo layout
-- Modules use a Clean Architecture split: `domain`, `data`, and `ui`.
-- Features live under `feature/{auth,media,core}` with modules like `auth_domain`, `auth_data`, `auth_ui`.
-- Shared test utilities live in `test_shared`.
-- Some `data` modules expose shared test helpers via `testFixtures`.
-- Gradle convention plugins live in `build-logic/convention`.
+### Architecture Rules
+- Dependency rule: `ui` → `domain` ← `data` (never `ui` → `data` or `domain` → anything)
+- Domain modules: contracts only (interfaces, models)
+- Data modules: implementations
+- Use cases: interfaces in `*_domain`, implemented by repositories in `*_data`
 
----
+### Koin DI Conventions
+- Koin is the **only** DI framework; do not introduce Hilt/Dagger
+- DI modules live in `di/` packages inside each module
+- `single` for shared components (Retrofit, Database, DAOs, repositories)
+- `factory` for stateless objects (builders, small helpers)
+- **No** `named()` or string-based qualifiers
+- Wrap primitives in `@JvmInline value class` (shared wrappers in `core_data`)
 
-## Build & configuration
-- Build files are named after their module (e.g., `feature/auth/auth_ui/auth_ui.gradle.kts`) via `setProjectBuildFileName` in `settings.gradle.kts`.
-- Dependencies and plugin aliases are centralized in `gradle/libs.versions.toml`.
-- Convention plugins used across modules:
-    - `tmdb.android.application`
-    - `tmdb.ui.module.plugin`
-    - `tmdb.framework.module.plugin`
-    - `tmdb.room.module.plugin`
-    - `tmdb.kotlin.module.plugin`
-    - `tmdb.test.shared.plugin`
-- Sensitive config goes in `local.properties` (e.g., `TMDB_API_KEY`, signing fields). Never commit secrets.
+### Dependencies (Strict)
+- No new dependencies without explicit approval
+- All dependencies via `gradle/libs.versions.toml`
+- Adding any dependency to a module requires approval first (explicit confirmation)
+- Broadly-used dependencies go in convention plugins, not repeated across modules
 
----
-
-## Dependencies (strict rules)
-- No new dependencies without explicit approval.
-- All dependencies MUST be added via `gradle/libs.versions.toml`.
-- Prefer existing libraries already used in the repo.
-- If a new approved dependency applies broadly:
-    - If it should be used by all modules or by a module type (e.g., all `*_data` modules),
-      add it to the appropriate Gradle convention plugin instead of repeating it across modules.
-    - If unsure whether it belongs in a convention plugin, STOP and ask.
-- If an approved dependency is needed only in a single module, it MAY be added directly to that module
-  (e.g., `implementation(libs.roomPaging)` in `media_data` only).
+### Build Configuration
+- Build files named after module (e.g., `auth_ui.gradle.kts`)
+- Convention plugins:
+  - `tmdb.android.application`
+  - `tmdb.ui.module.plugin`
+  - `tmdb.framework.module.plugin`
+  - `tmdb.room.module.plugin`
+  - `tmdb.kotlin.module.plugin`
+  - `tmdb.test.shared.plugin`
 
 ---
 
-## Architecture & DI
-- Domain modules define contracts only (interfaces, models); implementations live in `data` modules.
-- Use cases in `<feature>_domain` are contracts (interfaces) implemented by repositories in `<feature>_data`.
-- UI is Jetpack Compose; ViewModels are wired with Koin (`koinViewModel`), and DI modules live in `di/` packages.
-- Dependency rule: `ui` -> `domain` <- `data` (no `ui` -> `data` or `domain` -> anything).
-- Keep DI wiring consistent with existing patterns in the repo. Do not introduce a new DI approach.
+## 4. Testing Instructions
+
+### TDD Workflow (Mandatory)
+Strict TDD for **any** change (including refactors) with no exceptions:
+1. **Red**: Write/adjust a failing test first
+2. **Green**: Minimal change to pass
+3. **Refactor**: Only after green
+
+### Test Placement
+- Prefer fast unit tests at `domain`/`data` boundaries
+- UI/instrumented tests only when necessary
+- Some `data` modules expose helpers via `testFixtures`
 
 ---
 
-## Koin DI conventions
-- Koin is the only DI framework used in this repo. Do not introduce Hilt/Dagger or other DI.
-- DI modules MUST live in `di/` packages inside each module.
+## 5. Security Considerations
 
-### Binding rules
-- Use `single` for shared components (Retrofit, Database, DAOs, repositories).
-- Use `factory` for lightweight/stateless objects (builders, small helpers).
-- If parameters are required, use Koin parameter injection (`parametersOf(...)`) (follow existing patterns).
-
-### Qualifiers & primitives (type-safe wrappers)
-- Do NOT use `named()`, `StringQualifier`, or string-based qualifiers.
-- Primitive values (String, Boolean, Int, etc.) that are shared (e.g., API keys, base URLs)
-  MUST be wrapped in explicit types (`@JvmInline value class` preferred).
-- Shared wrapper types MUST live in `core_data` under `com.davidluna.tmdb.core_data.di`
-  (or a dedicated subpackage like `.values`).
-- Do not duplicate wrapper types across features/modules.
+- Sensitive config in `local.properties` only:
+  - `TMDB_API_KEY`
+  - Signing fields
+- **Never** commit secrets
+- Wrap shared primitives (API keys, URLs) in explicit types
 
 ---
 
-## Canonical implementation patterns
-## Architecture Reference
-![CleanArch.jpg](CleanArch.jpg)
+## 6. Git & GitHub Workflow
 
-### Framework layer (inside `<name>_data/framework`)
-- Remote:
-    - Retrofit interfaces use `*Api` naming (e.g., `AuthenticationApi`)
-    - Remote DTOs use `Remote*` naming
-- Local (Room):
-    - DAOs use `*Dao` naming
-    - Entities use `Room*` naming
+### Working Tree Policy
+- Read-only tasks: continue even if working tree is dirty
+- Modifying operations: **STOP and ask** if dirty (no edits until explicit approval)
+- If request requires updating `master` and tree is dirty: **STOP and ask**
 
-### Mapping conventions
-- Mapping functions are repository implementation details and MUST be kept `private` inside repositories.
-- Mappers are simple 1:1 field mapping (+ nullability checks).
-- Do not write direct tests for mappers.
-- Repositories must not leak `Remote*` or `Room*` types outside `<name>_data`.
+### What "Updated" Means
+```bash
+git fetch origin
+git checkout master
+git pull --rebase origin master
+```
+> If rebase would rewrite history or create conflicts, **STOP and ask** (user will clean).
+
+### Branching Rules
+| Type | Base | Pattern |
+|------|------|---------|
+| Feature | updated `master` | `feature/<name>` |
+| Issue | current feature branch | `issue/<issue-title-normalized>` |
+
+- "Current feature branch" = explicitly mentioned in request/issue context
+- Never infer from checked-out branch or issue metadata
+- If target feature branch not explicit: **STOP and ask** (always ask)
+
+### PR Rules (Strict)
+- Never commit/push directly to `master`
+- PRs target the feature branch, **not** `master`
+- Only inform when PR is ready for review
+
+### Commit Rules
+- Small commits grouped by task
+- No history rewrite unless explicitly asked
+
+### GitHub CLI Required
+All GitHub actions via `gh` CLI:
+- Issues: list, create, update, comment
+- PRs: create, update, check status
+- Labels, assignees, milestones
+
+> If `gh` unavailable or unauthenticated: **STOP and ask**
+
+### Forbidden Commands
+- `git clean -fd` — banned unless explicitly requested
+- `git reset --hard` — banned unless explicitly requested
+- If branch unrecoverable: delete and restart from base
 
 ---
 
-## Testing expectations (Mandatory)
-- Follow TDD for any behavior change:
-    1) Write/adjust a failing test first (red)
-    2) Make the minimal change to pass (green)
-    3) Refactor only after green
-- Prefer fast unit tests at `domain`/`data` boundaries. Use UI/instrumented tests only when necessary.
+## 7. Governance
 
----
+This file defines repo guardrails and supersedes conflicting practices.
 
-## Verification
-- Default verification is unit tests only (`./gradlew test`) unless the Spec/Task explicitly requires instrumented tests.
-- Instrumented tests are heavy: ask for confirmation before running them unless explicitly requested.
-- If changes touch `build-logic/convention`, run:
-    - `./gradlew test`
-    - `./gradlew :build-logic:convention:build` (or closest available task)
+| Topic | Reference |
+|-------|-----------|
+| Process/TDD rules | `context/constitution.md` |
+| Ops setup | `context/PROJECT_CONTEXT.md` |
+| Examples | `TDD_COOKBOOK.md` (on demand) |
 
----
-
-## Important design decisions
-- Domain use cases are contracts only (interfaces).
-- Repositories are singletons and implement one or more domain contracts when appropriate.
-- Mapping helpers are private repository details and not unit-tested directly.
-- Avoid string-based Koin qualifiers. Use type-safe wrapper classes.
-- Dependencies are centralized via `libs.versions.toml` and convention plugins.
-
----
-
-## Governance
-- This file defines repo guardrails and supersedes conflicting practices.
-- For process/TDD rules: see `contexts/templates/constitution.md`.
-- For operational setup and commands: see `contexts/PROJECT_CONTEXT.md`.
-  If docs conflict, STOP and ask.
+> If docs conflict, **STOP and ask**.
