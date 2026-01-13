@@ -10,6 +10,7 @@ All behavior changes MUST follow strict TDD:
 - Design MUST emerge from tests (never upfront design)
 - Never stop mid-iteration: each step ends with tests GREEN
 - Non-compiling RED is allowed only locally during the iteration; before any commit/push the project MUST compile and tests MUST be GREEN
+- No exceptions: every change (including refactors) starts with RED
 
 ### II. Side-Effect Free Construction
 Creating an object MUST NOT trigger behavior:
@@ -90,5 +91,7 @@ Never stop mid-iteration:
 - `PROJECT_CONTEXT.md` contains operational setup (commands, local configuration, troubleshooting).
 - `TDD_COOKBOOK.md` contains example-based guidance (few-shots). Do not load by default unless needed.
 - If documents conflict, STOP and ask.
+- If the working tree is dirty, STOP and ask before any edits (no changes until explicit approval).
+- If a rebase would rewrite history or cause conflicts, STOP and ask (user will clean).
 
 **Version**: 1.0.0 | **Ratified**: 2026-01-12 | **Last Amended**: 2026-01-12
