@@ -1,14 +1,14 @@
 package com.davidluna.tmdb.core_data.di
 
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val nativeModule = module {
-    single { NativeModule.provideApiKey() }
-    single { NativeModule.provideBaseUrl() }
+    singleOf(NativeModule::provideApiKey)
+    singleOf(NativeModule::provideBaseUrl)
 }
 
 object NativeModule {
-
     init {
         System.loadLibrary("native")
     }
@@ -18,10 +18,4 @@ object NativeModule {
 
     fun provideApiKey(): ApiKey = ApiKey(getApiKey())
     fun provideBaseUrl(): BaseUrl = BaseUrl(getBaseUrl())
-
-    @JvmInline
-    value class BaseUrl(val value: String)
-
-    @JvmInline
-    value class ApiKey(val value: String)
 }

@@ -5,7 +5,6 @@ import com.davidluna.tmdb.convention.helpers.androidApplication
 import com.davidluna.tmdb.convention.helpers.androidLibrary
 import com.davidluna.tmdb.convention.helpers.composeCompiler
 import com.davidluna.tmdb.convention.helpers.googleServices
-import com.davidluna.tmdb.convention.helpers.kotlinAndroid
 import com.davidluna.tmdb.convention.helpers.kotlinSerialization
 import com.davidluna.tmdb.convention.helpers.ksp
 import com.davidluna.tmdb.convention.helpers.libs
@@ -17,7 +16,6 @@ internal val Project.applicationPluginManager: PluginManager
     get() = pluginManager.apply {
         alias(libs.ksp)
         alias(libs.androidApplication)
-        alias(libs.kotlinAndroid)
         alias(libs.composeCompiler)
         alias(libs.googleServices)
     }
@@ -26,7 +24,6 @@ val Project.frameworkPluginManager: PluginManager
     get() = pluginManager.apply {
         alias(libs.ksp)
         alias(libs.androidLibrary)
-        alias(libs.kotlinAndroid)
         alias(libs.kotlinSerialization)
     }
 

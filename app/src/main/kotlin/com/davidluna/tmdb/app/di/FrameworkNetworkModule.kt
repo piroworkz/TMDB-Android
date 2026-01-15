@@ -43,7 +43,6 @@ private fun provideJsonConverter(): Json = Json {
     coerceInputValues = true
 }
 
-
 private fun provideRetrofit(
     baseUrl: BaseUrl,
     client: OkHttpClient,
