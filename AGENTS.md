@@ -1,190 +1,263 @@
 # AGENTS.md
 
-Project-specific guidance for AI agents working on this repository.
+## Purpose
+This file defines the operating protocol for automated agents (e.g., Codex) contributing to this repository.
+It prioritizes safety, correctness, and adherence to repo-specific rules.
 
 ---
 
-## 1. Project Overview
+## Authority / Source of Truth
+When rules conflict, follow this order:
 
-Android app consuming TMDB API, built with Clean Architecture, Kotlin, Jetpack Compose, and Koin DI.
+1) `context/CONSTITUTION.md`
+2) `context/PROJECT_CONTEXT.md`
+3) Feature `*_specs.md`
+4) Feature `*_plan.md`
+5) Feature `*_tasks.md`
+6) This file (`AGENTS.md`)
 
-### Tech Stack
-| Layer | Technology |
-|-------|------------|
-| Language | Kotlin |
-| UI | Jetpack Compose |
-| DI | Koin (no Hilt/Dagger) |
-| Build | Gradle + convention plugins |
-| Architecture | Clean Architecture (domain/data/ui) |
-
-### Repo Layout
-```
-feature/{auth,media,core}/   → feature modules (*_domain, *_data, *_ui)
-build-logic/convention/      → Gradle convention plugins
-test_shared/                 → shared test utilities
-context/                     → specs, plans, tasks, constitution
-```
-
-### Workflow (Spec-Driven + TDD)
-- **Specs** define user-facing behavior
-- **Plans** define technical approach (aligned with repo patterns)
-- **Tasks** define small actionable steps
-- **Implementation** follows strict TDD (see Constitution)
-
-### Source Priority (highest → lowest)
-1. `AGENTS.md` (this file)
-2. `context/constitution.md` (process/TDD rules)
-3. `context/PROJECT_CONTEXT.md` (ops cheat sheet)
-4. Feature docs (`*_spec.md`, `*_plan.md`, `*_tasks.md`)
-5. Code (current implementation)
-6. *Optional*: `TDD_COOKBOOK.md` (examples, on demand only)
-
-> If sources conflict, **STOP and ask**.
+If any conflict is detected, STOP and ask the user.
 
 ---
 
-## 2. Build and Test Commands
+## Required Context Loading (Read Order)
+Before making changes, always read (in order):
 
-```bash
-# Unit tests (default verification)
-./gradlew test
+1) `context/CONSTITUTION.md`
+2) `context/PROJECT_CONTEXT.md`
+3) Feature docs referenced by the user (spec/plan/tasks)
 
-# Build convention plugins (if build-logic/ changes)
-./gradlew :build-logic:convention:build
-
-# Full build
-./gradlew build
-```
-
-### Verification Rules
-- Default: unit tests only (`./gradlew test`)
-- Instrumented tests: **ask for confirmation** before running (they are heavy)
-- If changes touch `build-logic/convention`: run both test and convention build
+If any of these are missing, ambiguous, or contradictory, STOP and ask the user.
 
 ---
 
-## 3. Code Style Guidelines
+## STOP Rules (Non-negotiable)
+The agent MUST STOP and ask the user if any of the following is true:
 
-### General Practices
-- Prefer `rg` for search and `apply_patch` for small edits
-- Keep edits ASCII unless file already uses Unicode
-- Avoid destructive git commands unless explicitly asked
-- If unclear, search the repo first; if still unclear, ask
-
-### Architecture Rules
-- Dependency rule: `ui` → `domain` ← `data` (never `ui` → `data` or `domain` → anything)
-- Domain modules: contracts only (interfaces, models)
-- Data modules: implementations
-- Use cases: interfaces in `*_domain`, implemented by repositories in `*_data`
-
-### Koin DI Conventions
-- Koin is the **only** DI framework; do not introduce Hilt/Dagger
-- DI modules live in `di/` packages inside each module
-- `single` for shared components (Retrofit, Database, DAOs, repositories)
-- `factory` for stateless objects (builders, small helpers)
-- **No** `named()` or string-based qualifiers
-- Wrap primitives in `@JvmInline value class` (shared wrappers in `core_data`)
-
-### Dependencies (Strict)
-- No new dependencies without explicit approval
-- All dependencies via `gradle/libs.versions.toml`
-- Adding any dependency to a module requires approval first (explicit confirmation)
-- Broadly-used dependencies go in convention plugins, not repeated across modules
-
-### Build Configuration
-- Build files named after module (e.g., `auth_ui.gradle.kts`)
-- Convention plugins:
-  - `tmdb.android.application`
-  - `tmdb.ui.module.plugin`
-  - `tmdb.framework.module.plugin`
-  - `tmdb.room.module.plugin`
-  - `tmdb.kotlin.module.plugin`
-  - `tmdb.test.shared.plugin`
+- Scope is ambiguous or the requested change is not clearly defined by spec/tasks.
+- The change requires editing files outside the described scope.
+- Touching additional modules beyond those explicitly mentioned is necessary but not clearly justified or disclosed.
+- A new dependency is required (even if commonly used or already approved elsewhere).
+- The correct feature branch is not explicitly provided AND cannot be derived from repo rules.
+- Any destructive git action would be needed:
+    - `git reset --hard`
+    - `git clean -fd`
+    - rewriting history
+- Instrumented/UI tests appear necessary but were not explicitly requested (see runbook).
+- Any rule conflict exists between Constitution/Project Context/Feature docs.
 
 ---
 
-## 4. Testing Instructions
+## Tooling Policy (GitHub, Agents, Context)
 
-### TDD Workflow (Mandatory)
-Strict TDD for **any** change (including refactors) with no exceptions:
-1. **Red**: Write/adjust a failing test first
-2. **Green**: Minimal change to pass
-3. **Refactor**: Only after green
+### GitHub interactions
+- For ALL GitHub operations (issues, PRs, labels, milestones, projects, comments), use the GitHub CLI: `gh`.
+- Do NOT use MCP-based GitHub tooling unless the user explicitly asks for it.
+- If GitHub changes are required but `gh` is not available/configured, STOP and ask the user.
 
-### Test Placement
-- Prefer fast unit tests at `domain`/`data` boundaries
-- UI/instrumented tests only when necessary
-- Some `data` modules expose helpers via `testFixtures`
+### Context discipline
+- Do not load or paste large context blobs unless required by the task.
+- Prefer referencing in-repo sources (spec/plan/tasks/context) over importing external context.
 
 ---
 
-## 5. Security Considerations
+# Git & GitHub Workflow
 
-- Sensitive config in `local.properties` only:
-  - `TMDB_API_KEY`
-  - Signing fields
-- **Never** commit secrets
-- Wrap shared primitives (API keys, URLs) in explicit types
+## Working Tree Policy (Operational)
+Working tree laws are defined in `context/CONSTITUTION.md`.
+This section explains the operational guardrails for agents.
+
+### Documentation-only tasks (context/specs/plans/tasks/*.md)
+- If the working tree is dirty, the agent MAY proceed and directly edit documentation files.
+- Keep edits strictly limited to documentation under `context/` or other markdown docs.
+- Do NOT touch production code, build files, or tests while the tree is dirty.
+- If the dirty state includes non-doc files, proceed ONLY if you can avoid touching any non-doc file.
+
+### Code-development tasks (source/build/tests)
+- If the working tree is dirty, STOP and ask for explicit approval before editing:
+    - Kotlin/Java source
+    - Gradle/build logic
+    - tests
+    - resources/assets
+
+### Updating master while dirty
+- If the request requires updating `master` and the working tree is dirty, STOP and ask (user will clean first).
 
 ---
 
-## 6. Git & GitHub Workflow
+## Updating `master` (Operational)
+If the request explicitly requires updating `master`, the operational steps are:
 
-### Working Tree Policy
-- Read-only tasks: continue even if working tree is dirty
-- Modifying operations: **STOP and ask** if dirty (no edits until explicit approval)
-- If request requires updating `master` and tree is dirty: **STOP and ask**
-
-### What "Updated" Means
 ```bash
 git fetch origin
 git checkout master
 git pull --rebase origin master
 ```
-> If rebase would rewrite history or create conflicts, **STOP and ask** (user will clean).
 
-### Branching Rules
-| Type | Base | Pattern |
-|------|------|---------|
-| Feature | updated `master` | `feature/<name>` |
-| Issue | current feature branch | `issue/<issue-title-normalized>` |
-
-- "Current feature branch" = explicitly mentioned in request/issue context
-- Never infer from checked-out branch or issue metadata
-- If target feature branch not explicit: **STOP and ask** (always ask)
-
-### PR Rules (Strict)
-- Never commit/push directly to `master`
-- PRs target the feature branch, **not** `master`
-- Only inform when PR is ready for review
-
-### Commit Rules
-- Small commits grouped by task
-- No history rewrite unless explicitly asked
-
-### GitHub CLI Required
-All GitHub actions via `gh` CLI:
-- Issues: list, create, update, comment
-- PRs: create, update, check status
-- Labels, assignees, milestones
-
-> If `gh` unavailable or unauthenticated: **STOP and ask**
-
-### Forbidden Commands
-- `git clean -fd` — banned unless explicitly requested
-- `git reset --hard` — banned unless explicitly requested
-- If branch unrecoverable: delete and restart from base
+If rebase would rewrite history or create conflicts, STOP and ask (user will handle it).
 
 ---
 
-## 7. Governance
+## Branching Strategy (Operational)
+Branching laws are defined in `context/CONSTITUTION.md`.
+This section provides the operational steps for agents.
 
-This file defines repo guardrails and supersedes conflicting practices.
+### Branch naming
+- Follow `context/CONSTITUTION.md` for branch strategy and naming.
+- If the correct base branch is not explicitly provided and cannot be derived safely, STOP and ask.
 
-| Topic | Reference |
-|-------|-----------|
-| Process/TDD rules | `context/constitution.md` |
-| Ops setup | `context/PROJECT_CONTEXT.md` |
-| Examples | `TDD_COOKBOOK.md` (on demand) |
+Example workflow:
+```bash
+git checkout -b issue/<kebab-case-title>
+git push -u origin HEAD
+```
 
-> If docs conflict, **STOP and ask**.
+---
+
+## PR Conventions (Operational)
+PR laws are defined in `context/CONSTITUTION.md`.
+This section standardizes PR metadata for agents.
+
+### PR Rules (Strict)
+- Never commit/push directly to `master`.
+- PRs target the feature branch, NOT `master`.
+- Only inform when PR is ready for review.
+
+### PR Title format
+Use an imperative, scoped format:
+- `feat(<scope>): <short title>`
+- `fix(<scope>): <short title>`
+- `test(<scope>): <short title>`
+- `refactor(<scope>): <short title>`
+
+Examples:
+- `feat(favorites): add favorites screen entry point`
+- `fix(media): prevent duplicate favorites`
+- `test(media): cover favorites repository toggling`
+
+### PR Description format
+Include these sections in the PR body:
+
+- **Summary**
+    - What changed and why (2–5 bullets)
+
+- **Covers**
+    - Task IDs covered (e.g. `T001, T002`)
+
+- **Validation**
+    - Commands executed and results
+
+- **Notes / Risks**
+    - Tradeoffs, follow-ups, known limitations
+
+---
+
+## Commit Rules
+- Prefer small commits grouped by task/phase.
+- Do NOT rewrite history unless explicitly asked.
+
+Examples:
+- `feat(favorites): add toggle favorite use case`
+- `test(media): cover favorites repository behavior`
+- `refactor(media): simplify favorite mapping`
+
+---
+
+## Forbidden Commands
+Forbidden unless explicitly requested:
+- `git clean -fd`
+- `git reset --hard`
+
+If a branch is unrecoverable, prefer deleting the branch and restarting from base.
+
+---
+
+# Engineering Workflow
+
+## Standard Workflow
+1) Load sources of truth (Authority + Required Context Loading).
+2) Restate scope (briefly) and identify impacted modules/files.
+3) Ensure working tree state complies with repo policy.
+4) Create / switch to correct branch naming convention.
+5) Implement with strict TDD:
+    - write failing test
+    - make it pass minimally
+    - refactor
+6) Run validation commands (tests + build/lint if applicable).
+7) Commit changes with clear messages.
+8) Provide final report with checklist.
+
+---
+
+## TDD Policy
+- Strict TDD: tests first (RED → GREEN → REFACTOR).
+- No comments in production code.
+- Prefer small, incremental changes with frequent validations.
+- If adding or changing behavior, tests MUST cover:
+    - happy path
+    - edge case(s)
+    - error path (where applicable)
+
+---
+
+## TDD Support: Skills First
+When working with tests, TDD workflow, or test structure questions:
+
+- First, check for relevant built-in skills under `~/.codex/skills/` (especially TDD-related skills).
+- Use those skills as primary guidance for examples, steps, and conventions.
+- If no skill applies OR guidance conflicts with repo rules, STOP and ask the user.
+
+---
+
+## Coding Conventions
+- Keep changes minimal and aligned with current architecture.
+- Respect module boundaries and naming conventions.
+- Avoid premature abstraction (YAGNI).
+- No new dependencies without explicit user approval.
+
+---
+
+## Validation / Definition of Done (DoD)
+Before reporting completion:
+
+- [ ] All relevant unit tests pass
+- [ ] Build succeeds
+- [ ] No new warnings introduced
+- [ ] No new dependencies added
+- [ ] No files edited outside the defined scope
+- [ ] Documentation updated only if required by the tasks/spec
+
+---
+
+## Standard Commands (Runbook)
+Use these commands as default validation tools.
+If any command is not applicable, adapt minimally and document what was executed.
+
+### Instrumented / UI tests (slow - opt-in)
+Instrumented tests are SLOW and must NOT be run by default.
+
+Run them only if:
+- the user explicitly requests them, OR
+- the change touches UI behavior (Compose), navigation flows, or Android framework integration, AND the risk justifies it.
+
+Commands:
+- Run all instrumented UI tests:
+    - `./gradlew connectedUiTests`
+- Aggregate Android UI test reports:
+    - `./gradlew aggregateUiAndroidTestReports`
+
+If instrumented tests are not executed, the final report MUST explicitly state:
+- "Instrumented tests were skipped due to runtime cost (slow), unless requested."
+
+---
+
+# Reporting
+
+## Reporting Format
+Final response MUST include:
+
+- Summary of changes
+- Files modified
+- Tasks covered (IDs)
+- Validation executed (commands + results)
+- Any follow-ups / risks
