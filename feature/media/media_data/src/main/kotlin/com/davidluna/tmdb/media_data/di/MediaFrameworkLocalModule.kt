@@ -8,15 +8,16 @@ import com.davidluna.tmdb.media_data.framework.paging.CachePolicyValidator
 import com.davidluna.tmdb.media_data.framework.paging.IsCacheExpired
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val mediaFrameworkLocalModule = module {
-    singleOf(::CachePolicyValidator) bind IsCacheExpired::class
-    singleOf(::CachePolicyValidator) bind IsCacheExpired::class
-    singleOf(::SelectedCatalogDataSource) bind ObserveSelectedMediaCatalog::class
-    singleOf(::SelectedCatalogDataSource) bind UpdateSelectedEndpoint::class
+    factoryOf(::CachePolicyValidator) bind IsCacheExpired::class
+    factoryOf(::CachePolicyValidator) bind IsCacheExpired::class
+    factoryOf(::SelectedCatalogDataSource) bind ObserveSelectedMediaCatalog::class
+    factoryOf(::SelectedCatalogDataSource) bind UpdateSelectedEndpoint::class
     singleOf(::provideMediaDao)
     singleOf(::provideMediaDetailsDao)
     singleOf(::provideRemoteKeysDao)

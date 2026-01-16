@@ -14,19 +14,19 @@ import com.davidluna.tmdb.core_domain.usecases.IsChannelEnabled
 import com.davidluna.tmdb.core_domain.usecases.IsPermissionValid
 import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import com.davidluna.tmdb.core_domain.usecases.ShowNotification
-import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val frameworkLocationModule = module {
-    singleOf(::AndroidLocationProvider) bind ObserveCountryCode::class
-    singleOf(::AndroidLocationService) bind LocationService::class
-    singleOf(::GeoCountryCodeResolver) bind CountryCodeResolver::class
-    singleOf(::LocationIsPermissionValid) bind IsPermissionValid::class
+    factoryOf(::AndroidLocationProvider) bind ObserveCountryCode::class
+    factoryOf(::AndroidLocationService) bind LocationService::class
+    factoryOf(::GeoCountryCodeResolver) bind CountryCodeResolver::class
+    factoryOf(::LocationIsPermissionValid) bind IsPermissionValid::class
 }
 
 val frameworkNotificationModule = module {
-    singleOf(::TmdbNotificationsManager) bind ShowNotification::class
-    singleOf(::TmdbNotificationChannelStateReader) bind IsChannelEnabled::class
-    singleOf(::NotificationChannelInstaller) bind InstallNotificationChannels::class
+    factoryOf(::TmdbNotificationsManager) bind ShowNotification::class
+    factoryOf(::TmdbNotificationChannelStateReader) bind IsChannelEnabled::class
+    factoryOf(::NotificationChannelInstaller) bind InstallNotificationChannels::class
 }

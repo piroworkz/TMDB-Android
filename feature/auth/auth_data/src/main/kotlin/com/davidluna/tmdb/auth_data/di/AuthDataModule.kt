@@ -10,16 +10,16 @@ import com.davidluna.tmdb.auth_domain.usecases.ObserveUserAccount
 import com.davidluna.tmdb.auth_domain.usecases.OpenSession
 import com.davidluna.tmdb.auth_domain.usecases.ValidateInput
 import com.davidluna.tmdb.auth_domain.usecases.ValidateSession
-import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val authDataModule = module {
-    singleOf(::TextInputValidator) bind ValidateInput::class
-    singleOf(::AccountRepository) bind ObserveUserAccount::class
-    singleOf(::AccountRepository) bind AccountDetailsRepository::class
-    singleOf(::AuthenticationRepository) bind OpenSession::class
-    singleOf(::AuthenticationRepository) bind CloseSession::class
-    singleOf(::AuthenticationRepository) bind ValidateSession::class
-    singleOf(::AuthenticationRepository) bind ObserveSession::class
+    factoryOf(::AccountRepository) bind AccountDetailsRepository::class
+    factoryOf(::AccountRepository) bind ObserveUserAccount::class
+    factoryOf(::AuthenticationRepository) bind CloseSession::class
+    factoryOf(::AuthenticationRepository) bind ObserveSession::class
+    factoryOf(::AuthenticationRepository) bind OpenSession::class
+    factoryOf(::AuthenticationRepository) bind ValidateSession::class
+    factoryOf(::TextInputValidator) bind ValidateInput::class
 }

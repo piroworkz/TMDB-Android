@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.update
 typealias MediaIndex = Int
 typealias MediaOffset = Int
 
-class MediaCatalogViewModel (
+class MediaCatalogViewModel(
     private val observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog,
     private val observeMediaCatalogUseCase: ObserveMediaCatalogUseCase,
 ) : ViewModel() {
@@ -35,19 +35,19 @@ class MediaCatalogViewModel (
     private val _state = MutableStateFlow(State())
     val state = _state.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Eagerly,
+        started = SharingStarted.WhileSubscribed(5_000),
         initialValue = State()
     )
 
     val pagerPagingDataFlow: StateFlow<PagingData<Media>> = getPagerFlow().stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Eagerly,
+        started = SharingStarted.WhileSubscribed(5_000),
         initialValue = PagingData.empty()
     )
 
     val gridPagingDataFlow: StateFlow<PagingData<Media>> = getGridFlow().stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Eagerly,
+        started = SharingStarted.WhileSubscribed(5_000),
         initialValue = PagingData.empty()
     )
 
@@ -61,6 +61,10 @@ class MediaCatalogViewModel (
 
     fun updateLastKnownPosition(index: MediaIndex, offset: MediaOffset) {
         _state.update { it.copy(lastKnownPosition = index to offset) }
+    }
+
+    fun clearAppError() {
+        _state.update { it.copy(appError = null) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

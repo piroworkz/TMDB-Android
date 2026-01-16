@@ -48,6 +48,7 @@ fun MediaCatalogScreen(
         lastKnownPosition = state.lastKnownPosition,
         pagerCatalogTitle = state.pagerCatalogTitle?.let { stringResource(it) },
         pagerLazyPagingItems = pagerLazyPagingItems,
+        clearAppError = viewModel::clearAppError,
         navigateTo = { navigateTo(it) },
         onPositionChanged = { index, offset -> viewModel.updateLastKnownPosition(index, offset) }
     )
@@ -61,6 +62,7 @@ fun MediaCatalogScreen(
     lastKnownPosition: Pair<Int, Int>,
     pagerCatalogTitle: String?,
     pagerLazyPagingItems: LazyPagingItems<Media>,
+    clearAppError: () -> Unit,
     navigateTo: (Destination) -> Unit,
     onPositionChanged: (Int, Int) -> Unit,
 ) {
