@@ -89,7 +89,6 @@ Never stop mid-iteration:
 - This Constitution defines the development process and supersedes any conflicting practice.
 - `AGENTS.md` is the authoritative repository guardrails (architecture, DI, dependencies, git workflow).
 - `PROJECT_CONTEXT.md` contains operational setup (commands, local configuration, troubleshooting).
-- `TDD_COOKBOOK.md` contains example-based guidance (few-shots). Do not load by default unless needed.
 - If documents conflict, STOP and ask.
 - If the working tree is dirty:
     - For **code-development changes** (source/build/tests/resources), STOP and ask before any edits (no changes until explicit approval).

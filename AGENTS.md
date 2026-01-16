@@ -201,6 +201,4 @@ This file defines repo guardrails and supersedes conflicting practices.
 |-------|-----------|
 | Process/TDD rules | `context/constitution.md` |
 | Ops setup | `context/PROJECT_CONTEXT.md` |
-| Examples | `TDD_COOKBOOK.md` (on demand) |
-
 > If docs conflict, **STOP and ask**.
