@@ -1,24 +1,22 @@
 package com.davidluna.tmdb.media_ui.presenter.media
 
 import app.cash.turbine.test
-import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.core_domain.entities.toAppError
-import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
-import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
 import com.davidluna.tmdb.media_data.fakes.fakeEmptyPagingData
 import com.davidluna.tmdb.media_data.fakes.fakeMediaPagingData
+import com.davidluna.tmdb.media_domain.entities.Catalog
+import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
+import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_ui.view.utils.title
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -113,7 +111,6 @@ class MediaCatalogViewModelTest {
             getGridFlowJob.cancelAndJoin()
         }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `GIVEN updateLastKnownPosition is called WHEN getState is called THEN it reflects updated lastKnownPosition`() =
         coroutineTestRule.scope.runTest {
@@ -121,10 +118,12 @@ class MediaCatalogViewModelTest {
             val sut = buildSUT()
 
             sut.updateLastKnownPosition(10, 100)
-            advanceUntilIdle()
-            val actual = sut.state.value.lastKnownPosition
-
-            assertEquals(10 to 100, actual)
+            sut.state.test {
+                awaitItem()
+               val actual = awaitItem().lastKnownPosition
+                assertEquals(10 to 100, actual)
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test
