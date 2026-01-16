@@ -131,9 +131,25 @@ Strict TDD for **any** change (including refactors) with no exceptions:
 ## 6. Git & GitHub Workflow
 
 ### Working Tree Policy
-- Read-only tasks: continue even if working tree is dirty
-- Modifying operations: **STOP and ask** if dirty (no edits until explicit approval)
-- If request requires updating `master` and tree is dirty: **STOP and ask**
+
+This repo distinguishes between **documentation/spec tasks** and **code-development tasks**.
+
+#### Documentation-only tasks (context/specs/plans/tasks/*.md)
+- If the working tree is dirty, the agent **MAY proceed** and directly edit documentation files.
+- The agent must keep edits **strictly limited** to documentation under `context/` or other markdown docs.
+- The agent must **NOT** touch production code, build files, or tests while the tree is dirty.
+- If the dirty state includes non-doc files, the agent must still proceed **only if** it can avoid touching any non-doc file.
+
+#### Code-development tasks (source/build/tests)
+- If the working tree is dirty and the task requires editing:
+    - Kotlin/Java source
+    - Gradle/build logic
+    - tests
+    - resources/assets
+      then the agent must **STOP and ask for explicit approval** before making edits.
+
+#### Updating master while dirty
+- If the request requires updating `master` and the working tree is dirty, the agent must **STOP and ask** (user will clean first).
 
 ### What "Updated" Means
 ```bash
