@@ -130,10 +130,11 @@ class MediaCatalogIntegrationTest {
             sut.gridPagingDataFlow.asSnapshot { refresh() }
 
             sut.state.test {
+                awaitItem()
                 val actual = awaitItem()
-
                 assertNotNull("pagerCatalogTitle is not null", actual.pagerCatalogTitle)
                 assertNotNull("gridCatalogTitle is not null", actual.gridCatalogTitle)
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
