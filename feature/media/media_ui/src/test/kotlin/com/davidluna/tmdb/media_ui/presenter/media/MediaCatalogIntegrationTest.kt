@@ -173,7 +173,7 @@ class MediaCatalogIntegrationTest {
         )
         return MediaCatalogViewModel(
             observeSelectedMediaCatalogUseCase = getSelectedMediaCatalog,
-            observeMediaCatalogUseCase = observeMediaCatalogUseCase
+            observeMediaCatalog = observeMediaCatalogUseCase
         )
     }
 

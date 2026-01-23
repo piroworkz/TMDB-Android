@@ -10,7 +10,7 @@ import com.davidluna.tmdb.media_domain.entities.Catalog.MOVIE_UPCOMING
 import com.davidluna.tmdb.media_domain.entities.Catalog.TV_AIRING_TODAY
 import com.davidluna.tmdb.media_domain.entities.Media
 import com.davidluna.tmdb.media_domain.entities.MediaType.MOVIE
-import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
+import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_ui.view.utils.title
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,7 +28,7 @@ typealias MediaOffset = Int
 
 class MediaCatalogViewModel(
     private val observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog,
-    private val observeMediaCatalogUseCase: ObserveMediaCatalogUseCase,
+    private val observeMediaCatalog: ObserveMediaCatalog,
 ) : ViewModel() {
 
 
@@ -73,7 +73,7 @@ class MediaCatalogViewModel(
         .catch { e -> _state.update { it.copy(appError = e.toAppError()) } }
         .flatMapLatest { mediaCatalog ->
             _state.update { it.copy(gridCatalogTitle = mediaCatalog.title) }
-            observeMediaCatalogUseCase(mediaCatalog, viewModelScope)
+            observeMediaCatalog(mediaCatalog, viewModelScope)
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -84,6 +84,6 @@ class MediaCatalogViewModel(
             val pagerCatalog =
                 if (catalog.mediaType == MOVIE) MOVIE_UPCOMING else TV_AIRING_TODAY
             _state.update { it.copy(pagerCatalogTitle = pagerCatalog.title) }
-            observeMediaCatalogUseCase(pagerCatalog, viewModelScope)
+            observeMediaCatalog(pagerCatalog, viewModelScope)
         }
 }

@@ -7,7 +7,7 @@ import com.davidluna.tmdb.media_data.repositories.MediaCatalogRepository
 import com.davidluna.tmdb.media_data.repositories.MediaDetailsCacheRepository
 import com.davidluna.tmdb.media_domain.usecases.GetCatalogVideos
 import com.davidluna.tmdb.media_domain.usecases.GetMediaDetails
-import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
+import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalog
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf
@@ -19,7 +19,7 @@ val mediaFrameworkRemoteModule = module {
     singleOf(::provideMediaCatalogService)
     factoryOf(::MediaCatalogRemoteMediator)
     factoryOf(::CatalogVideosRepository) bind GetCatalogVideos::class
-    factoryOf(::MediaCatalogRepository) bind ObserveMediaCatalogUseCase::class
+    factoryOf(::MediaCatalogRepository) bind ObserveMediaCatalog::class
     factoryOf(::MediaDetailsCacheRepository) bind GetMediaDetails::class
     factory<MediaCatalogMediatorFactory> {
         val koin = getKoin()

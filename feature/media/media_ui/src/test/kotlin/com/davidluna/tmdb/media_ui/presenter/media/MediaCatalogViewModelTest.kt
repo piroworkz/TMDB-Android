@@ -5,7 +5,7 @@ import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.media_data.fakes.fakeEmptyPagingData
 import com.davidluna.tmdb.media_data.fakes.fakeMediaPagingData
 import com.davidluna.tmdb.media_domain.entities.Catalog
-import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
+import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalog
 import com.davidluna.tmdb.media_domain.usecases.ObserveSelectedMediaCatalog
 import com.davidluna.tmdb.media_ui.view.utils.title
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
@@ -34,7 +34,7 @@ class MediaCatalogViewModelTest {
     private lateinit var observeSelectedMediaCatalogUseCase: ObserveSelectedMediaCatalog
 
     @MockK
-    private lateinit var observeMediaCatalogUseCase: ObserveMediaCatalogUseCase
+    private lateinit var observeMediaCatalog: ObserveMediaCatalog
 
     private val initialState = MediaCatalogViewModel.State()
 
@@ -73,7 +73,7 @@ class MediaCatalogViewModelTest {
         coroutineTestRule.scope.runTest {
             val endpoint = Catalog.MOVIE_UPCOMING
             every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
-            every { observeMediaCatalogUseCase(any(), any()) } returns emptyFlow()
+            every { observeMediaCatalog(any(), any()) } returns emptyFlow()
             val sut = buildSUT()
 
             val getGridFlowJob = launch { sut.gridPagingDataFlow.collect {} }
@@ -94,7 +94,7 @@ class MediaCatalogViewModelTest {
         coroutineTestRule.scope.runTest {
             val endpoint = Catalog.MOVIE_UPCOMING
             every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
-            every { observeMediaCatalogUseCase(any(), any()) } returns emptyFlow()
+            every { observeMediaCatalog(any(), any()) } returns emptyFlow()
 
             val sut = buildSUT()
 
@@ -131,7 +131,7 @@ class MediaCatalogViewModelTest {
         coroutineTestRule.scope.runTest {
 
             every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
-            every { observeMediaCatalogUseCase.invoke(any(), any()) } returns flowOf(
+            every { observeMediaCatalog.invoke(any(), any()) } returns flowOf(
                 fakeEmptyPagingData
             )
             val sut = buildSUT()
@@ -149,7 +149,7 @@ class MediaCatalogViewModelTest {
     fun `GIVEN getSelectedMediaCatalogUseCase emits any WHEN pagerPagingDataFlow is collected THEN it emits Media PagingData`() =
         coroutineTestRule.scope.runTest {
             every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flowOf(Catalog.MOVIE_UPCOMING)
-            every { observeMediaCatalogUseCase.invoke(any(), any()) } returns flowOf(
+            every { observeMediaCatalog.invoke(any(), any()) } returns flowOf(
                 fakeMediaPagingData
             )
             val sut = buildSUT()
@@ -168,7 +168,7 @@ class MediaCatalogViewModelTest {
         coroutineTestRule.scope.runTest {
             val endpoint = Catalog.MOVIE_UPCOMING
             every { observeSelectedMediaCatalogUseCase.selectedCatalog } returns flow { emit(endpoint) }
-            every { observeMediaCatalogUseCase(any(), any()) } returns emptyFlow()
+            every { observeMediaCatalog(any(), any()) } returns emptyFlow()
             val sut = buildSUT()
 
             val getGridFlowJob = launch { sut.pagerPagingDataFlow.collect {} }
@@ -186,6 +186,6 @@ class MediaCatalogViewModelTest {
 
     private fun buildSUT(): MediaCatalogViewModel = MediaCatalogViewModel(
         observeSelectedMediaCatalogUseCase = observeSelectedMediaCatalogUseCase,
-        observeMediaCatalogUseCase = observeMediaCatalogUseCase
+        observeMediaCatalog = observeMediaCatalog
     )
 }

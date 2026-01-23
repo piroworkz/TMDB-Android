@@ -6,4 +6,4 @@ import com.davidluna.tmdb.media_domain.entities.Media
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
-fun interface ObserveMediaCatalogUseCase : (Catalog, CoroutineScope) -> Flow<PagingData<Media>>
+fun interface ObserveMediaCatalog : (Catalog, CoroutineScope) -> Flow<PagingData<Media>>

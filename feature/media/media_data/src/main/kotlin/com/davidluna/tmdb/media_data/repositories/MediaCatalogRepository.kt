@@ -12,7 +12,7 @@ import com.davidluna.tmdb.media_data.framework.local.database.entities.media.Roo
 import com.davidluna.tmdb.media_data.framework.remote.model.toEndpointPath
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.Media
-import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalogUseCase
+import com.davidluna.tmdb.media_domain.usecases.ObserveMediaCatalog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.map
 class MediaCatalogRepository(
     private val mediaDao: MediaDao,
     private val mediatorFactory: MediaCatalogMediatorFactory,
-) : ObserveMediaCatalogUseCase {
+) : ObserveMediaCatalog {
 
     @OptIn(ExperimentalPagingApi::class)
     override operator fun invoke(
