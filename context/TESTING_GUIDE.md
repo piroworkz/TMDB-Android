@@ -1,5 +1,7 @@
 # TESTING_GUIDE.md
 
+All mandatory testing rules are defined in `context/CONSTITUTION.md`.
+
 ## Purpose
 This document captures the testing conventions and patterns used in this repository.
 It is descriptive (how tests are written today), not prescriptive beyond the

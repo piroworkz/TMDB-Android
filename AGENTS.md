@@ -179,10 +179,7 @@ If a branch is unrecoverable, prefer deleting the branch and restarting from bas
 2) Restate scope (briefly) and identify impacted modules/files.
 3) Ensure working tree state complies with repo policy.
 4) Create / switch to correct branch naming convention.
-5) Implement with strict TDD:
-    - write failing test
-    - make it pass minimally
-    - refactor
+5) Implement with the chosen methodology (TDD optional).
 6) Run validation commands (tests + build/lint if applicable).
 7) Commit changes with clear messages.
 8) Provide final report with checklist.
@@ -190,13 +187,13 @@ If a branch is unrecoverable, prefer deleting the branch and restarting from bas
 ---
 
 ## TDD Policy
-- Strict TDD: tests first (RED → GREEN → REFACTOR).
 - No comments in production code.
 - Prefer small, incremental changes with frequent validations.
-- If adding or changing behavior, tests MUST cover:
+- If adding or changing behavior in data/UI modules, tests MUST cover:
     - happy path
     - edge case(s)
     - error path (where applicable)
+- Domain modules (pure interfaces/entities) do NOT require tests unless behavior is added.
 
 ---
 

@@ -100,10 +100,11 @@ This repo distinguishes between documentation work and code-development work.
 
 ## 7. Test-Driven Development (TDD) Laws
 - TDD-first is optional; any development methodology is allowed.
-- Tests are mandatory for all code changes (features, fixes, refactors, updates).
-- Every new feature MUST include tests (unit, integration, or Compose UI) consistent with existing project patterns.
+- Tests are mandatory for all code changes (features, fixes, refactors, updates) in data and UI modules.
+- Domain modules (pure interfaces/entities) do NOT require tests unless behavior is added.
+- Every new feature in data/UI MUST include tests (unit, integration, or Compose UI) consistent with existing project patterns.
 - No "drive-by" changes without tests.
-- If tests cannot be written or executed: STOP and ask.
+- If required tests cannot be written or executed: STOP and ask.
 
 ---
 
