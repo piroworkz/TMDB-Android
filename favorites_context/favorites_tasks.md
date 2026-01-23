@@ -34,7 +34,7 @@ description: "Task list for favorites feature implementation"
     - feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/usecases/ToggleFavorite.kt
     - feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/usecases/ClearFavorites.kt
 
-- [ ] T002 Implement favorites persistence layer in Room
+- [x] T002 Implement favorites persistence layer in Room
   Description: Extend Room entities/mappers and add DAO queries for favorites by media type.
   Ensures local storage and paging sources reflect `isFavorite`.
   Paths:
