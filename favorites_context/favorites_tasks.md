@@ -25,7 +25,7 @@ description: "Task list for favorites feature implementation"
 
 **Purpose**: Align shared domain/data foundations used by all stories.
 
-- [ ] T001 Define favorites domain contracts and entities
+- [x] T001 Define favorites domain contracts and entities
   Description: Add `isFavorite` to `Media` and introduce use cases for observe/toggle/clear favorites.
   This is the shared contract required by UI and data layers.
   Paths:
