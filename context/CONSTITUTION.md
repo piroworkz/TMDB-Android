@@ -48,34 +48,42 @@ If any conflict is detected, STOP and ask the user.
 
 ## 4. Git & Branching Laws
 - Never commit or push directly to `master`.
-- All changes MUST be made on a feature/issue branch.
+- All new features MUST be created on a feature branch created from `master`.
+- All tasks MUST be created on a issue/{branch name} branch.
 - Branch naming MUST follow the repository strategy below.
 - History rewriting is forbidden unless explicitly requested.
+- Agents MUST NOT perform merges; the user handles merges.
+- The user creates feature branches; agents MUST NOT start any task unless the feature branch already exists and is explicitly named.
 
 ### Branch Types
 - Feature branches:
     - Base: updated `master`
     - Pattern: `feature/<name>`
+    - Source-of-truth: feature branch name MUST be read from the current feature’s `*_specs.md`, `*_plan.md`, or `*_tasks.md` (in that order) and must exist (user-created) before proceeding.
 
 - Issue branches:
-    - Base: the current feature branch (MUST be explicitly stated in the request/issue context)
-    - Pattern: `issue/<issue-title-normalized>`
+    - Base: the current feature branch explicitly declared in the above feature docs
+    - Pattern: `issue/<issue-title-normalized>` (normalize from the task title being worked)
+    - Each issue branch is tied to the specific task being executed.
 
 ### Non-inference rule
 - The "current feature branch" MUST NOT be inferred from the checked-out branch or GitHub metadata.
-- If the target base branch is not explicit, STOP and ask.
+- If the target base branch is not explicit in the feature docs, STOP and ask.
 
 ### PR Target
-- PRs MUST target the feature branch, NOT `master`.
+- PRs from `issue/...` MUST target their parent feature branch, NOT `master`.
 
 ---
 
 ## 5. Working Tree Policy (Global)
 This repo distinguishes between documentation work and code-development work.
 
-- Documentation-only tasks MAY proceed on a dirty working tree, as long as changes are strictly limited to documentation.
+- Documentation-only tasks MAY proceed on a dirty working tree, as long as changes are strictly limited to documentation; config files and generated docs/assets are NOT considered documentation for this exception.
 - Code-development tasks MUST NOT proceed if the working tree is dirty.
+- "Dirty" for this policy means tracked file changes (staged or unstaged); untracked files, ignored files, and partially staged changes do NOT trigger the dirty-tree stop rule.
 - If code changes are required while dirty, STOP and ask for explicit user approval.
+- Before any code change, run `git status --short` and report the result; if dirty per the above, STOP and request approval.
+- If a documentation task requires any code/config tweak (even tiny, e.g., snippet fix), treat it as code-development and require a clean tree or explicit approval.
 
 ---
 
@@ -83,12 +91,17 @@ This repo distinguishes between documentation work and code-development work.
 - Adding any dependency (even if commonly used) requires explicit user approval.
 - Prefer existing approved dependencies and existing internal abstractions.
 - If a new dependency seems required: STOP and ask.
+### Definition (for this repo)
+- "Dependency" includes any third-party library added via Gradle build files.
+- This includes: new libraries in `gradle/libs.versions.toml`, version updates, Gradle plugins, changes in `build-logic`, and BOM or alias changes in the version catalog.
+- Any of the above requires explicit user approval before proceeding.
 
 ---
 
 ## 7. Test-Driven Development (TDD) Laws
-- Strict TDD is mandatory: RED → GREEN → REFACTOR.
-- Any behavior change MUST be accompanied by tests.
+- TDD-first is optional; any development methodology is allowed.
+- Tests are mandatory for all code changes (features, fixes, refactors, updates).
+- Every new feature MUST include tests (unit, integration, or Compose UI) consistent with existing project patterns.
 - No "drive-by" changes without tests.
 - If tests cannot be written or executed: STOP and ask.
 

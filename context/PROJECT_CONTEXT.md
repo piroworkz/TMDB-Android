@@ -31,19 +31,19 @@
 
 ### Module list
 
-| Module                             | Type            | Convention Plugin                    | Purpose                                       |
-|------------------------------------|-----------------|--------------------------------------|-----------------------------------------------|
-| `:app`                             | Application     | `tmdb.android.application`           | App entry point, DI setup, main navigation    |
-| `:feature:auth:auth_ui`            | Android Library | `tmdb.ui.module.plugin`              | Auth UI layer (Compose screens, ViewModels)   |
-| `:feature:auth:auth_domain`        | Kotlin (JVM)    | `tmdb.kotlin.module.plugin`          | Auth domain layer (entities, use cases, interfaces) |
-| `:feature:auth:auth_data`          | Android Library | `tmdb.room.module.plugin`            | Auth data layer (repositories, Room, network) |
-| `:feature:media:media_ui`          | Android Library | `tmdb.ui.module.plugin`              | Media UI layer (Compose screens, ViewModels)  |
-| `:feature:media:media_domain`      | Kotlin (JVM)    | `tmdb.kotlin.module.plugin`          | Media domain layer (entities, use cases, interfaces) |
-| `:feature:media:media_data`        | Android Library | `tmdb.room.module.plugin`            | Media data layer (repositories, Room, Paging) |
-| `:feature:core:core_ui`            | Android Library | `tmdb.ui.module.plugin`              | Shared UI components, themes, composables     |
-| `:feature:core:core_domain`        | Kotlin (JVM)    | `tmdb.kotlin.module.plugin`          | Shared domain entities and use cases          |
-| `:feature:core:core_data`          | Android Library | `tmdb.framework.module.plugin`       | Shared data: DataStore, Firebase, network     |
-| `:test_shared`                     | Kotlin (JVM)    | `tmdb.test.shared.plugin`            | Shared test utilities, fakes, JSON fixtures   |
+| Module                        | Type            | Convention Plugin              | Purpose                                              |
+|-------------------------------|-----------------|--------------------------------|------------------------------------------------------|
+| `:app`                        | Application     | `tmdb.android.application`     | App entry point, DI setup, main navigation           |
+| `:feature:auth:auth_ui`       | Android Library | `tmdb.ui.module.plugin`        | Auth UI layer (Compose screens, ViewModels)          |
+| `:feature:auth:auth_domain`   | Kotlin (JVM)    | `tmdb.kotlin.module.plugin`    | Auth domain layer (entities, use cases, interfaces)  |
+| `:feature:auth:auth_data`     | Android Library | `tmdb.room.module.plugin`      | Auth data layer (repositories, Room, network)        |
+| `:feature:media:media_ui`     | Android Library | `tmdb.ui.module.plugin`        | Media UI layer (Compose screens, ViewModels)         |
+| `:feature:media:media_domain` | Kotlin (JVM)    | `tmdb.kotlin.module.plugin`    | Media domain layer (entities, use cases, interfaces) |
+| `:feature:media:media_data`   | Android Library | `tmdb.room.module.plugin`      | Media data layer (repositories, Room, Paging)        |
+| `:feature:core:core_ui`       | Android Library | `tmdb.ui.module.plugin`        | Shared UI components, themes, composables            |
+| `:feature:core:core_domain`   | Kotlin (JVM)    | `tmdb.kotlin.module.plugin`    | Shared domain entities and use cases                 |
+| `:feature:core:core_data`     | Android Library | `tmdb.framework.module.plugin` | Shared data: DataStore, Firebase, network            |
+| `:test_shared`                | Kotlin (JVM)    | `tmdb.test.shared.plugin`      | Shared test utilities, fakes, JSON fixtures          |
 
 ### Build file naming
 Each module uses a custom build file name: `<module-name>.gradle.kts` (e.g., `app.gradle.kts`, `core_domain.gradle.kts`).
@@ -91,14 +91,14 @@ Located at `gradle/libs.versions.toml`. Defines:
 - Convention plugin aliases (e.g., `libs.plugins.uiModuleConventionPlugin`)
 
 ### Convention plugins (`build-logic/convention/`)
-| Plugin ID                          | Implementation Class                         | Purpose                                     |
-|------------------------------------|----------------------------------------------|---------------------------------------------|
-| `tmdb.android.application`         | `AndroidApplicationConventionPlugin`         | App module: SDK config, Compose, Koin, HTTP |
-| `tmdb.framework.module.plugin`     | `FrameworkModuleConventionPlugin`            | Android data modules: HTTP, Koin, testing   |
-| `tmdb.ui.module.plugin`            | `UiModuleConventionPlugin`                   | UI modules: Compose, Koin, testing          |
-| `tmdb.kotlin.module.plugin`        | `KotlinModuleConventionPlugin`               | Pure Kotlin/JVM domain modules              |
-| `tmdb.room.module.plugin`          | `RoomModuleConvention`                       | Room database modules: Room, Koin, HTTP     |
-| `tmdb.test.shared.plugin`          | `TestSharedConventionPlugin`                 | Test shared module: JUnit, MockK, coroutines|
+| Plugin ID                      | Implementation Class                 | Purpose                                      |
+|--------------------------------|--------------------------------------|----------------------------------------------|
+| `tmdb.android.application`     | `AndroidApplicationConventionPlugin` | App module: SDK config, Compose, Koin, HTTP  |
+| `tmdb.framework.module.plugin` | `FrameworkModuleConventionPlugin`    | Android data modules: HTTP, Koin, testing    |
+| `tmdb.ui.module.plugin`        | `UiModuleConventionPlugin`           | UI modules: Compose, Koin, testing           |
+| `tmdb.kotlin.module.plugin`    | `KotlinModuleConventionPlugin`       | Pure Kotlin/JVM domain modules               |
+| `tmdb.room.module.plugin`      | `RoomModuleConvention`               | Room database modules: Room, Koin, HTTP      |
+| `tmdb.test.shared.plugin`      | `TestSharedConventionPlugin`         | Test shared module: JUnit, MockK, coroutines |
 
 ### Key dependencies (from `gradle/libs.versions.toml`)
 - **Compose BOM:** 2026.01.00
@@ -133,6 +133,9 @@ Located at `gradle/libs.versions.toml`. Defines:
 ---
 
 ## 7. Testing
+
+### Testing guide
+- See `context/TESTING_GUIDE.md` for current testing conventions and patterns.
 
 ### Unit tests
 - **Location:** `src/test/kotlin/`
@@ -242,6 +245,7 @@ Expected release signing properties (observed in repository config/code):
 ## 11. References
 
 - **`context/CONSTITUTION.md`** — Non-negotiable repository-wide rules for development
+- **`context/TESTING_GUIDE.md`** — Testing conventions and patterns used in this repo
 - **`AGENTS.md`** — Operating protocol for automated agents, TDD policy, Git/PR conventions
 
 ---
