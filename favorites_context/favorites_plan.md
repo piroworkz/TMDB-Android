@@ -15,7 +15,7 @@ Implement session-scoped favorites for Movies and TV Shows with immediate UI fee
 **Language/Version**: Kotlin 2.3.0 (JVM 17) + Jetpack Compose
 **Primary Dependencies**: Compose, Koin, Room, Paging (already in repo)
 **Storage**: Room (media_data database), scoped to active session only
-**Testing**: JUnit4 + MockK + Coroutines Test + Turbine (TDD required: Red → Green → Refactor)
+**Testing**: JUnit4 + MockK + Coroutines Test + Turbine
 **Target Platform**: Android (min SDK 28, target SDK 35)
 **Project Type**: Mobile (multi-module, clean architecture)
 **Performance Goals**: Smooth UI updates (no blocking), favorites toggle reflects immediately
