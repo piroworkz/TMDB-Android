@@ -6,4 +6,6 @@ import com.davidluna.tmdb.media_domain.entities.MediaType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
-fun interface ObserveFavoriteMedia : (MediaType, CoroutineScope) -> Flow<PagingData<Media>>
+interface ObserveFavoriteMedia {
+    fun observe(mediaType: MediaType, scope: CoroutineScope): Flow<PagingData<Media>>
+}
