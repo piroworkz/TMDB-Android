@@ -4,7 +4,7 @@
 **Input**: Feature specification from `/favorites_context/favorites_specs.md`
 
 **Note**: This template is filled in by the plan generation command.
-**TDD Requirement**: Plan must assume Red → Green → Refactor for each user story.
+**TDD Requirement**: TDD is optional; tests are mandatory for data/UI changes (happy path, edge case(s), error path).
 
 ## Summary
 
@@ -28,7 +28,7 @@ Implement session-scoped favorites for Movies and TV Shows with immediate UI fee
 
 - Scope is defined by `favorites_context/favorites_specs.md` and limited to session-scoped favorites.
 - No new dependencies are required.
-- TDD is required for all code changes.
+- TDD is optional; tests are mandatory for all data/UI code changes (happy path, edge case(s), error path).
 - Branch is explicitly defined in the spec: `feature/favorites`.
 - Multi-module changes are expected and will be disclosed in the plan.
 
@@ -124,11 +124,12 @@ feature/
 - `feature/auth/auth_domain/src/main/kotlin/com/davidluna/tmdb/auth_domain/usecases/CloseSession.kt`
 - `app/src/main/kotlin/com/davidluna/tmdb/app/...` (navigation drawer + route)
 
-## Testing Strategy (TDD suggested)
+## Testing Strategy (TDD optional)
 
-- **Data tests**: Favorites DAO + repository behavior (observe, toggle, clear).
-- **UI/ViewModel tests**: filter switching, empty state, toggle behavior.
-- **Integration tests**: media grid + favorites state wiring (if existing pattern allows).
+- **Data tests**: Favorites DAO + repository behavior (observe, toggle, clear). Cover happy path, edge case(s), and error path.
+- **UI/ViewModel tests**: filter switching, empty state, toggle behavior. Cover happy path, edge case(s), and error path.
+- **Integration tests (non-instrumented)**: media grid + favorites state wiring if existing test patterns support it. Do not conflate with instrumented/UI tests.
+- **Instrumented/UI tests**: opt-in only; run only if explicitly requested or if UI/navigation changes justify the risk per AGENTS.md.
 
 ## Risks / Limitations
 

@@ -11,10 +11,11 @@ description: "Task list for favorites feature implementation"
 
 ## Testing Policy (IMPORTANT)
 
-**Tests**: Tests are **REQUIRED by default** for every user story.
+**Tests**: Tests are **REQUIRED by default** for every user story that changes data/UI behavior.
 
-**TDD**: **REQUIRED for this feature** per `favorites_plan.md`.
-- All user stories below are marked **TDD** and must follow **Red → Green → Refactor**.
+**TDD**: Optional for this feature. If used, follow **Red → Green → Refactor**.
+
+**Instrumented/UI tests**: Opt-in only; run only if explicitly requested or if UI/navigation changes justify the risk per AGENTS.md.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -68,10 +69,6 @@ description: "Task list for favorites feature implementation"
 
 **Independent Test**: Tap the heart on a media card and verify both the card state and favorites list update.
 
-### Testing Mode for User Story 1 (MANDATORY)
-
-- [ ] **TDD** (tests REQUIRED + must include Red/Green/Refactor tasks)
-
 ### Tests for User Story 1 (REQUIRED) ⚠️
 
 - [ ] T005 [US1] Red: Media grid shows favorite state and toggles heart
@@ -79,7 +76,6 @@ description: "Task list for favorites feature implementation"
   Cover happy path, edge case (toggle twice), and error path (toggle failure).
   Paths:
     - feature/media/media_ui/src/test/kotlin/com/davidluna/tmdb/media_ui/presenter/MediaGridViewModelTest.kt
-    - feature/media/media_ui/src/androidTest/kotlin/com/davidluna/tmdb/media_ui/view/media/MediaGridCardTest.kt
   Depends on: T004
 
 - [ ] T006 [US1] Green: Implement minimum toggle flow
@@ -97,6 +93,12 @@ description: "Task list for favorites feature implementation"
     - feature/media/media_ui/src/main/kotlin/com/davidluna/tmdb/media_ui/presenter/MediaGridViewModel.kt
   Depends on: T006
 
+- [ ] T007a [US1] Optional instrumented UI tests (opt-in)
+  Description: Add/extend Compose UI tests for media grid cards if explicitly requested or justified.
+  Paths:
+    - feature/media/media_ui/src/androidTest/kotlin/com/davidluna/tmdb/media_ui/view/media/MediaGridCardTest.kt
+  Depends on: T007
+
 ---
 
 ## Phase 3: User Story 2 - View favorites by media type (Priority: P2)
@@ -105,10 +107,6 @@ description: "Task list for favorites feature implementation"
 
 **Independent Test**: Open Favorites, switch filters, and verify the correct list or empty state.
 
-### Testing Mode for User Story 2 (MANDATORY)
-
-- [ ] **TDD** (tests REQUIRED + must include Red/Green/Refactor tasks)
-
 ### Tests for User Story 2 (REQUIRED) ⚠️
 
 - [ ] T008 [US2] Red: Favorites screen states + filter switching
@@ -116,8 +114,6 @@ description: "Task list for favorites feature implementation"
   Include a test for navigation entry from the drawer.
   Paths:
     - feature/media/media_ui/src/test/kotlin/com/davidluna/tmdb/media_ui/presenter/favorites/FavoritesViewModelTest.kt
-    - feature/media/media_ui/src/androidTest/kotlin/com/davidluna/tmdb/media_ui/view/favorites/FavoritesScreenTest.kt
-    - app/src/androidTest/kotlin/com/davidluna/tmdb/app/navigation/DrawerFavoritesNavigationTest.kt
   Depends on: T004
 
 - [ ] T009 [US2] Green: Implement Favorites screen + navigation
@@ -137,6 +133,13 @@ description: "Task list for favorites feature implementation"
     - feature/media/media_ui/src/main/kotlin/com/davidluna/tmdb/media_ui/presenter/favorites/FavoritesViewModel.kt
   Depends on: T009
 
+- [ ] T010a [US2] Optional instrumented UI tests (opt-in)
+  Description: Add Compose UI + navigation tests if explicitly requested or justified.
+  Paths:
+    - feature/media/media_ui/src/androidTest/kotlin/com/davidluna/tmdb/media_ui/view/favorites/FavoritesScreenTest.kt
+    - app/src/androidTest/kotlin/com/davidluna/tmdb/app/navigation/DrawerFavoritesNavigationTest.kt
+  Depends on: T010
+
 ---
 
 ## Phase 4: User Story 3 - Remove favorites from the Favorites screen (Priority: P3)
@@ -145,10 +148,6 @@ description: "Task list for favorites feature implementation"
 
 **Independent Test**: Tap the heart on a favorite item in Favorites; it disappears and empty state updates if needed.
 
-### Testing Mode for User Story 3 (MANDATORY)
-
-- [ ] **TDD** (tests REQUIRED + must include Red/Green/Refactor tasks)
-
 ### Tests for User Story 3 (REQUIRED) ⚠️
 
 - [ ] T011 [US3] Red: Remove favorite from Favorites list
@@ -156,7 +155,6 @@ description: "Task list for favorites feature implementation"
   Include error path where toggle fails and UI remains accurate.
   Paths:
     - feature/media/media_ui/src/test/kotlin/com/davidluna/tmdb/media_ui/presenter/favorites/FavoritesViewModelTest.kt
-    - feature/media/media_ui/src/androidTest/kotlin/com/davidluna/tmdb/media_ui/view/favorites/FavoritesScreenTest.kt
   Depends on: T009
 
 - [ ] T012 [US3] Green: Wire toggle in Favorites cards
@@ -176,6 +174,12 @@ description: "Task list for favorites feature implementation"
     - feature/media/media_ui/src/main/kotlin/com/davidluna/tmdb/media_ui/view/favorites/FavoritesCard.kt
   Depends on: T012
 
+- [ ] T013a [US3] Optional instrumented UI tests (opt-in)
+  Description: Add/extend Favorites screen Compose UI tests if explicitly requested or justified.
+  Paths:
+    - feature/media/media_ui/src/androidTest/kotlin/com/davidluna/tmdb/media_ui/view/favorites/FavoritesScreenTest.kt
+  Depends on: T013
+
 ---
 
 ## Phase 5: Validation & Documentation
@@ -186,4 +190,3 @@ description: "Task list for favorites feature implementation"
   Paths:
     - Tmdb2024.gradle.kts
   Depends on: T013
-
