@@ -1,5 +1,6 @@
 package com.davidluna.tmdb.media_data.framework.local.database.entities.media
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 
 @Entity(primaryKeys = ["id", "category"])
@@ -8,4 +9,6 @@ data class RoomMedia(
     val id: Int,
     val posterPath: String,
     val title: String,
+    @ColumnInfo(defaultValue = "0")
+    val isFavorite: Boolean = false,
 )
