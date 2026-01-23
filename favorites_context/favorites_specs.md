@@ -6,7 +6,11 @@
 **Input**: User description: "# Favorites (Movies & TV Shows)
 
 ## Overview
-Users can mark and unmark Movies or TV Shows as favorites directly from the media grid using a heart button. Favorites are available only during the active session and are grouped in a dedicated Favorites screen, allowing users to quickly access saved content without searching again.
+Users can quickly save Movies or TV Shows while browsing by tapping a heart on the media card. Saved items appear in a dedicated Favorites screen during the current session, so users can return to what they care about without re-searching.
+
+### User-centered What / Why
+- **What**: Let users add or remove favorites from any media card and view them in one place, separated by Movies and TV Shows.
+- **Why**: Users want a fast, low-effort way to keep track of items they like during a session so they can continue watching or decide later without losing their place.
 
 ## Functional Requirements
 
@@ -31,7 +35,7 @@ This feature is available to:
 - **Registered users** (session ends on explicit logout)
 
 ### Data Management
-- Favorites are stored **locally** and are valid only for the **current active session**.
+- Favorites are stored **locally** and are valid only for the **current active session**, so users are never surprised by stale lists.
 - When the session ends:
     - Guest session expiration → favorites are cleared
     - Registered user logout → favorites are cleared
@@ -41,54 +45,54 @@ This feature is available to:
 
 ### Visual Components
 - [ ] **Favorite Heart Button (Overlay on Media Card)**  
-  Purpose: Toggle favorite state.  
+  User need: Save or remove an item without leaving the grid.  
   Appearance: Heart icon displayed in the **top-right corner** of each media card, using a subtle circular background to ensure contrast over posters.
 
 - [ ] **Favorites Drawer Item**  
-  Purpose: Entry point to Favorites screen.  
+  User need: Reach saved items in one tap.  
   Appearance: Drawer row labeled **"Favorites"** with a heart icon.
 
 - [ ] **Favorites Filter Controls**  
-  Purpose: Switch between favorite Movies and favorite TV Shows.  
+  User need: Focus on Movies or TV Shows without extra searching.  
   Appearance: Two pill/chip-style buttons:
     - "♡ FAVORITE MOVIES"
     - "♡ FAVORITE TV SHOWS"  
       The selected option is visually highlighted.
 
 ### Navigation
-- [ ] **Entry point**: Navigation Drawer → **Favorites**
+- [ ] **Entry point**: Navigation Drawer → **Favorites** so users can access saved items from anywhere.
 - [ ] **Flow between screens**:
-    - Movies/TV Shows screens → toggle favorites from media cards
-    - Favorites screen → browse favorites and optionally toggle/remove favorites
-- [ ] **Exit point**: Back navigation returns to the previous screen
+    - Movies/TV Shows screens → toggle favorites from media cards to save in place.
+    - Favorites screen → browse favorites and optionally toggle/remove favorites to keep the list accurate.
+- [ ] **Exit point**: Back navigation returns to the previous screen to preserve user context.
 
 ### States
 - [ ] **Empty state**
     - If there are no favorites for the selected type, show a placeholder message:
         - "No favorite movies yet." / "No favorite TV shows yet."
     - Include a suggested action like:
-        - "Browse and tap the heart to add favorites."
+        - "Browse and tap the heart to add favorites." so users know what to do next.
 
 - [ ] **Loading state**
-    - While favorites are loading, show a loading indicator (spinner or skeleton grid).
+    - While favorites are loading, show a loading indicator (spinner or skeleton grid) so users know the list is on its way.
 
 - [ ] **Error state**
-    - If a favorite update fails, show a non-blocking error message (snackbar/toast) and ensure the UI reflects the correct state.
-    - If favorites cannot be loaded, show an error placeholder with a retry action.
+    - If a favorite update fails, show a non-blocking error message (snackbar/toast) and ensure the UI reflects the correct state so users trust the list.
+    - If favorites cannot be loaded, show an error placeholder with a retry action so users can recover quickly.
 
 ## Accessibility
 - [ ] Heart button must include an accessible label that changes with state:
     - "Add to favorites" / "Remove from favorites"
-- [ ] Ensure good contrast for the overlay controls over posters.
-- [ ] Ensure tappable areas meet minimum touch target guidelines.
-- [ ] Favorites filter controls are accessible and properly announced by screen readers.
+- [ ] Ensure good contrast for the overlay controls over posters so controls are easy to spot.
+- [ ] Ensure tappable areas meet minimum touch target guidelines so actions are easy to perform.
+- [ ] Favorites filter controls are accessible and properly announced by screen readers so users can switch lists confidently.
 
 ## Success Criteria
 - Users can favorite/unfavorite an item with one tap and see the change immediately.
-- Favorites screen correctly displays favorites for the **current session**, separated by Movies vs TV Shows.
-- Favorites are cleared correctly when the session ends:
+- Users can access a Favorites screen that reflects only the **current session**, separated by Movies vs TV Shows.
+- Users are not surprised by stale lists because favorites clear when the session ends:
     - Guest session expiration
-    - Registered user logout"
+    - Registered user logout
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -107,7 +111,7 @@ This feature is available to:
 
 ### User Story 1 - Toggle favorites from media cards (Priority: P1)
 
-As a user browsing Movies or TV Shows, I want to mark or unmark an item as a favorite from the media grid so I can save items I care about instantly.
+As a user browsing Movies or TV Shows, I want to mark or unmark an item as a favorite from the media grid so I can save what matters without breaking my flow.
 
 **Why this priority**: This is the core action that enables favorites and delivers immediate user value.
 
@@ -122,7 +126,7 @@ As a user browsing Movies or TV Shows, I want to mark or unmark an item as a fav
 
 ### User Story 2 - View favorites by media type (Priority: P2)
 
-As a user, I want to open a Favorites screen and switch between Movies and TV Shows so I can quickly find saved items by type.
+As a user, I want to open a Favorites screen and switch between Movies and TV Shows so I can quickly find saved items without extra searching.
 
 **Why this priority**: Users need a dedicated place to access saved items without searching again.
 
@@ -137,7 +141,7 @@ As a user, I want to open a Favorites screen and switch between Movies and TV Sh
 
 ### User Story 3 - Remove favorites from the Favorites screen (Priority: P3)
 
-As a user, I want to remove an item from favorites while browsing the Favorites screen so I can keep my saved list accurate.
+As a user, I want to remove an item from favorites while browsing the Favorites screen so I can keep my saved list accurate and relevant.
 
 **Why this priority**: Removing items from the saved list maintains relevance and trust in the feature.
 

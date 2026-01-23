@@ -57,7 +57,7 @@ The project follows a **Clean Architecture** approach with vertical feature slic
 ```
 feature/
   └── <feature>/
-       ├── <feature>_domain/   ← Pure Kotlin (JVM). Use cases, entities, repository interfaces.
+       ├── <feature>_domain/   ← Pure Kotlin (JVM). Use case interfaces, entities.
        ├── <feature>_data/     ← Android Library. Repository implementations, network, database.
        └── <feature>_ui/       ← Android Library. Compose UI, ViewModels, navigation.
 ```
