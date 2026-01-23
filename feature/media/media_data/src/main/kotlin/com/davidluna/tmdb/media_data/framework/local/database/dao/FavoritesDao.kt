@@ -20,6 +20,12 @@ interface FavoritesDao {
     )
     suspend fun updateFavorite(mediaId: Int, categoryPrefix: String, isFavorite: Boolean)
 
+    @Query(
+        "UPDATE RoomMedia SET isFavorite = NOT isFavorite " +
+            "WHERE id = :mediaId AND category LIKE :categoryPrefix"
+    )
+    suspend fun toggleFavorite(mediaId: Int, categoryPrefix: String)
+
     @Query("UPDATE RoomMedia SET isFavorite = 0")
     suspend fun clearFavorites()
 }

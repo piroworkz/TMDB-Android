@@ -44,7 +44,7 @@ description: "Task list for favorites feature implementation"
     - feature/media/media_data/src/main/kotlin/com/davidluna/tmdb/media_data/framework/local/database/mappers/RoomMediaMapper.kt
   Depends on: T001
 
-- [ ] T003 Implement FavoritesRepository and DI wiring
+- [x] T003 Implement FavoritesRepository and DI wiring
   Description: Provide observe/toggle/clear behavior and wire the repository + use cases in Koin.
   Keeps data flow consistent with existing media repositories.
   Paths:
