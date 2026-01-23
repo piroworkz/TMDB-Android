@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.davidluna.tmdb.media_data.framework.local.database.converters.RoomMediaConverters
+import com.davidluna.tmdb.media_data.framework.local.database.dao.FavoritesDao
 import com.davidluna.tmdb.media_data.framework.local.database.dao.MediaDao
 import com.davidluna.tmdb.media_data.framework.local.database.dao.MediaDetailsDao
 import com.davidluna.tmdb.media_data.framework.local.database.dao.MediaVideosDao
@@ -34,6 +35,7 @@ import com.davidluna.tmdb.media_data.framework.local.database.entities.videos.Ro
 )
 abstract class MediaDatabase : RoomDatabase() {
     abstract val mediaDao: MediaDao
+    abstract val favoritesDao: FavoritesDao
     abstract val mediaDetailsDao: MediaDetailsDao
     abstract val remoteKeysDao: RemoteKeysDao
     abstract val videosDao: MediaVideosDao
