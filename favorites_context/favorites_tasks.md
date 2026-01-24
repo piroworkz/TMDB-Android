@@ -52,7 +52,7 @@ description: "Task list for favorites feature implementation"
     - feature/media/media_data/src/main/kotlin/com/davidluna/tmdb/media_data/di/MediaDataModule.kt
   Depends on: T002
 
-- [ ] T004 Integrate session end with favorites clearing
+- [x] T004 Integrate session end with favorites clearing
   Description: On session close/expiration, invoke `ClearFavorites` so lists reset immediately.
   Ensures favorites are session-scoped for guests and registered users.
   Paths:
