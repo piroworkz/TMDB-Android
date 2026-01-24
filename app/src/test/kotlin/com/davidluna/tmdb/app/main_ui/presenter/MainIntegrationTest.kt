@@ -22,11 +22,13 @@ import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.media_data.framework.local.storage.SelectedCatalogDataSource
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.MediaType.TV_SHOW
+import com.davidluna.tmdb.media_domain.usecases.ClearFavorites
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
 import com.davidluna.tmdb.media_ui.view.utils.bottomBarItems
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -37,6 +39,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainIntegrationTest {
 
     @get:Rule(order = 1)
@@ -51,6 +54,7 @@ class MainIntegrationTest {
     private lateinit var sessionDao: SessionDaoSpy
 
     private lateinit var selectedCatalogDataSource: UpdateSelectedEndpoint
+    private lateinit var clearFavorites: FakeClearFavorites
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -107,6 +111,19 @@ class MainIntegrationTest {
                 assertTrue(actual)
                 cancel()
             }
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `GIVEN OnCloseSession event WHEN session is cleared THEN favorites are cleared`() =
+        coroutineTestRule.scope.runTest {
+            val sut = buildSUT()
+
+            sessionDao.insertSession(fakeRoomSession)
+            sut.onEvent(OnCloseSession)
+            advanceUntilIdle()
+
+            assertEquals(1, clearFavorites.calls)
         }
 
     @Test
@@ -226,6 +243,7 @@ class MainIntegrationTest {
         accountDao = AccountDaoSpy()
         authAPI = AuthenticationApiSpy()
         sessionDao = SessionDaoSpy()
+        clearFavorites = FakeClearFavorites()
 
         selectedCatalogDataSource = buildSelectedCatalogDataSource()
 
@@ -243,7 +261,9 @@ class MainIntegrationTest {
             observeUserAccount = accountRepository,
             closeSession = authenticationRepository,
             ioDispatcher = coroutineTestRule.dispatcher,
-            updateSelectedEndpoint = selectedCatalogDataSource
+            observeSession = authenticationRepository,
+            updateSelectedEndpoint = selectedCatalogDataSource,
+            clearFavorites = clearFavorites
         )
     }
 
@@ -264,5 +284,15 @@ class MainIntegrationTest {
             username = username,
             avatarPath = avatarPath
         )
+    }
+
+    private class FakeClearFavorites : ClearFavorites {
+        var calls = 0
+            private set
+
+        override suspend fun clear(): AppError? {
+            calls += 1
+            return null
+        }
     }
 }

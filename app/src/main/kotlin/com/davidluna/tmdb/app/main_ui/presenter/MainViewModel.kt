@@ -9,11 +9,13 @@ import com.davidluna.tmdb.app.main_ui.presenter.MainEvent.ResetAppError
 import com.davidluna.tmdb.app.main_ui.presenter.MainEvent.UpdateBottomNavItems
 import com.davidluna.tmdb.auth_domain.entities.UserAccount
 import com.davidluna.tmdb.auth_domain.usecases.CloseSession
+import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
 import com.davidluna.tmdb.auth_domain.usecases.ObserveUserAccount
 import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.media_domain.entities.Catalog
 import com.davidluna.tmdb.media_domain.entities.MediaType
+import com.davidluna.tmdb.media_domain.usecases.ClearFavorites
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
 import com.davidluna.tmdb.media_ui.view.utils.bottomBarItems
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,7 +31,9 @@ class MainViewModel(
     observeUserAccount: ObserveUserAccount,
     private val closeSession: CloseSession,
     private val ioDispatcher: CoroutineDispatcher,
+    private val observeSession: ObserveSession,
     private val updateSelectedEndpoint: UpdateSelectedEndpoint,
+    private val clearFavorites: ClearFavorites,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(State())
@@ -56,6 +60,10 @@ class MainViewModel(
         val selectedCatalog: Catalog = Catalog.MOVIE_NOW_PLAYING,
     )
 
+    init {
+        observeSessionEnd()
+    }
+
     fun onEvent(event: MainEvent) = when (event) {
         OnCloseSession -> endSession()
         is UpdateBottomNavItems -> updateBottomNavItems(event.bottomNavItems)
@@ -72,6 +80,25 @@ class MainViewModel(
 
     private fun updateBottomNavItems(bottomNavItems: List<Catalog>) {
         _state.update { it.copy(bottomNavItems = bottomNavItems) }
+    }
+
+    private fun observeSessionEnd() {
+        viewModelScope.launch(ioDispatcher) {
+            var hasActiveSession = false
+            observeSession.session
+                .catch { e -> _state.update { it.copy(appError = e.toAppError()) } }
+                .collect { session ->
+                    if (session == null && hasActiveSession) {
+                        val result = clearFavorites.clear()
+                        if (result != null) {
+                            _state.update { it.copy(appError = result) }
+                        }
+                        hasActiveSession = false
+                    } else if (session != null) {
+                        hasActiveSession = true
+                    }
+                }
+        }
     }
 
     private fun endSession() {
