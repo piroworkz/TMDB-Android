@@ -126,7 +126,7 @@ Located at `gradle/libs.versions.toml`. Defines:
 **Initialization:** Called from `App.onCreate()` via `startDi()` extension function.
 
 **Module organization:**
-- Each feature layer defines Koin modules in its `di/` package.
+- UI and data layers define Koin modules in their `di/` package; domain modules do not use `di/`.
 - Modules are aggregated in `StartDI.kt` and passed to `startKoin { modules(...) }`.
 - ViewModels are registered using `viewModelOf(::ViewModel)`.
 
