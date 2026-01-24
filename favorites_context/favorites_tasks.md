@@ -50,7 +50,6 @@ description: "Task list for favorites feature implementation"
   Paths:
     - feature/media/media_data/src/main/kotlin/com/davidluna/tmdb/media_data/repository/FavoritesRepository.kt
     - feature/media/media_data/src/main/kotlin/com/davidluna/tmdb/media_data/di/MediaDataModule.kt
-    - feature/media/media_domain/src/main/kotlin/com/davidluna/tmdb/media_domain/di/MediaDomainModule.kt
   Depends on: T002
 
 - [ ] T004 Integrate session end with favorites clearing
@@ -58,7 +57,6 @@ description: "Task list for favorites feature implementation"
   Ensures favorites are session-scoped for guests and registered users.
   Paths:
     - feature/auth/auth_domain/src/main/kotlin/com/davidluna/tmdb/auth_domain/usecases/CloseSession.kt
-    - feature/auth/auth_domain/src/main/kotlin/com/davidluna/tmdb/auth_domain/di/AuthDomainModule.kt
   Depends on: T003
 
 ---
