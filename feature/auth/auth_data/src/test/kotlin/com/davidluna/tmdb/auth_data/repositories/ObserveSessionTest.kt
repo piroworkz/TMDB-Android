@@ -2,8 +2,8 @@ package com.davidluna.tmdb.auth_data.repositories
 
 import androidx.sqlite.SQLiteException
 import app.cash.turbine.test
-import com.davidluna.tmdb.auth_data.data.fakeDomainSession
-import com.davidluna.tmdb.auth_data.data.fakeRoomSession
+import com.davidluna.tmdb.auth_data.data.fakeGuestSession
+import com.davidluna.tmdb.auth_data.data.fakeRoomGuestSession
 import com.davidluna.tmdb.auth_data.framework.local.database.dao.SessionDao
 import com.davidluna.tmdb.auth_data.framework.remote.AuthenticationApi
 import com.davidluna.tmdb.auth_domain.usecases.ObserveSession
@@ -64,9 +64,9 @@ class ObserveSessionTest {
     fun `GIVEN session in db WHEN getSession is called THEN session emits session`() =
         coroutineRule.scope.runTest {
             val sut = buildSUT()
-            val expected = fakeDomainSession
+            val expected = fakeGuestSession
 
-            every { sessionDao.getSession() } returns flowOf(fakeRoomSession)
+            every { sessionDao.getSession() } returns flowOf(fakeRoomGuestSession)
 
             sut.session.test {
                 val actual = awaitItem()

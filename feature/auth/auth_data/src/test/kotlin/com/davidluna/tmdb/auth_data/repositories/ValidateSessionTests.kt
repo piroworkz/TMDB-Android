@@ -1,6 +1,6 @@
 package com.davidluna.tmdb.auth_data.repositories
 
-import com.davidluna.tmdb.auth_data.data.fakeRoomSession
+import com.davidluna.tmdb.auth_data.data.fakeRoomGuestSession
 import com.davidluna.tmdb.auth_data.framework.local.database.dao.SessionDao
 import com.davidluna.tmdb.auth_data.framework.remote.AuthenticationApi
 import com.davidluna.tmdb.auth_domain.usecases.ValidateSession
@@ -57,7 +57,7 @@ class ValidateSessionTests {
             val expiration = utcStringFromDate(futureDate)
 
             coEvery { sessionDao.hasSession() } returns true
-            every { sessionDao.getSession() } returns flowOf(fakeRoomSession.copy(expiresAt = expiration))
+            every { sessionDao.getSession() } returns flowOf(fakeRoomGuestSession.copy(expiresAt = expiration))
 
             val actual = sut.isValid()
             assertTrue(actual)
@@ -71,7 +71,7 @@ class ValidateSessionTests {
             val expiration = utcStringFromDate(pastDate)
 
             coEvery { sessionDao.hasSession() } returns true
-            every { sessionDao.getSession() } returns flowOf(fakeRoomSession.copy(expiresAt = expiration))
+            every { sessionDao.getSession() } returns flowOf(fakeRoomGuestSession.copy(expiresAt = expiration))
 
             val actual = sut.isValid()
             assertFalse(actual)
@@ -84,7 +84,7 @@ class ValidateSessionTests {
             val invalidDate = "invalid-date"
 
             coEvery { sessionDao.hasSession() } returns true
-            every { sessionDao.getSession() } returns flowOf(fakeRoomSession.copy(expiresAt = invalidDate))
+            every { sessionDao.getSession() } returns flowOf(fakeRoomGuestSession.copy(expiresAt = invalidDate))
 
             val actual = sut.isValid()
 

@@ -35,8 +35,10 @@ object Reader {
     }
 
     inline fun <reified T> fromJson(fileName: String): T =
-        this::class.java.getResourceAsStream("/raw/$fileName").use { stream: InputStream? ->
-            requireNotNull(stream) { "File not found" }
+        this::class.java.getResourceAsStream("/raw/${fileName}").use { stream: InputStream? ->
+            requireNotNull(stream) {
+                "File not found"
+            }
             val jsonString: String = stream.bufferedReader().use { it.readText() }
             json.decodeFromString<T>(jsonString)
         }

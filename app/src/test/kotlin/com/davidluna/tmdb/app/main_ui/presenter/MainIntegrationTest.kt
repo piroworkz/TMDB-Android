@@ -4,10 +4,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import app.cash.turbine.test
-import com.davidluna.tmdb.app.main_ui.fakes.fakeUserAccount
-import com.davidluna.tmdb.app.main_ui.presenter.MainEvent.OnCloseSession
-import com.davidluna.tmdb.app.main_ui.presenter.MainEvent.ResetAppError
+import com.davidluna.tmdb.auth_data.data.fakeAccount
+import com.davidluna.tmdb.auth_data.data.fakeGuestSession
+import com.davidluna.tmdb.auth_data.data.fakeRoomAccount
+import com.davidluna.tmdb.auth_data.data.fakeRoomGuestSession
 import com.davidluna.tmdb.auth_data.data.fakeRoomSession
+import com.davidluna.tmdb.auth_data.data.fakeSession
 import com.davidluna.tmdb.auth_data.data.local.database.dao.AccountDaoSpy
 import com.davidluna.tmdb.auth_data.data.local.database.dao.SessionDaoSpy
 import com.davidluna.tmdb.auth_data.data.remote.AuthenticationApiSpy
@@ -16,27 +18,20 @@ import com.davidluna.tmdb.auth_data.framework.local.database.entities.RoomUserAc
 import com.davidluna.tmdb.auth_data.repositories.AccountRepository
 import com.davidluna.tmdb.auth_data.repositories.AuthenticationRepository
 import com.davidluna.tmdb.auth_domain.entities.UserAccount
-import com.davidluna.tmdb.core_domain.entities.AppError
-import com.davidluna.tmdb.core_domain.entities.AppErrorCode
-import com.davidluna.tmdb.core_domain.entities.toAppError
+import com.davidluna.tmdb.media_data.data.local.database.dao.FavoritesDaoSpy
 import com.davidluna.tmdb.media_data.framework.local.storage.SelectedCatalogDataSource
-import com.davidluna.tmdb.media_domain.entities.Catalog
-import com.davidluna.tmdb.media_domain.entities.MediaType.TV_SHOW
+import com.davidluna.tmdb.media_data.repositories.FavoritesRepository
 import com.davidluna.tmdb.media_domain.usecases.UpdateSelectedEndpoint
-import com.davidluna.tmdb.media_ui.view.utils.bottomBarItems
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
+import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainIntegrationTest {
 
     @get:Rule(order = 1)
@@ -45,180 +40,43 @@ class MainIntegrationTest {
     @get:Rule(order = 2)
     val coroutineTestRule = CoroutineTestRule()
 
-    private lateinit var userAccountApi: UserAccountApiSpy
     private lateinit var accountDao: AccountDaoSpy
     private lateinit var authAPI: AuthenticationApiSpy
-    private lateinit var sessionDao: SessionDaoSpy
-
+    private lateinit var favoritesDao: FavoritesDaoSpy
     private lateinit var selectedCatalogDataSource: UpdateSelectedEndpoint
+    private lateinit var sessionDao: SessionDaoSpy
+    private lateinit var userAccountApi: UserAccountApiSpy
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `GIVEN GetUserAccountUseCase returns user WHEN VM is initialized THEN userAccount emits`() =
+    fun `GIVEN a valid guest session WHEN state flow has at least one subscriber THEN _state should be updated with guest session`() =
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
+            sessionDao.insertSession(fakeRoomGuestSession)
 
-            accountDao.insertAccount(fakeUserAccount.toEntity())
+            sut.state.test {
+                awaitItem()
+                val actual = awaitItem().session
 
-            sut.userAccount.test {
-                val initialValue = awaitItem()
+                assertEquals(fakeGuestSession, actual)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `GIVEN a valid session AND user account WHEN state flow has at least one subscriber THEN _state should be updated with guest session`() =
+        coroutineTestRule.scope.runTest {
+            val sut = buildSUT()
+            sessionDao.insertSession(fakeRoomSession)
+            accountDao.insertAccount(fakeRoomAccount)
+
+            sut.state.test {
+                awaitItem()
                 val actual = awaitItem()
 
-                assertEquals(initialValue, null)
-                assertEquals(actual, fakeUserAccount)
-                cancel()
+                assertEquals(fakeSession, actual.session)
+                assertEquals(fakeAccount, actual.userAccount)
+                cancelAndIgnoreRemainingEvents()
             }
-        }
-
-    @Test
-    fun `GIVEN GetUserAccountUseCase throws WHEN VM is initialized THEN state contains appError`() =
-        coroutineTestRule.scope.runTest {
-            val expected = IllegalStateException("test exception")
-            val sut = buildSUT()
-
-            accountDao.shouldThrowException(expected)
-
-            val userAccountJob = launch { sut.userAccount.collect {} }
-
-            sut.state.test {
-                val initialValue = awaitItem().appError
-                val actual = awaitItem().appError
-
-                assertNull(initialValue)
-                assertEquals(expected.toAppError(), actual)
-                cancel()
-            }
-            userAccountJob.cancel()
-        }
-
-    @Test
-    fun `GIVEN OnCloseSession event WHEN accountDao AND sessionDao succeed THEN isSessionClosed state should be true`() =
-        coroutineTestRule.scope.runTest {
-            val sut = buildSUT()
-
-            sessionDao.insertSession(fakeRoomSession)
-            sut.onEvent(OnCloseSession)
-
-            sut.state.test {
-                val initialValue = awaitItem().isSessionClosed
-                val actual = awaitItem().isSessionClosed
-
-                assertFalse(initialValue)
-                assertTrue(actual)
-                cancel()
-            }
-        }
-
-    @Test
-    fun `GIVEN OnCloseSession event WHEN accountDao fails THEN state updates appError`() =
-        coroutineTestRule.scope.runTest {
-            val expected = AppError(
-                code = AppErrorCode.NOT_FOUND,
-                description = "Account not deleted or no session found",
-                type = null
-            )
-            val sut = buildSUT()
-
-            accountDao.shouldThrowException(expected)
-            sut.onEvent(OnCloseSession)
-            sut.state.test {
-                val initialValue = awaitItem().appError
-                val actual = awaitItem().appError
-
-                assertNull(initialValue)
-                assertEquals(expected, actual)
-                cancel()
-            }
-        }
-
-    @Test
-    fun `GIVEN OnCloseSession event WHEN sessionDao fails THEN state updates appError`() =
-        coroutineTestRule.scope.runTest {
-            val expected = IllegalStateException("test exception")
-            val sut = buildSUT()
-
-            sessionDao.shouldThrowException(expected)
-            sut.onEvent(OnCloseSession)
-            sut.state.test {
-                val initialValue = awaitItem().appError
-                val actual = awaitItem().appError
-
-                assertNull(initialValue)
-                assertEquals(expected.toAppError(), actual)
-                cancel()
-            }
-        }
-
-    @Test
-    fun `GIVEN UpdateBottomNavItems event WHEN bottomNavItems different from current THEN state updated`() =
-        coroutineTestRule.scope.runTest {
-            val initialBottomNavItems = MainViewModel.State().bottomNavItems
-            val expected = TV_SHOW.bottomBarItems()
-            val sut = buildSUT()
-
-            sut.onEvent(MainEvent.UpdateBottomNavItems(expected))
-            sut.state.test {
-                val initialValue = awaitItem().bottomNavItems
-                val actual = awaitItem().bottomNavItems
-
-                assertEquals(initialBottomNavItems, initialValue)
-                assertEquals(expected, actual)
-                cancel()
-            }
-
-        }
-
-    @Test
-    fun `GIVEN UpdateBottomNavItems event WHEN bottomNavItems same as current THEN no new state is produced`() =
-        coroutineTestRule.scope.runTest {
-            val initialBottomNavItems = MainViewModel.State().bottomNavItems
-            val sut = buildSUT()
-
-            sut.onEvent(MainEvent.UpdateBottomNavItems(initialBottomNavItems))
-
-            sut.state.test {
-                val initialValue = awaitItem().bottomNavItems
-
-                assertEquals(initialBottomNavItems, initialValue)
-                expectNoEvents()
-            }
-        }
-
-    @Test
-    fun `GIVEN OnCatalogSelected event WHEN selectedCatalogDataSource succeeds THEN state updated`() =
-        coroutineTestRule.scope.runTest {
-            val expected = Catalog.MOVIE_POPULAR
-            val sut = buildSUT()
-
-            sut.onEvent(MainEvent.OnCatalogSelected(expected))
-            sut.state.test {
-                skipItems(1)
-                val actual = awaitItem().selectedCatalog
-
-                assertEquals(expected, actual)
-                cancel()
-            }
-        }
-
-    @Test
-    fun `GIVEN ResetAppError event WHEN appError is not null THEN state appError is set to null`() =
-        coroutineTestRule.scope.runTest {
-            val expected = IllegalStateException("test exception")
-            val sut = buildSUT()
-
-            accountDao.shouldThrowException(expected)
-
-            val userAccountJob = launch { sut.userAccount.collect {} }
-
-            sut.state.test {
-                skipItems(2)
-                sut.onEvent(ResetAppError)
-                val actual = awaitItem().appError
-
-                assertNull(actual)
-                cancel()
-            }
-            userAccountJob.cancel()
         }
 
     private fun buildSUT(): MainViewModel {
@@ -226,7 +84,7 @@ class MainIntegrationTest {
         accountDao = AccountDaoSpy()
         authAPI = AuthenticationApiSpy()
         sessionDao = SessionDaoSpy()
-
+        favoritesDao = FavoritesDaoSpy()
         selectedCatalogDataSource = buildSelectedCatalogDataSource()
 
         val accountRepository = AccountRepository(
@@ -239,11 +97,18 @@ class MainIntegrationTest {
             accountDetailsRepository = accountRepository
         )
 
+        val favoritesRepository = FavoritesRepository(
+            favoritesDao = favoritesDao
+        )
+
         return MainViewModel(
-            observeUserAccount = accountRepository,
+            clearFavorites = favoritesRepository,
             closeSession = authenticationRepository,
             ioDispatcher = coroutineTestRule.dispatcher,
-            updateSelectedEndpoint = selectedCatalogDataSource
+            observeSession = authenticationRepository,
+            observeUserAccount = accountRepository,
+            updateSelectedEndpoint = selectedCatalogDataSource,
+            validateSession = authenticationRepository
         )
     }
 

@@ -15,12 +15,6 @@ interface FavoritesDao {
     fun getFavorites(categoryPrefix: String): PagingSource<Int, RoomMedia>
 
     @Query(
-        "UPDATE RoomMedia SET isFavorite = :isFavorite " +
-            "WHERE id = :mediaId AND category LIKE :categoryPrefix"
-    )
-    suspend fun updateFavorite(mediaId: Int, categoryPrefix: String, isFavorite: Boolean)
-
-    @Query(
         "UPDATE RoomMedia SET isFavorite = NOT isFavorite " +
             "WHERE id = :mediaId AND category LIKE :categoryPrefix"
     )

@@ -36,7 +36,6 @@ class NetworkCall<R : Any>(
                         throwable.message.isNullOrEmpty() -> "Unknown error"
                         else -> throwable.message.orEmpty()
                     }
-                    println("<-- NetworkCall failed: $message")
                     callback.onResponse(
                         this@NetworkCall,
                         Response.success(

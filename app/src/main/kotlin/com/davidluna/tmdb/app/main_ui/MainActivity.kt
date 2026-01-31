@@ -9,6 +9,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.davidluna.tmdb.app.main_ui.presenter.MainEvent
 import com.davidluna.tmdb.app.main_ui.presenter.MainEvent.OnCatalogSelected
 import com.davidluna.tmdb.app.main_ui.presenter.MainEvent.ResetAppError
 import com.davidluna.tmdb.app.main_ui.presenter.MainViewModel
@@ -30,9 +31,11 @@ class MainActivity : FragmentActivity() {
             val navController = rememberNavController()
             val stateHolder = rememberNavigatorState(navController)
             val state by viewModel.state.collectAsStateWithLifecycle()
-            val userAccount by viewModel.userAccount.collectAsStateWithLifecycle()
 
-            closeSession(state.isSessionClosed)
+            finish(state.finishActivity)
+            if (state.isSessionClosed) {
+                viewModel.onEvent(MainEvent.ClearAppData)
+            }
             ErrorDialogView(state.appError) { viewModel.onEvent(ResetAppError) }
             stateHolder.BackStackEntryFlowCollectEffect()
             LaunchedEffect(state.bottomNavItems) {
@@ -47,14 +50,14 @@ class MainActivity : FragmentActivity() {
                     state = stateHolder,
                     bottomNavItems = state.bottomNavItems,
                     selectedCatalog = state.selectedCatalog,
-                    userAccount = userAccount,
+                    userAccount = state.userAccount,
                     onMainEvent = { viewModel.onEvent(it) }
                 )
             }
         }
     }
 
-    private fun closeSession(isSessionClosed: Boolean) {
+    private fun finish(isSessionClosed: Boolean) {
         if (isSessionClosed) finishAffinity()
     }
 }
