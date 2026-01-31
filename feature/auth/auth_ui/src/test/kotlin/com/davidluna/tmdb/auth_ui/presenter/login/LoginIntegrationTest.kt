@@ -67,7 +67,7 @@ class LoginIntegrationTest {
             val expected = fakeAppError
 
             sut.onEvent(LoginEvent.LoginButtonClicked(loginMethod.username, loginMethod.password))
-            accountDao.shouldThrowException(expected)
+            accountDao.throwException(expected)
 
             sut.state.test {
                 awaitItem()

@@ -7,4 +7,5 @@ sealed interface MainEvent {
     data class UpdateBottomNavItems(val bottomNavItems: List<Catalog>) : MainEvent
     data object OnCloseSession : MainEvent
     data object ResetAppError: MainEvent
+    data object ClearAppData: MainEvent
 }

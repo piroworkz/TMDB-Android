@@ -19,8 +19,8 @@ import androidx.test.rule.GrantPermissionRule
 import com.davidluna.tmdb.app.rules.MockWebServerRule
 import com.davidluna.tmdb.media_data.framework.remote.model.RemoteMedia
 import com.davidluna.tmdb.media_data.framework.remote.model.RemoteResults
-import com.davidluna.tmdb.test_shared.reader.Reader
 import com.davidluna.tmdb.test_shared.reader.Reader.UPCOMING_MOVIES
+import com.davidluna.tmdb.test_shared.reader.Reader.fromJson
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -40,7 +40,7 @@ class TmdbAppEndToEndTest {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     private val upcomingMoviesResponse =
-        Reader.fromJson<RemoteResults<RemoteMedia>>(UPCOMING_MOVIES).results
+        fromJson<RemoteResults<RemoteMedia>>(UPCOMING_MOVIES).results
     private val firstMovie = upcomingMoviesResponse.first()
 
     @SuppressLint("CheckResult")

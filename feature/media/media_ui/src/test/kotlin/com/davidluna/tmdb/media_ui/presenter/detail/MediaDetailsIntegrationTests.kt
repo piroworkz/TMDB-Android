@@ -18,6 +18,7 @@ import com.davidluna.tmdb.media_data.framework.remote.services.RemoteMediaServic
 import com.davidluna.tmdb.media_data.repositories.MediaDetailsCacheRepository
 import com.davidluna.tmdb.media_ui.view.utils.UiState
 import com.davidluna.tmdb.test_shared.reader.Reader
+import com.davidluna.tmdb.test_shared.reader.Reader.fromJson
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -86,7 +87,7 @@ class MediaDetailsIntegrationTests {
     @Test
     fun `GIVEN GetMediaDetailsUseCase WHEN any remote failure THEN emits UiState Failure`() =
         coroutineTestRule.scope.runTest {
-            val exception = Reader.fromJson<RemoteError>(Reader.REMOTE_ERROR)
+            val exception = fromJson<RemoteError>(Reader.REMOTE_ERROR)
             val expected = UiState.Failure(appError = exception.toAppError())
             val sut = buildSUT()
 

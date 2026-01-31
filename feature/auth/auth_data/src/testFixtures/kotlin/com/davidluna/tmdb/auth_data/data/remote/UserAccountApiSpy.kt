@@ -7,6 +7,7 @@ import com.davidluna.tmdb.auth_data.framework.remote.UserAccountApi
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteUserAccountDetail
 import com.davidluna.tmdb.core_data.framework.remote.model.RemoteError
 import com.davidluna.tmdb.test_shared.reader.Reader
+import com.davidluna.tmdb.test_shared.reader.Reader.fromJson
 
 class UserAccountApiSpy : UserAccountApi {
 
@@ -18,9 +19,9 @@ class UserAccountApiSpy : UserAccountApi {
 
     override suspend fun fetchAccountDetails(): Either<RemoteError, RemoteUserAccountDetail> {
         return if (shouldThrowError) {
-            Reader.fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
+            fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
         } else {
-            Reader.fromJson<RemoteUserAccountDetail>(Reader.USER_ACCOUNT).right()
+            fromJson<RemoteUserAccountDetail>(Reader.USER_ACCOUNT).right()
         }
     }
 }

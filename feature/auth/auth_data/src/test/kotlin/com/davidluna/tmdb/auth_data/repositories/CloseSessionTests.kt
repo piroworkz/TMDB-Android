@@ -1,6 +1,7 @@
 package com.davidluna.tmdb.auth_data.repositories
 
 import androidx.sqlite.SQLiteException
+import com.davidluna.tmdb.auth_data.data.fakeAppError
 import com.davidluna.tmdb.auth_data.framework.local.database.dao.SessionDao
 import com.davidluna.tmdb.auth_data.framework.remote.AuthenticationApi
 import com.davidluna.tmdb.auth_domain.usecases.CloseSession
@@ -53,7 +54,7 @@ class CloseSessionTests {
 
             coEvery { sessionDao.hasSession() } returns false
 
-            val actual = sut.close()
+            val actual = sut.close(false)
             assertEquals(expected, actual)
         }
 
@@ -64,9 +65,9 @@ class CloseSessionTests {
             val expected = illegalStateException
 
             coEvery { sessionDao.hasSession() } returns false
-            coEvery { accountRepository.isAccountDeleted() } returns false
+            coEvery { accountRepository.deleteAccount() } returns fakeAppError
 
-            val actual = sut.close()
+            val actual = sut.close(false)
             assertEquals(expected, actual)
         }
 
@@ -77,9 +78,9 @@ class CloseSessionTests {
 
             coEvery { sessionDao.hasSession() } returns true
             coEvery { sessionDao.deleteSession() } returns 1
-            coEvery { accountRepository.isAccountDeleted() } returns true
+            coEvery { accountRepository.deleteAccount() } returns null
 
-            val actual = sut.close()
+            val actual = sut.close(false)
 
             assertNull(actual)
         }
@@ -92,9 +93,9 @@ class CloseSessionTests {
 
             coEvery { sessionDao.hasSession() } returns true
             coEvery { sessionDao.deleteSession() } returns -1
-            coEvery { accountRepository.isAccountDeleted() } returns true
+            coEvery { accountRepository.deleteAccount() } returns null
 
-            val actual = sut.close()
+            val actual = sut.close(true)
             assertEquals(expected, actual)
         }
 
@@ -107,7 +108,7 @@ class CloseSessionTests {
             coEvery { sessionDao.hasSession() } returns true
             coEvery { sessionDao.deleteSession() } throws SQLiteException()
 
-            val actual = sut.close()
+            val actual = sut.close(false)
             assertEquals(expected, actual)
         }
 
@@ -119,9 +120,9 @@ class CloseSessionTests {
 
             coEvery { sessionDao.hasSession() } returns true
             coEvery { sessionDao.deleteSession() } returns 1
-            coEvery { accountRepository.isAccountDeleted() } returns false
+            coEvery { accountRepository.deleteAccount() } returns fakeAppError
 
-            val actual = sut.close()
+            val actual = sut.close(false)
 
             assertEquals(expected, actual)
         }

@@ -10,13 +10,14 @@ import com.davidluna.tmdb.media_data.framework.remote.model.details.RemoteMediaD
 import com.davidluna.tmdb.media_data.framework.remote.model.images.RemoteImages
 import com.davidluna.tmdb.media_data.framework.remote.model.videos.RemoteVideos
 import com.davidluna.tmdb.test_shared.reader.Reader
+import com.davidluna.tmdb.test_shared.reader.Reader.fromJson
 
-val fakeRemoteMediaDetail: RemoteMediaDetail = Reader.fromJson<RemoteMediaDetail>(Reader.MOVIE_DETAIL)
-val fakeRemoteImages: RemoteImages = Reader.fromJson<RemoteImages>(Reader.MOVIE_IMAGES)
-val fakeRemoteCredits: RemoteCredits = Reader.fromJson<RemoteCredits>(Reader.MOVIE_CREDITS)
-val fakeRemoteVideos: RemoteVideos = Reader.fromJson<RemoteVideos>(Reader.MOVIE_VIDEOS)
-val fakeRemoteMediaList: List<RemoteMedia> = Reader.fromJson<RemoteResults<RemoteMedia>>(Reader.MOVIE_LIST).results
-val fakeRemoteError = Reader.fromJson<RemoteError>(Reader.REMOTE_ERROR)
+val fakeRemoteMediaDetail: RemoteMediaDetail = fromJson<RemoteMediaDetail>(Reader.MOVIE_DETAIL)
+val fakeRemoteImages: RemoteImages = fromJson<RemoteImages>(Reader.MOVIE_IMAGES)
+val fakeRemoteCredits: RemoteCredits = fromJson<RemoteCredits>(Reader.MOVIE_CREDITS)
+val fakeRemoteVideos: RemoteVideos = fromJson<RemoteVideos>(Reader.MOVIE_VIDEOS)
+val fakeRemoteMediaList: List<RemoteMedia> = fromJson<RemoteResults<RemoteMedia>>(Reader.MOVIE_LIST).results
+val fakeRemoteError = fromJson<RemoteError>(Reader.REMOTE_ERROR)
 
 val fakeRemoteResults = RemoteResults(
     page = 1,

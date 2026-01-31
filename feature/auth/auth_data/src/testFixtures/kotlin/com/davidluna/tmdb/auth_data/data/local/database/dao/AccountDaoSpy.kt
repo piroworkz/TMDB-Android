@@ -34,7 +34,7 @@ class AccountDaoSpy : AccountDao {
         return 1
     }
 
-    fun shouldThrowException(error: Throwable?) {
+    fun throwException(error: Throwable?) {
         shouldThrowException.set(error != null)
         this.error = error
     }

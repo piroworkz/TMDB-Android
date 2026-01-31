@@ -42,13 +42,11 @@ class AuthenticationRepository(
         asGuest()
     }
 
-    override suspend fun close(): AppError? = tryCatchSuspend {
-        val shouldThrow =
-            !sessionDao.hasSession() || sessionDao.deleteSession() < 0 || !accountDetailsRepository.isAccountDeleted()
-        if (shouldThrow) {
-            throw IllegalStateException("Account not deleted or no session found")
-        } else {
-            null
+    override suspend fun close(isGuest: Boolean): AppError? = tryCatchSuspend {
+        if (!isGuest) accountDetailsRepository.deleteAccount()
+        sessionDao.deleteSession()
+        if (accountDetailsRepository.hasAccount() && sessionDao.hasSession()) {
+            throw IllegalStateException("Failed to delete account")
         }
     }.leftOrNull()
 
@@ -64,7 +62,7 @@ class AuthenticationRepository(
                 .parse(it) ?: Date()
             val isNotExpired = Date().before(expiresAt)
             if (isNotExpired.not()) {
-                close()
+                close(session.isGuest)
             }
             isNotExpired
         } ?: false

@@ -12,6 +12,7 @@ import com.davidluna.tmdb.media_data.framework.remote.model.images.RemoteImages
 import com.davidluna.tmdb.media_data.framework.remote.model.videos.RemoteVideos
 import com.davidluna.tmdb.media_data.framework.remote.services.RemoteMediaService
 import com.davidluna.tmdb.test_shared.reader.Reader
+import com.davidluna.tmdb.test_shared.reader.Reader.fromJson
 
 class RemoteMediaServiceSpy : RemoteMediaService {
 
@@ -25,36 +26,36 @@ class RemoteMediaServiceSpy : RemoteMediaService {
         endpoint: String,
         page: Int,
     ): Either<RemoteError, RemoteResults<RemoteMedia>> = if (shouldThrowError) {
-        Reader.fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
+        fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
     } else {
-        Reader.fromJson<RemoteResults<RemoteMedia>>(Reader.MOVIE_LIST).right()
+        fromJson<RemoteResults<RemoteMedia>>(Reader.MOVIE_LIST).right()
     }
 
     override suspend fun getDetailById(endpoint: String): Either<RemoteError, RemoteMediaDetail> =
         if (shouldThrowError) {
-            Reader.fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
+            fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
         } else {
-            Reader.fromJson<RemoteMediaDetail>(Reader.MOVIE_DETAIL).right()
+            fromJson<RemoteMediaDetail>(Reader.MOVIE_DETAIL).right()
         }
 
     override suspend fun getCreditsById(endpoint: String): Either<RemoteError, RemoteCredits> =
         if (shouldThrowError) {
-            Reader.fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
+            fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
         } else {
-            Reader.fromJson<RemoteCredits>(Reader.MOVIE_CREDITS).right()
+            fromJson<RemoteCredits>(Reader.MOVIE_CREDITS).right()
         }
 
     override suspend fun getImagesById(endpoint: String): Either<RemoteError, RemoteImages> =
         if (shouldThrowError) {
-            Reader.fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
+            fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
         } else {
-            Reader.fromJson<RemoteImages>(Reader.MOVIE_IMAGES).right()
+            fromJson<RemoteImages>(Reader.MOVIE_IMAGES).right()
         }
 
     override suspend fun getVideos(endpoint: String): Either<RemoteError, RemoteVideos> =
         if (shouldThrowError) {
-            Reader.fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
+            fromJson<RemoteError>(Reader.REMOTE_ERROR).left()
         } else {
-            Reader.fromJson<RemoteVideos>(Reader.MOVIE_VIDEOS).right()
+            fromJson<RemoteVideos>(Reader.MOVIE_VIDEOS).right()
         }
 }

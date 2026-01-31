@@ -23,17 +23,18 @@ class AccountRepository(
         get() = accountDao.getAccount().map { it?.toDomain() }
 
     override suspend fun fetch(): AppError? = tryCatchSuspend {
-        if (!accountDao.hasAccount()) {
-            val remoteAccount = userAccountApi.fetchAccountDetails()
-                .getOrElse { throw it.toAppError() }
-            accountDao.insertAccount(remoteAccount.toLocalStorage())
-        }
-        accountDao.hasAccount()
+        val remoteAccount = userAccountApi.fetchAccountDetails()
+            .getOrElse { throw it.toAppError() }
+        accountDao.insertAccount(remoteAccount.toLocalStorage())
     }.leftOrNull()
 
-    override suspend fun isAccountDeleted(): Boolean = tryCatchSuspend {
-        if (accountDao.hasAccount()) accountDao.deleteAccount() > 0 else true
-    }.isRight()
+    override suspend fun deleteAccount(): AppError? = tryCatchSuspend {
+        accountDao.deleteAccount()
+    }.leftOrNull()
+
+    override suspend fun hasAccount(): Boolean = tryCatchSuspend {
+        accountDao.hasAccount()
+    }.getOrElse { false }
 
     private fun RemoteUserAccountDetail.toLocalStorage(): RoomUserAccount = RoomUserAccount(
         userId = userId,

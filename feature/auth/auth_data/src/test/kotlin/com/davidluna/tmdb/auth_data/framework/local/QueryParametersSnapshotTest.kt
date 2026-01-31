@@ -1,7 +1,7 @@
 package com.davidluna.tmdb.auth_data.framework.local
 
-import com.davidluna.tmdb.auth_data.data.fakeDomainSession
-import com.davidluna.tmdb.auth_data.data.fakeRoomSession
+import com.davidluna.tmdb.auth_data.data.fakeGuestSession
+import com.davidluna.tmdb.auth_data.data.fakeRoomGuestSession
 import com.davidluna.tmdb.auth_data.framework.local.database.dao.SessionDao
 import com.davidluna.tmdb.core_domain.usecases.ObserveCountryCode
 import com.davidluna.tmdb.core_data.framework.remote.interceptors.ParametersSnapshot.Keys
@@ -69,7 +69,7 @@ class QueryParametersSnapshotTest {
     @Test
     fun `GIVEN session AND country US WHEN invoke is called THEN returns params with session`() =
         coroutineRule.scope.runTest {
-            every { sessionDao.getSession() } returns flowOf(fakeRoomSession)
+            every { sessionDao.getSession() } returns flowOf(fakeRoomGuestSession)
             every { getCountryCode.invoke() } returns flowOf("US")
 
             val sut = buildSut()
@@ -80,13 +80,13 @@ class QueryParametersSnapshotTest {
             assertEquals("US", actual[Keys.REGION])
             assertEquals(Keys.DEFAULT_LANGUAGE, actual[Keys.LANGUAGE])
             assertEquals("en", actual[Keys.INCLUDE_IMAGE_LANGUAGE])
-            assertEquals(fakeDomainSession.sessionId, actual[Keys.SESSION_ID])
+            assertEquals(fakeGuestSession.sessionId, actual[Keys.SESSION_ID])
         }
 
     @Test
     fun `GIVEN session AND country MX WHEN invoke is called THEN returns params with session and spanish locale`() =
         coroutineRule.scope.runTest {
-            every { sessionDao.getSession() } returns flowOf(fakeRoomSession)
+            every { sessionDao.getSession() } returns flowOf(fakeRoomGuestSession)
             every { getCountryCode.invoke() } returns flowOf("MX")
 
             val sut = buildSut()
@@ -97,7 +97,7 @@ class QueryParametersSnapshotTest {
             assertEquals("MX", actual[Keys.REGION])
             assertEquals("es-mx", actual[Keys.LANGUAGE])
             assertEquals("es", actual[Keys.INCLUDE_IMAGE_LANGUAGE])
-            assertEquals(fakeDomainSession.sessionId, actual[Keys.SESSION_ID])
+            assertEquals(fakeGuestSession.sessionId, actual[Keys.SESSION_ID])
         }
 
     private fun buildSut(): QueryParametersSnapshot {

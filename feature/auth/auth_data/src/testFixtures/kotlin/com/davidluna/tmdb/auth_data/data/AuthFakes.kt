@@ -2,48 +2,43 @@ package com.davidluna.tmdb.auth_data.data
 
 import com.davidluna.tmdb.auth_data.framework.local.database.entities.RoomSession
 import com.davidluna.tmdb.auth_data.framework.local.database.entities.RoomUserAccount
-import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteAvatar
-import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteGravatar
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteGuestSession
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteSessionIdResponse
-import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteTmdb
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteTokenResponse
 import com.davidluna.tmdb.auth_data.framework.remote.model.RemoteUserAccountDetail
 import com.davidluna.tmdb.auth_domain.entities.LoginMethod
 import com.davidluna.tmdb.auth_domain.entities.Session
 import com.davidluna.tmdb.auth_domain.entities.UserAccount
-import com.davidluna.tmdb.core_domain.entities.AppError
-import com.davidluna.tmdb.core_domain.entities.toAppError
 import com.davidluna.tmdb.core_data.framework.remote.model.RemoteError
 import com.davidluna.tmdb.core_data.framework.remote.model.buildModel
+import com.davidluna.tmdb.core_data.framework.remote.model.toAppError
+import com.davidluna.tmdb.core_domain.entities.AppError
+import com.davidluna.tmdb.test_shared.reader.Reader
+import com.davidluna.tmdb.test_shared.reader.Reader.fromJson
 
-val fakeRoomSession = RoomSession(
-    id = 0,
-    sessionId = "guest123",
-    isGuest = true,
-    expiresAt = "2025-12-01 00:00:00 UTC"
-)
+val fakeRemoteError = fromJson<RemoteError>(Reader.REMOTE_ERROR)
+val fakeRemoteGuestSession = fromJson<RemoteGuestSession>(Reader.AUTH_GUEST_SESSION)
+val fakeRemoteSessionIdResponse = fromJson<RemoteSessionIdResponse>(Reader.AUTH_SESSION_NEW)
+val fakeRemoteTokenResponse = fromJson<RemoteTokenResponse>(Reader.AUTH_TOKEN_NEW)
+val fakeRemoteUserAccountDetail = fromJson<RemoteUserAccountDetail>(Reader.USER_ACCOUNT)
 
-val fakeDomainSession = Session(
-    sessionId = "guest123",
-    isGuest = true,
-    expiresAt = "2025-12-01 00:00:00 UTC"
-)
+val fakeRoomGuestSession = with(fakeRemoteGuestSession) {
+    RoomSession(
+        id = 0,
+        sessionId = guestSessionId,
+        isGuest = true,
+        expiresAt = expiresAt
+    )
+}
 
-val fakeRemoteUserAccountDetail = RemoteUserAccountDetail(
-    avatar = RemoteAvatar(
-        gravatar = RemoteGravatar(
-            hash = "nihil"
-        ),
-        tmdb = RemoteTmdb(avatarPath = "wisi")
-    ),
-    userId = 3376,
-    includeAdult = false,
-    iso_3166_1 = "ferri",
-    iso_639_1 = "sea",
-    name = "Janna Strong",
-    username = "Nell Delaney"
-)
+val fakeRoomSession = with(fakeRemoteSessionIdResponse) {
+    RoomSession(
+        id = 0,
+        sessionId = sessionId,
+        isGuest = false,
+        expiresAt = null
+    )
+}
 
 val fakeRoomAccount = with(fakeRemoteUserAccountDetail) {
     RoomUserAccount(
@@ -54,7 +49,23 @@ val fakeRoomAccount = with(fakeRemoteUserAccountDetail) {
     )
 }
 
-val fakeDomainAccount = with(fakeRoomAccount) {
+val fakeGuestSession = with(fakeRoomGuestSession) {
+    Session(
+        sessionId = sessionId,
+        isGuest = isGuest,
+        expiresAt = expiresAt
+    )
+}
+
+val fakeSession = with(fakeRoomSession) {
+    Session(
+        sessionId = sessionId,
+        isGuest = isGuest,
+        expiresAt = expiresAt
+    )
+}
+
+val fakeAccount = with(fakeRoomAccount) {
     UserAccount(
         userId = userId,
         name = name,
@@ -63,31 +74,8 @@ val fakeDomainAccount = with(fakeRoomAccount) {
     )
 }
 
-val fakeRemoteGuestSession = RemoteGuestSession(
-    success = true,
-    guestSessionId = "test_guest_session_id",
-    expiresAt = "2024-12-31T23:59:59Z"
-)
-
-val fakeRemoteError = RemoteError(
-    statusCode = 500,
-    statusMessage = "some test error",
-    success = false
-)
-
-val fakeRemoteTokenResponse = RemoteTokenResponse(
-    expiresAt = "legimus",
-    requestToken = "quot",
-    success = true
-)
-
 val fakeAuthCredentials = LoginMethod.AuthCredentials(
-    username = "Michael Peck", password = "aperiri"
+    username = "someEmail@mail.com", password = "password"
 )
 
-val fakeRemoteSessionIdResponse = RemoteSessionIdResponse(
-    sessionId = "sociis",
-    success = true
-)
-
-val fakeAppError: AppError = Exception("Test error").toAppError()
+val fakeAppError: AppError = fakeRemoteError.toAppError()
