@@ -4,7 +4,8 @@
 
     <application
         android:networkSecurityConfig="@xml/network_security_config"
-        tools:ignore="MissingApplicationIcon"
+        tools:ignore="DataExtractionRules,MissingApplicationIcon"
+        android:allowBackup="false"
         tools:node="merge" />
 
 </manifest>

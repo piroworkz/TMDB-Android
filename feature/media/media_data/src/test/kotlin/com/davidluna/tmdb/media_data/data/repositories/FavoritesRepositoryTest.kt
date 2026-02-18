@@ -3,15 +3,16 @@ package com.davidluna.tmdb.media_data.data.repositories
 import androidx.paging.PagingSource
 import androidx.paging.PagingSource.LoadResult
 import androidx.paging.PagingState
-import androidx.paging.testing.asSnapshot
 import androidx.sqlite.SQLiteException
+import app.cash.turbine.test
+import com.davidluna.tmdb.core_domain.entities.AppError
 import com.davidluna.tmdb.core_domain.entities.toAppError
+import com.davidluna.tmdb.media_data.fakes.fakeCatalog
+import com.davidluna.tmdb.media_data.fakes.fakeFavorites
+import com.davidluna.tmdb.media_data.fakes.fakeRoomFavorites
 import com.davidluna.tmdb.media_data.framework.local.database.dao.FavoritesDao
 import com.davidluna.tmdb.media_data.framework.local.database.entities.media.RoomMedia
-import com.davidluna.tmdb.media_data.framework.local.database.mappers.toDomain
 import com.davidluna.tmdb.media_data.repositories.FavoritesRepository
-import com.davidluna.tmdb.media_domain.entities.Media
-import com.davidluna.tmdb.media_domain.entities.MediaType
 import com.davidluna.tmdb.test_shared.rules.CoroutineTestRule
 import io.mockk.called
 import io.mockk.coEvery
@@ -19,6 +20,8 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.verify
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -46,24 +49,16 @@ class FavoritesRepositoryTest {
     @Test
     fun `GIVEN favorites in db WHEN observe is called THEN emits mapped favorites`() =
         coroutineTestRule.scope.runTest {
-            val roomMedia = listOf(
-                RoomMedia(
-                    category = "MOVIE_POPULAR",
-                    id = 1,
-                    posterPath = "poster",
-                    title = "title",
-                    isFavorite = true
-                )
-            )
-            val expected: List<Media> = roomMedia.map { it.toDomain() }
             val sut = buildSUT()
+            val expected = fakeFavorites
+            every { favoritesDao.getFavorites(any()) } returns flowOf(fakeRoomFavorites)
 
-            every { favoritesDao.getFavorites("MOVIE_%") } returns buildFakePagingSource(roomMedia)
+            sut.observe(fakeCatalog).onEach { println("<-- $it") }.test {
+                val actual = awaitItem()
 
-            val actual = sut.observe(MediaType.MOVIE, backgroundScope).asSnapshot()
-
-            assertEquals(expected, actual)
-            verify(exactly = 1) { favoritesDao.getFavorites("MOVIE_%") }
+                assertEquals(expected, actual)
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test
@@ -71,9 +66,9 @@ class FavoritesRepositoryTest {
         coroutineTestRule.scope.runTest {
             val sut = buildSUT()
 
-            coEvery { favoritesDao.toggleFavorite(1, "TV_%") } returns Unit
+            coEvery { favoritesDao.toggleFavorite(any(), any()) } returns Unit
 
-            val actual = sut.toggle(1, MediaType.TV_SHOW)
+            val actual: AppError? = sut.toggle(1, fakeCatalog)
 
             assertNull(actual)
         }
@@ -84,9 +79,9 @@ class FavoritesRepositoryTest {
             val expected = SQLiteException().toAppError()
             val sut = buildSUT()
 
-            coEvery { favoritesDao.toggleFavorite(1, "MOVIE_%") } throws SQLiteException()
+            coEvery { favoritesDao.toggleFavorite(any(), any()) } throws SQLiteException()
 
-            val actual = sut.toggle(1, MediaType.MOVIE)
+            val actual = sut.toggle(1, fakeCatalog)
 
             assertEquals(expected, actual)
         }

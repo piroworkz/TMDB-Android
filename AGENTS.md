@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Purpose
-This file defines the operating protocol for automated agents (e.g., Codex) contributing to this repository.
+This file defines the operating protocol for automated agents contributing to this repository.
 It prioritizes safety, correctness, and adherence to repo-specific rules.
 
 ---

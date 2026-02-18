@@ -15,6 +15,7 @@ import com.davidluna.tmdb.media_data.framework.local.database.entities.details.R
 import com.davidluna.tmdb.media_data.framework.local.database.entities.details.RoomMediaDetails
 import com.davidluna.tmdb.media_data.framework.local.database.entities.images.RoomImage
 import com.davidluna.tmdb.media_data.framework.local.database.entities.media.RemoteKeys
+import com.davidluna.tmdb.media_data.framework.local.database.entities.media.RoomFavorite
 import com.davidluna.tmdb.media_data.framework.local.database.entities.media.RoomMedia
 import com.davidluna.tmdb.media_data.framework.local.database.entities.videos.RoomVideo
 
@@ -28,7 +29,8 @@ import com.davidluna.tmdb.media_data.framework.local.database.entities.videos.Ro
         RoomImage::class,
         RoomMedia::class,
         RoomMediaDetails::class,
-        RoomVideo::class
+        RoomVideo::class,
+        RoomFavorite::class
     ],
     exportSchema = true,
     version = 1

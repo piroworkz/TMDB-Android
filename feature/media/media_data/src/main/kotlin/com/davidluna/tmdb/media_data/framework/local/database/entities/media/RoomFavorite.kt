@@ -3,11 +3,7 @@ package com.davidluna.tmdb.media_data.framework.local.database.entities.media
 import androidx.room.Entity
 
 @Entity(primaryKeys = ["id", "category"])
-data class RoomMedia(
-    val category: String,
+data class RoomFavorite(
     val id: Int,
-    val posterPath: String,
-    val title: String,
+    val category: String
 )
-
-

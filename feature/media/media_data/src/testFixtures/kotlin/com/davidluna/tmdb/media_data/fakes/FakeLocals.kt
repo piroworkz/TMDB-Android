@@ -5,7 +5,9 @@ import com.davidluna.tmdb.media_data.framework.local.database.entities.details.R
 import com.davidluna.tmdb.media_data.framework.local.database.entities.details.RoomMediaDetails
 import com.davidluna.tmdb.media_data.framework.local.database.entities.details.RoomMediaDetailsRelations
 import com.davidluna.tmdb.media_data.framework.local.database.entities.images.RoomImage
+import com.davidluna.tmdb.media_data.framework.local.database.entities.media.RoomFavorite
 import com.davidluna.tmdb.media_data.framework.local.database.entities.media.RoomMedia
+import com.davidluna.tmdb.media_domain.entities.Favorite
 
 val fakeRoomMediaList = fakeRemoteMediaList.map {
     RoomMedia(
@@ -13,6 +15,20 @@ val fakeRoomMediaList = fakeRemoteMediaList.map {
         id = it.id ?: 0,
         posterPath = it.posterPath.orEmpty(),
         title = it.title.orEmpty()
+    )
+}
+
+val fakeRoomFavorites = fakeRoomMediaList.map {
+    RoomFavorite(
+        id = it.id,
+        category = it.category
+    )
+}
+
+val fakeFavorites = fakeRoomFavorites.map {
+    Favorite(
+        id = it.id,
+        category = it.category
     )
 }
 

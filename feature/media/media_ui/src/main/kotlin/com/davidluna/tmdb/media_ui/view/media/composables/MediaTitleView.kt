@@ -20,10 +20,13 @@ import com.davidluna.tmdb.core_ui.theme.dimens.Dimens
 import kotlinx.coroutines.delay
 
 @Composable
-fun MediaTitleView(movieTitle: String?) {
+fun MediaTitleView(
+    modifier: Modifier = Modifier,
+    movieTitle: String?
+) {
     Text(
         text = movieTitle.orEmpty(),
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = Dimens.margins.small)
             .fillMaxWidth()
             .shimmer(movieTitle == null),

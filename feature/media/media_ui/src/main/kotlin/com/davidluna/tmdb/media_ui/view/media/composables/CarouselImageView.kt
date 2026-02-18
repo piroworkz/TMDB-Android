@@ -38,6 +38,7 @@ fun CarouselImageView(
         alignment = Alignment.Center,
         contentScale = ContentScale.Crop
     )
+
 }
 
 @Preview
